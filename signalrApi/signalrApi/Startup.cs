@@ -44,6 +44,13 @@ namespace signalrApi
 
             app.UseAuthorization();
 
+            app.UseCors(policy =>
+            {
+                policy.AllowAnyOrigin();
+                policy.AllowAnyHeader();
+                policy.AllowAnyMethod();
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
