@@ -26,6 +26,14 @@ namespace signalrPlayGround
         {
             services.AddRazorPages();
             services.AddSignalR();
+            //services.AddCors();
+            services.AddCors(options => options.AddPolicy("CorsPolicy",
+          builder =>
+          {
+              builder.AllowAnyMethod().AllowAnyHeader()
+                     .WithOrigins("http://localhost:5001")
+                     .AllowCredentials();
+          }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,9 +53,13 @@ namespace signalrPlayGround
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+           
+
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
