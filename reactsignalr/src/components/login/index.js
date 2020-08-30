@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 export default function Login(props) {
 
@@ -8,9 +8,8 @@ export default function Login(props) {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        console.log(e.target);
-        console.log(userInput);
-        console.log(props);
+        //console.log(e.target);
+        //console.log(userInput);
         nameInput(userInput);
     }
     
