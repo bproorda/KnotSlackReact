@@ -41,9 +41,25 @@ export default function Chat(props) {
         }
     }, [hubConnection]);
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e, username, message) => {
         e.preventDefault();
-        console.log("Send!")
+        console.log("Send!");
+            const chatMessage = {
+                user: username,
+                message: message
+            };
+    
+            if (hubConnection.connectionStarted) {
+                try {
+                    await hubConnection.send('SendMessage', chatMessage);
+                }
+                catch(e) {
+                    console.log(e);
+                }
+            }
+            else {
+                alert('No connection to server yet.');
+            }
     };
 
     const changeHandler = e => {
