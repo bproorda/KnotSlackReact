@@ -27,8 +27,17 @@ namespace signalrApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder => builder.WithOrigins("http://127.0.0.1:5500")
+                    .SetIsOriginAllowed((host) => true)
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            }); ;
+
             services.AddSignalR();
-            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,12 +54,7 @@ namespace signalrApi
 
             app.UseAuthorization();
 
-            app.UseCors(policy =>
-            {
-                policy.AllowAnyOrigin();
-                policy.AllowAnyHeader();
-                policy.AllowAnyMethod();
-            });
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
