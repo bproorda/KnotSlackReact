@@ -1,29 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     HubConnectionBuilder,
-    HubConnectionState,
     LogLevel,
-    HubConnection,
   } from '../../../node_modules/@microsoft/signalr/dist/browser/signalr'
 
 export default function Chat(props){
 
-    const {username} = props;
+    //const {username} = props;
 
-    const [hubConnection, setHubConncetion] = useState();
+    const [hubConnection, setHubConnection] = useState();
+    const [ chat, setChat ] = useState([]);
+    const latestChat = useRef(null);
 
     useEffect(()=>{
       let hubConnection =  new HubConnectionBuilder()
       .withUrl('http://localhost:5001/chat')
+      .withAutomaticReconnect()
       .configureLogging(LogLevel.Information)
       .build();
 
-      hubConnection.start()
-      .then(() => console.log('Connection started!'))
-      .catch(err => console.log('Error while establishing connection :('));
+      setHubConnection(hubConnection);
+    },[]);
 
-      setHubConncetion(hubConnection);
-    },[])
+    useEffect(() => {
+        if (hubConnection) {
+            hubConnection.start()
+                .then(result => {
+                    console.log('Connected!');
+    
+                    hubConnection.on('ReceiveMessage', message => {
+                        const updatedChat = [...latestChat.current];
+                        updatedChat.push(message);
+                    
+                        setChat(updatedChat);
+                    });
+                })
+                .catch(e => console.log('Connection failed: ', e));
+        }
+    }, [hubConnection]);
 
     return(
         <>
