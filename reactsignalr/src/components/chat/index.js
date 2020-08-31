@@ -62,7 +62,7 @@ export default function Chat(props) {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        //let thisForm = e.target;
+        let thisForm = e.target;
 
         if (hubConnection.connectionStarted) {
             console.log("sending!")
@@ -73,7 +73,7 @@ export default function Chat(props) {
         else {
             alert('No connection to server yet.');
         }
-        //this.reset();        
+        thisForm.reset();        
     };
 
     const changeHandler = e => {
@@ -89,7 +89,7 @@ export default function Chat(props) {
                 </label>
                 <button name="name" type="submit">Send</button>
             </form>
-            <ChatWindow messages={chat} />
+            <ChatWindow messages={chat} count={messageCount} />
 
         </>
     )

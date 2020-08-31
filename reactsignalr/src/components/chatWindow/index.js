@@ -1,20 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 
 export default function ChatWindow(props){
 
-    const {messages} = props;
-    const [messageList, setMessageList] = useState(messages);
-
-
-    useEffect(() => {
-        setMessageList(messages);
-    },[messages])
-
+    const {messages, count} = props;
+    
     return(
         <>
                     <ul>
-                <li><h2>Messages: </h2></li>
-                {messageList.map((msg, index) => (
+                <li><h2>Messages: {count}</h2></li>
+                {messages.map((msg, index) => (
                     <li key={index}>{msg}</li>
                 ))}
             </ul>
