@@ -6,7 +6,7 @@ import {
 
 export default function Chat(props) {
 
-    const {username} = props;
+    const username = props.username;
 
     const [hubConnection, setHubConnection] = useState();
 
@@ -31,35 +31,40 @@ export default function Chat(props) {
                     console.log('Connected!');
 
                     hubConnection.on('ReceiveMessage', message => {
+                        console.log("messages received");
+                        let msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        let encodedMsg = username + " says " + msg;
                         const updatedChat = [...latestChat.current];
-                        updatedChat.push(message);
-
+                        updatedChat.push(encodedMsg);
+                        
                         setChat(updatedChat);
                     });
                 })
                 .catch(e => console.log('Connection failed: ', e));
         }
-    }, [hubConnection]);
+    }, [hubConnection, username]);
 
-    const submitHandler = async (e, username, message) => {
+
+    const submitHandler = async (e) => {
         e.preventDefault();
-        console.log("Send!");
             const chatMessage = {
                 user: username,
                 message: message
             };
+
+            console.log(chatMessage);
+            //console.log(props);
     
             if (hubConnection.connectionStarted) {
-                try {
-                    await hubConnection.send('SendMessage', chatMessage);
-                }
-                catch(e) {
-                    console.log(e);
-                }
+                console.log("sending!")
+                    await hubConnection.invoke("SendMessage", username, message).catch(function (err) {
+                        return console.error(err.toString());
+                    });
             }
             else {
                 alert('No connection to server yet.');
             }
+            console.log(chat);
     };
 
     const changeHandler = e => {
@@ -75,7 +80,7 @@ export default function Chat(props) {
                 </label>
                 <button name="name" type="submit">Send</button>
             </form>
-            <p>{message}</p>
+            <p>{chat}</p>
         </>
     )
 }
