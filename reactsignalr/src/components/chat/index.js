@@ -14,8 +14,7 @@ export default function Chat(props){
 
     useEffect(()=>{
       let hubConnection =  new HubConnectionBuilder()
-      .withUrl('http://localhost:5001/chat')
-      .withAutomaticReconnect()
+      .withUrl("https://localhost:5001/chatHub")
       .configureLogging(LogLevel.Information)
       .build();
 

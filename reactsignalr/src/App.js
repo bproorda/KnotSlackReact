@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Header from './components/header';
 import Login from './components/login';
+import Chat from './components/chat';
 import './App.css';
 
 function App() {
@@ -14,6 +15,7 @@ const loginHandler = (data) => {
     <>
     <Header />
     {userName ? <p>Hello, {userName}. Welcome to your chat!</p> : <Login nameInput={loginHandler} />}
+    {userName ? <Chat username={userName} /> : null }
     </>
   );
 }
