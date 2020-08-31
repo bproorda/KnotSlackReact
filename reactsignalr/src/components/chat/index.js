@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ChatWindow from '../chatWindow';
 import {
     HubConnectionBuilder,
     LogLevel,
@@ -7,12 +8,10 @@ import {
 export default function Chat(props) {
 
     const username = props.username;
-
     const [hubConnection, setHubConnection] = useState();
-
     const [chat, setChat] = useState([]);
-
     const [message, setMessage] = useState("");
+    const [messageCount, setMessageCount] = useState(0);
 
 
     useEffect(() => {
@@ -28,40 +27,38 @@ export default function Chat(props) {
         if (hubConnection) {
             console.log(hubConnection);
 
-
             if (!hubConnection.connectionStarted) {
                 hubConnection.start()
                     .then(result => {
                         console.log('Connected!');
-
-                        hubConnection.on('ReceiveMessage', function (user, message) {
-                            console.log("messages received");
-                            console.log(message);
-                            var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                            var encodedMsg = user + " says " + msg;
-                            let currentChat = chat;
-                            currentChat.push(encodedMsg);
-                            console.log(currentChat);
-                            setChat(currentChat);
-                        });
+                        RecieveNewMessages();
                     })
                     .catch(e => console.log('Connection failed: ', e));
             } else {
-                hubConnection.on('ReceiveMessage', function (user, message) {
-                    console.log("messages received");
-                    console.log(message);
-                    var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                    var encodedMsg = user + " says " + msg;
-                    let currentChat = chat;
-                    currentChat.push(encodedMsg);
-                    console.log(currentChat);
-                    setChat(currentChat);
-                });
+                RecieveNewMessages();
             }
-
         }
     }, [hubConnection, username, chat]);
 
+    const RecieveNewMessages = () => {
+        hubConnection.on('ReceiveMessage', function (user, message) {
+            console.log("messages received");
+            console.log(message);
+            var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            var encodedMsg = user + ": " + msg;
+            let currentChat = chat;
+            currentChat.push(encodedMsg);
+            console.log(currentChat);
+            setChat(currentChat);
+            IncrementCount();
+        });
+    }
+
+    const IncrementCount = () =>{
+        let currentCount = chat.length;
+        setMessageCount(currentCount);
+        console.log(`# of messages: ${currentCount}`);
+    }
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -76,8 +73,7 @@ export default function Chat(props) {
         else {
             alert('No connection to server yet.');
         }
-        //this.reset();
-        console.log(chat);
+        //this.reset();        
     };
 
     const changeHandler = e => {
@@ -93,12 +89,8 @@ export default function Chat(props) {
                 </label>
                 <button name="name" type="submit">Send</button>
             </form>
-            <ul>
-                <li><h2>Messages: </h2></li>
-                {chat.map((msg, index) => (
-                    <li key={index}>{msg}</li>
-                ))}
-            </ul>
+            <ChatWindow messages={chat} />
+
         </>
     )
 }
