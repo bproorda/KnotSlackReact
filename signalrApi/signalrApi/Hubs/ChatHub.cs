@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,7 +7,7 @@ namespace signalrApi.Hubs
 {
     public class ChatHub : Hub
     {
-        private List<string> users;
+        private List<string> Users { get; set; }
 
         public async Task SendMessage(string user, string message)
         {
@@ -15,16 +16,21 @@ namespace signalrApi.Hubs
 
         public async Task AddUser(string user)
         {
-            users.Add(user);
+            Users.Add(user);
 
-            await Clients.All.SendAsync("ShowUsers", users.ToArray());
+            if (Users == null)
+            {
+                Users = new List<string>();
+            }
+
+            await Clients.All.SendAsync("ShowUsers", Users.ToArray());
         }
 
         public async Task RemoveUser(string user)
         {
-            users.Remove(users.Find(x => x == user));
+            Users.Remove(Users.Find(x => x == user));
 
-            await Clients.All.SendAsync("ShowUsers", users.ToArray());
+            await Clients.All.SendAsync("ShowUsers", Users.ToArray());
         }
     }
 }
