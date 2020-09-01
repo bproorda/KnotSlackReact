@@ -14,6 +14,12 @@ namespace signalrApi.Data
         {
 
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+        }
         public DbSet<ksUser> ksUser { get; set; }
     }
 }
