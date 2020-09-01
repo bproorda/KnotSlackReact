@@ -18,9 +18,9 @@ namespace signalrApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserManager userManager;
-        private ChatHub chatHub;
+        private IChatHub chatHub;
 
-        public UsersController(IUserManager userManager, ChatHub chatHub)
+        public UsersController(IUserManager userManager, IChatHub chatHub)
         {
             this.userManager = userManager;
             this.chatHub = chatHub;

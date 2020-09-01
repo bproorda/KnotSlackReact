@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace signalrApi.Hubs
 {
-    public class ChatHub : Hub
+    public class ChatHub : Hub, IChatHub
     {
         private knotSlackDbContext _context;
 
@@ -45,5 +45,12 @@ namespace signalrApi.Hubs
 
         //    await Clients.All.SendAsync("ShowUsers", Users.ToArray());
         //}
+    }
+
+    public interface IChatHub
+    {
+        Task SendMessage(string user, string message);
+
+        Task DisplayUsers();
     }
 }
