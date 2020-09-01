@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using signalrApi.Hubs;
 using signalrApi.Models.Identity;
 using signalrApi.services;
 
@@ -17,10 +18,12 @@ namespace signalrApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserManager userManager;
+        private ChatHub chatHub;
 
-        public UsersController(IUserManager userManager)
+        public UsersController(IUserManager userManager, ChatHub chatHub)
         {
             this.userManager = userManager;
+            this.chatHub = chatHub;
         }
 
         [HttpPost("Login")]
@@ -33,6 +36,7 @@ namespace signalrApi.Controllers
                 if (result)
                 {
                     user.LoggedIn = true;
+                    await chatHub.DisplayUsers();
                     return Ok(new UserWithToken
                     {
                         UserId = user.Id,
@@ -53,8 +57,9 @@ namespace signalrApi.Controllers
             var user = await userManager.FindByNameAsync(UserName);
             if (user != null)
             {
-                    user.LoggedIn = false;
-                    return Ok();
+                user.LoggedIn = false;
+                await chatHub.DisplayUsers();
+                return Ok();
 
             }
             return Unauthorized();

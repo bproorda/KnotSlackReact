@@ -26,9 +26,8 @@ namespace signalrApi.Hubs
             await Clients.All.SendAsync("ReceiveMessage", user, message);
         }
 
-        public async Task AddUser(string user)
+        public async Task DisplayUsers()
         {
-
             var users = _context.Users
                 .Where(user => user.LoggedIn)
                 .Select(user => new userDTO
