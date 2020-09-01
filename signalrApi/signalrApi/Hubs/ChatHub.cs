@@ -21,9 +21,7 @@ namespace signalrApi.Hubs
 
         public async Task AddUser(string user)
         {
-            
-
-             Users.Add(user);
+            Users.Add(user);
 
             await Clients.All.SendAsync("ShowUsers", Users.ToArray());
         }
