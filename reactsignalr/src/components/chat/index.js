@@ -13,35 +13,23 @@ export default function Chat(props) {
     const [message, setMessage] = useState("");
     const [messageCount, setMessageCount] = useState(0);
     const [userList, setUserList] = useState([]);
+    const [userCount, setUserCount] = useState(0);
 
 
     useEffect(() => {
-        let hubConnection = new HubConnectionBuilder()
-            .withUrl("https://localhost:5001/chatHub")
-            .configureLogging(LogLevel.Information)
-            .build();
-
-            sendUser();
-
-        setHubConnection(hubConnection);
+        startup();
     }, []);
 
     useEffect(() => {
         if (hubConnection) {
             console.log(hubConnection);
 
-            if (!hubConnection.connectionStarted) {
-                hubConnection.start()
-                    .then(result => {
-                        console.log('Connected!');
-                        RecieveNewMessages();
-                    })
-                    .catch(e => console.log('Connection failed: ', e));
-            } else {
-                RecieveNewMessages();
-            }
+            RecieveNewMessages();
+            updateUserList();
+
         }
-    }, [hubConnection, username, chat]);
+
+    }, [hubConnection]);
 
     const RecieveNewMessages = () => {
         hubConnection.on('ReceiveMessage', function (user, message) {
@@ -56,11 +44,24 @@ export default function Chat(props) {
             IncrementCount();
         });
     }
+//currently only shows user being logged in. I think it needs database
+    const updateUserList = () => {
+        hubConnection.on('ShowUsers', function (users) {
+            console.log("updating user list");
+            console.log(users);
+            setUserList(users);
+            incrementUser();
+        })
+    }
 
-    const IncrementCount = () =>{
+    const IncrementCount = () => {
         let currentCount = chat.length;
         setMessageCount(currentCount);
         console.log(`# of messages: ${currentCount}`);
+    }
+
+    const incrementUser = () => {
+        setUserCount(userList.length);
     }
 
     const submitHandler = async (e) => {
@@ -76,19 +77,35 @@ export default function Chat(props) {
         else {
             alert('No connection to server yet.');
         }
-        thisForm.reset();        
+        thisForm.reset();
     };
 
-    const sendUser = async () => {
-        if (hubConnection.connectionStarted) {
+    const sendUser = async (connection) => {
+        if (connection.connectionStarted) {
             console.log("adding your username to the list of users")
-            await hubConnection.invoke("AddUser", username).catch(function (err) {
+            await connection.invoke("AddUser", username).catch(function (err) {
                 return console.error(err.toString());
             });
         }
         else {
             alert('No connection to server yet.');
         }
+    }
+    const startup = async () => {
+        let hubConnection = new HubConnectionBuilder()
+            .withUrl("https://localhost:5001/chatHub")
+            .configureLogging(LogLevel.Information)
+            .build();
+
+       await hubConnection.start()
+            .then(result => {
+                console.log('Connected!');
+            })
+            .catch(e => console.log('Connection failed: ', e));
+
+        sendUser(hubConnection);
+
+        setHubConnection(hubConnection);
     }
 
     const changeHandler = e => {
