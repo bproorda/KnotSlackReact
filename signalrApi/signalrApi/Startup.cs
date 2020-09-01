@@ -44,6 +44,8 @@ namespace signalrApi
 
             services.AddTransient<IUserManager, UserManagerWrapper>();
 
+            services.AddTransient<IChatHub, ChatHub>();
+
             services.AddIdentity<ksUser, IdentityRole>()
                .AddEntityFrameworkStores<knotSlackDbContext>()
                ;
