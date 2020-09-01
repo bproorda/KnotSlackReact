@@ -7,7 +7,7 @@ namespace signalrApi.Hubs
 {
     public class ChatHub : Hub
     {
-        private List<string> Users { get; set; }
+        public List<string> Users { get; private set; }
 
         public async Task SendMessage(string user, string message)
         {
@@ -16,11 +16,15 @@ namespace signalrApi.Hubs
 
         public async Task AddUser(string user)
         {
-            Users.Add(user);
+            
 
             if (Users == null)
             {
                 Users = new List<string>();
+                Users.Add(user);
+            } else
+            {
+                Users.Add(user);
             }
 
             await Clients.All.SendAsync("ShowUsers", Users.ToArray());
