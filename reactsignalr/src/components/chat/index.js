@@ -12,6 +12,7 @@ export default function Chat(props) {
     const [chat, setChat] = useState([]);
     const [message, setMessage] = useState("");
     const [messageCount, setMessageCount] = useState(0);
+    const [userList, setUserList] = useState([]);
 
 
     useEffect(() => {
@@ -19,6 +20,8 @@ export default function Chat(props) {
             .withUrl("https://localhost:5001/chatHub")
             .configureLogging(LogLevel.Information)
             .build();
+
+            sendUser();
 
         setHubConnection(hubConnection);
     }, []);
@@ -75,6 +78,18 @@ export default function Chat(props) {
         }
         thisForm.reset();        
     };
+
+    const sendUser = async () => {
+        if (hubConnection.connectionStarted) {
+            console.log("adding your username to the list of users")
+            await hubConnection.invoke("AddUser", username).catch(function (err) {
+                return console.error(err.toString());
+            });
+        }
+        else {
+            alert('No connection to server yet.');
+        }
+    }
 
     const changeHandler = e => {
         setMessage(e.target.value);
