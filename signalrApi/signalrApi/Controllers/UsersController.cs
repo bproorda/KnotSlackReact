@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using signalrApi.Models.Identity;
+using signalrApi.services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,36 +23,116 @@ namespace signalrApi.Controllers
             this.userManager = userManager;
         }
 
-        // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginData login)
         {
-            return new string[] { "value1", "value2" };
+            var user = await userManager.FindByNameAsync(login.UserName);
+            if (user != null)
+            {
+                var result = await userManager.CheckPasswordAsync(user, login.Password);
+                if (result)
+                {
+                    return Ok(new UserWithToken
+                    {
+                        UserId = user.Id,
+                        Token = userManager.CreateToken(user)
+
+                    });
+                }
+
+                await userManager.AccessFailedAsync(user);
+            }
+            return Unauthorized();
         }
 
-        // GET api/<UsersController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpPost("Register")]
+
+        public async Task<IActionResult> Register(RegisterData register)
         {
-            return "value";
+            var user = new ksUser
+            {
+                Email = register.Email,
+                UserName = register.Email,
+                LoggedIn = true,
+
+            };
+
+            var result = await userManager.CreateAsync(user, register.Password);
+            if (!result.Succeeded)
+            {
+                return BadRequest(new
+                {
+                    message = "registration failed",
+                    errors = result.Errors
+                });
+            }
+
+            return Ok(new UserWithToken
+            {
+                UserId = user.Id,
+                Token = userManager.CreateToken(user)
+            });
+
+
         }
 
-        // POST api/<UsersController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [Authorize]
+        [HttpGet("Self")]
+        public async Task<IActionResult> Self()
         {
+            if (HttpContext.User.Identity is ClaimsIdentity identity)
+            {
+                var usernameClaim = identity.FindFirst("UserId");
+                var userId = usernameClaim.Value;
+
+                var user = await userManager.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    return Unauthorized();
+                }
+
+                return Ok(new
+                {
+                    user.Email,
+
+                });
+            }
+            return Unauthorized();
         }
 
-        // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetUser(string userId)
         {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+                return NotFound();
+
+            return Ok(new
+            {
+                UserId = user.Id,
+                user.Email,
+
+            });
         }
 
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPut("userId")]
+
+        public async Task<IActionResult> UpdateUser(string userId, ksUser data)
         {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+                return NotFound();
+
+
+            await userManager.UpdateAsync(user);
+
+            return Ok(new
+            {
+                UserId = user.Id,
+                user.Email,
+
+            });
         }
+
     }
 }
