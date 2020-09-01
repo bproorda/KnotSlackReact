@@ -32,6 +32,7 @@ namespace signalrApi.Controllers
                 var result = await userManager.CheckPasswordAsync(user, login.Password);
                 if (result)
                 {
+                    user.LoggedIn = true;
                     return Ok(new UserWithToken
                     {
                         UserId = user.Id,
@@ -41,6 +42,20 @@ namespace signalrApi.Controllers
                 }
 
                 await userManager.AccessFailedAsync(user);
+            }
+            return Unauthorized();
+        }
+
+        //To update LoggedIn prop in db
+        [HttpPost("Logout")]
+        public async Task<IActionResult> Logout(string UserName)
+        {
+            var user = await userManager.FindByNameAsync(UserName);
+            if (user != null)
+            {
+                    user.LoggedIn = false;
+                    return Ok();
+
             }
             return Unauthorized();
         }
