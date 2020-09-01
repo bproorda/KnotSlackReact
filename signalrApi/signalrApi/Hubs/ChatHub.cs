@@ -1,17 +1,24 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
+using signalrApi.Data;
+using signalrApi.Models.DTO;
+using signalrApi.services;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace signalrApi.Hubs
 {
     public class ChatHub : Hub
     {
-        public List<string> Users { get; private set; }
+        private knotSlackDbContext _context;
 
-        public ChatHub()
+        private readonly IUserManager userManager;
+
+        public ChatHub(knotSlackDbContext _context, IUserManager userManager)
         {
-            Users = new List<string>();
+            this._context = _context;
+            this.userManager = userManager;
         }
 
         public async Task SendMessage(string user, string message)
@@ -21,16 +28,23 @@ namespace signalrApi.Hubs
 
         public async Task AddUser(string user)
         {
-            Users.Add(user);
 
-            await Clients.All.SendAsync("ShowUsers", Users.ToArray());
+            var users = _context.Users
+                .Where(user => user.LoggedIn)
+                .Select(user => new userDTO
+                {
+                    Username = user.Email
+                }).ToList();
+
+
+            await Clients.All.SendAsync("ShowUsers", users.ToArray());
         }
 
-        public async Task RemoveUser(string user)
-        {
-            Users.Remove(Users.Find(x => x == user));
+        //public async Task RemoveUser(string user)
+        //{
+        //    Users.Remove(Users.Find(x => x == user));
 
-            await Clients.All.SendAsync("ShowUsers", Users.ToArray());
-        }
+        //    await Clients.All.SendAsync("ShowUsers", Users.ToArray());
+        //}
     }
 }

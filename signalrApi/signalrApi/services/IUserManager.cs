@@ -76,6 +76,11 @@ namespace signalrApi.services
 
             return tokenString;
         }
+
+        public Task<ksUser> FindAllLoggedInUsers()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public interface IUserManager
@@ -85,6 +90,7 @@ namespace signalrApi.services
         Task AccessFailedAsync(ksUser user);
         Task<IdentityResult> CreateAsync(ksUser user, string password);
         Task<ksUser> FindByIdAsync(string userId);
+        Task<ksUser> FindAllLoggedInUsers();
         Task<IdentityResult> UpdateAsync(ksUser user);
         string CreateToken(ksUser user);
     }
