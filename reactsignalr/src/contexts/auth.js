@@ -98,10 +98,7 @@ export class AuthProvider extends React.Component {
                     return;
                 }
                 if (true) {
-                    user = {
-            //username: payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
-            username: payload.sub
-                    };
+                    user = payload.sub;
                 }
                 window.localStorage.setItem("user", JSON.stringify(user));
                 window.localStorage.setItem("token", JSON.stringify(token));

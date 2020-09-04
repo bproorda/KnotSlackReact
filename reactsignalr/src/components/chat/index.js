@@ -80,17 +80,17 @@ export default function Chat(props) {
         thisForm.reset();
     };
 
-    const sendUser = async (connection) => {
-        if (connection.connectionStarted) {
-            console.log("adding your username to the list of users")
-            await connection.invoke("DisplayUsers").catch(function (err) {
-                return console.error(err.toString());
-            });
-        }
-        else {
-            alert('No connection to server yet.');
-        }
-    }
+    // const sendUser = async (connection) => {
+    //     if (connection.connectionStarted) {
+    //         console.log("adding your username to the list of users")
+    //         await connection.invoke("DisplayUsers").catch(function (err) {
+    //             return console.error(err.toString());
+    //         });
+    //     }
+    //     else {
+    //         alert('No connection to server yet.');
+    //     }
+    // }
     const startup = async () => {
         let hubConnection = new HubConnectionBuilder()
             .withUrl("https://localhost:5001/chatHub")
@@ -103,7 +103,7 @@ export default function Chat(props) {
             })
             .catch(e => console.log('Connection failed: ', e));
 
-        sendUser(hubConnection);
+        //sendUser(hubConnection);
 
         setHubConnection(hubConnection);
     }
