@@ -16,7 +16,7 @@ export class AuthProvider extends React.Component {
         super(props);
 
         this.state = {
-            user: JSON.parse(window.localStorage.getItem('orderId')) || null,
+            user: JSON.parse(window.localStorage.getItem('user')) || null,
             permissions: [],
             token: JSON.parse(window.localStorage.getItem('token')) || null,
             login: this.login,
@@ -64,8 +64,6 @@ export class AuthProvider extends React.Component {
                 }
                 if (true) {
                     user = {
-                        //id: payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
-                        id: payload.sub,
             //username: payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
             username: payload.FullName
                     };
