@@ -5,7 +5,10 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using signalrApi.Data;
 using signalrApi.Hubs;
+using signalrApi.Models.DTO;
 using signalrApi.Models.Identity;
 using signalrApi.services;
 
@@ -17,13 +20,15 @@ namespace signalrApi.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private knotSlackDbContext _context;
         private readonly IUserManager userManager;
         private IChatHub chatHub;
 
-        public UsersController(IUserManager userManager, IChatHub chatHub)
+        public UsersController(IUserManager userManager, IChatHub chatHub, knotSlackDbContext _context)
         {
             this.userManager = userManager;
             this.chatHub = chatHub;
+            this._context = _context;
         }
 
         [HttpPost("Login")]
@@ -36,7 +41,8 @@ namespace signalrApi.Controllers
                 if (result)
                 {
                     user.LoggedIn = true;
-                    //await chatHub.DisplayUsers();
+                    //comment out if using postman
+                    await chatHub.DisplayUsers();
                     return Ok(new UserWithToken
                     {
                         UserId = user.Id,
@@ -58,6 +64,8 @@ namespace signalrApi.Controllers
             if (user != null)
             {
                 user.LoggedIn = false;
+
+                //comment out if using postman
                 await chatHub.DisplayUsers();
                 return Ok();
 
@@ -153,6 +161,18 @@ namespace signalrApi.Controllers
 
             });
         }
+        //method for postman/testing. maybe admin stuff later
+        [HttpGet("users")]
+        public async Task<userDTO[]> users()
+        {
+                var users = await _context.Users
+                .Where(user => user.LoggedIn)
+                .Select(user => new userDTO
+                    {
+                     Username = user.Email
+                        }).ToListAsync();
 
+            return users.ToArray();
+        }
     }
 }
