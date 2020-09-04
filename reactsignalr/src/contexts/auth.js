@@ -73,7 +73,7 @@ export class AuthProvider extends React.Component {
 
     logout = async (username) => {
 
-        const result = await fetch(`${usersAPI}login`, {
+        const result = await fetch(`${usersAPI}logout`, {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',

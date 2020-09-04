@@ -35,8 +35,10 @@ namespace signalrApi.Hubs
                     Username = user.Email
                 }).ToList();
 
-
-            await Clients.All.SendAsync("ShowUsers", users.ToArray());
+            if (users != null && users.Count > 0)
+            {
+                await Clients.All.SendAsync("ShowUsers", users.ToArray());
+            }
         }
 
         //public async Task RemoveUser(string user)

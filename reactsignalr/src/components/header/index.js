@@ -9,6 +9,11 @@ function Header() {
 
   const {user, logout} = useAuth();
 
+  const logoutHandler = () => {
+    console.log("logout was clicked");
+    logout(user);
+  }
+
     return (
       <div className="header">
         <header className="App-header">
@@ -16,7 +21,7 @@ function Header() {
           <p>
             my Knot Slack Prototype, a Work in progress!
           </p>
-          {user ? <Button onClick={logout()}>Log Out</Button> : null}
+          {user ? <Button onClick={logoutHandler}>Log Out</Button> : null}
         </header>
       </div>
     );

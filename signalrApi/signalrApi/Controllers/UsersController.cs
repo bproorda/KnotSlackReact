@@ -43,7 +43,7 @@ namespace signalrApi.Controllers
                     user.LoggedIn = true;
                     await userManager.UpdateAsync(user);
                     //comment out if using postman
-                    await chatHub.DisplayUsers();
+                    //await chatHub.DisplayUsers();
                     return Ok(new UserWithToken
                     {
                         UserId = user.Id,
@@ -68,6 +68,7 @@ namespace signalrApi.Controllers
                 await userManager.UpdateAsync(user);
 
                 //comment out if using postman
+                
                 await chatHub.DisplayUsers();
                 return user.UserName;
 
