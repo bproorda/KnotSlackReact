@@ -14,7 +14,7 @@ const Login = () => {
         const { username, password } = e.target.elements;
 
        const result = login(username.value, password.value);
-       if (result) history.push("/stores");
+       if (result) history.push("/chat");
     }
 
     const logoutSubmit = e => {
@@ -34,7 +34,7 @@ const Login = () => {
                 <h3>Welcome back, {user.username ? user.username.match(/^\S*\b/gm) : "Friend"}!</h3>
                 <form onSubmit={logoutSubmit}>
                     <Button type="submit" >Log Out</Button>
-                    <Button onClick={()=>history.push("/stores")} >To Stores</Button>
+                    <Button onClick={()=>history.push("/chat")} >To Chat</Button>
                 </form>
             </div>)
     }
