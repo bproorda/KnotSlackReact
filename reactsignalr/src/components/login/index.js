@@ -1,33 +1,57 @@
-import React, { useState } from 'react';
+import React from 'react';
+import useAuth from '../../contexts/auth';
+import Button from 'react-bootstrap/Button';
+import { useHistory } from "react-router-dom";
 
-export default function Login(props) {
+const Login = () => {
 
-    const {nameInput} = props
-
-    const [userInput, setUserInput] = useState();
-
-    const submitHandler = (e) => {
+    const { user, login, logout} = useAuth();
+    let history = useHistory();
+    const handleSubmit = e => {
+        console.log("logging in");
         e.preventDefault();
-        //console.log(e.target);
-        //console.log(userInput);
-        nameInput(userInput);
+
+        const { username, password } = e.target.elements;
+
+       const result = login(username.value, password.value);
+       if (result) history.push("/stores");
     }
+
+    const logoutSubmit = e => {
+        console.log("logging out use");
+        e.preventDefault();
+        logout();
+        history.push("/")
+        
+    }
+
+    console.log(user);
+  
     
-    const changeHandler = e =>{
-        //console.log(e.target.value);
-        setUserInput(e.target.value);
+    if (user) {
+        return (
+            <div className="login">
+                <h3>Welcome back, {user.username ? user.username.match(/^\S*\b/gm) : "Friend"}!</h3>
+                <form onSubmit={logoutSubmit}>
+                    <Button type="submit" >Log Out</Button>
+                    <Button onClick={()=>history.push("/stores")} >To Stores</Button>
+                </form>
+            </div>)
     }
 
     return (
-        <>
-            <p>Please enter your name to start chatting</p>
-            <form onSubmit={submitHandler}>
-                <label>
-                    Name:
-    <input type="text" name="name"  onChange={changeHandler}/>
-                </label>
-                <button name="name" type="submit">Submit</button>
-            </form>
-        </>
+        <form onSubmit={handleSubmit} className="login">
+            <label>
+              Email
+            <input placeholder="Username" name="username" />
+            </label>
+            <label>
+              password
+            <input placeholder="Password" type="password" name="password" />
+            </label>
+            <Button type="submit">Login</Button>
+        </form>
     )
 }
+
+export default Login;
