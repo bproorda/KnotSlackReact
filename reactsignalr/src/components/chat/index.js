@@ -44,7 +44,7 @@ export default function Chat(props) {
             IncrementCount();
         });
     }
-//currently only shows user being logged in. I think it needs database
+
     const updateUserList = () => {
         hubConnection.on('ShowUsers', function (users) {
             console.log("updating user list");
@@ -83,7 +83,7 @@ export default function Chat(props) {
     const sendUser = async (connection) => {
         if (connection.connectionStarted) {
             console.log("adding your username to the list of users")
-            await connection.invoke("AddUser", username).catch(function (err) {
+            await connection.invoke("DisplayUsers").catch(function (err) {
                 return console.error(err.toString());
             });
         }
