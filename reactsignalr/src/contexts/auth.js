@@ -25,14 +25,15 @@ export class AuthProvider extends React.Component {
         };
     }
 
-    register = async (username, email, password) => {
-        const result = await fetch(`${usersAPI}/register`, {
+    register = async (email, password) => {
+        const result = await fetch(`${usersAPI}register`, {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username, email,  password }),
+            body: JSON.stringify({ email, password }),
         });
+        console.log(result);
 
         const body = await result.json();
 
@@ -40,12 +41,14 @@ export class AuthProvider extends React.Component {
             if(this.processToken(body.token, body)){
                 return true;
             }
+        } else {
+            return false;
         }
     }
 
 
     login = async (username, password) => {
-        const result = await fetch(`${usersAPI}/login`, {
+        const result = await fetch(`${usersAPI}login`, {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,6 +63,8 @@ export class AuthProvider extends React.Component {
             if(this.processToken(body.token, body)){
                 return true;
             }
+        } else {
+            return false;
         }
 
         //TODO: userError state
