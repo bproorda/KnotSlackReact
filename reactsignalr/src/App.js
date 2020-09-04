@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Route, Switch, Link } from 'react-router-dom';
 import Header from './components/header';
 import Login from './components/login';
 import Chat from './components/chat';
@@ -14,8 +15,14 @@ const loginHandler = (data) => {
   return (
     <>
     <Header />
-    {userName ? <p>Hello, {userName}. Welcome to your chat!</p> : <Login nameInput={loginHandler} />}
-    {userName ? <Chat username={userName} /> : null }
+    <Switch>
+      <Route exact path = "/">
+      <Login />
+      </Route>
+      <Route path = "/chat">
+      <Chat username={userName} />
+      </Route>
+    </Switch>
     </>
   );
 }
