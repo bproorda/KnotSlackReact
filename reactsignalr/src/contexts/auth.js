@@ -24,6 +24,23 @@ export class AuthProvider extends React.Component {
         };
     }
 
+    register = async (username, email, password) => {
+        const result = await fetch(`${usersAPI}/register`, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const body = await result.json();
+
+        if (result.ok) {
+            if(this.processToken(body.token, body)){
+                return true;
+            }
+        }
+    }
+
 
     login = async (username, password) => {
         const result = await fetch(`${usersAPI}/login`, {
@@ -35,7 +52,7 @@ export class AuthProvider extends React.Component {
         });
 
         const body = await result.json();
-        console.log(body);
+        //console.log(body);
 
         if (result.ok) {
             if(this.processToken(body.token, body)){
