@@ -42,7 +42,7 @@ namespace signalrApi.Controllers
                 {
                     user.LoggedIn = true;
                     //comment out if using postman
-                    await chatHub.DisplayUsers();
+                   await chatHub.DisplayUsers();
                     return Ok(new UserWithToken
                     {
                         UserId = user.Id,
@@ -58,19 +58,20 @@ namespace signalrApi.Controllers
 
         //To update LoggedIn prop in db
         [HttpPost("Logout")]
-        public async Task<IActionResult> Logout(string UserName)
+        public async Task<string> Logout(userDTO userInfo)
         {
-            var user = await userManager.FindByNameAsync(UserName);
+            var user = await userManager.FindByNameAsync(userInfo.Username);
             if (user != null)
             {
                 user.LoggedIn = false;
+                await userManager.UpdateAsync(user);
 
                 //comment out if using postman
                 await chatHub.DisplayUsers();
-                return Ok();
+                return user.UserName;
 
             }
-            return Unauthorized();
+            return "User Not Found";
         }
 
         [HttpPost("Register")]
