@@ -36,7 +36,7 @@ namespace signalrApi.Controllers
                 if (result)
                 {
                     user.LoggedIn = true;
-                    await chatHub.DisplayUsers();
+                    //await chatHub.DisplayUsers();
                     return Ok(new UserWithToken
                     {
                         UserId = user.Id,
