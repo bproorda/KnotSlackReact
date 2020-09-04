@@ -1,20 +1,41 @@
-import React from 'react';
+import React, {useState} from 'react';
 import useAuth from '../../contexts/auth';
 import Button from 'react-bootstrap/Button';
 import { useHistory } from "react-router-dom";
 
 const Login = () => {
 
-    const { user, login, logout} = useAuth();
+    const { user, login, logout, register} = useAuth();
+
     let history = useHistory();
+
+    const [isRegistering, setIsRegistering] = useState(false);
+
     const handleSubmit = e => {
-        console.log("logging in");
         e.preventDefault();
 
         const { username, password } = e.target.elements;
 
-       const result = login(username.value, password.value);
+        let result = null;
+
+        if(!isRegistering){
+
+        console.log("logging in");
+
+        result = login(username.value, password.value);
+
+        } else {
+            console.log("registering");
+
+            result = register(username.value, username.value, password.value);            
+        }
+
        if (result) history.push("/chat");
+    }
+
+    const toggleIsRegistering = () => {
+        console.log("Registering new user!");
+        setIsRegistering(!isRegistering);
     }
 
     const logoutSubmit = e => {
@@ -41,6 +62,10 @@ const Login = () => {
 
     return (
         <form onSubmit={handleSubmit} className="login">
+            <label>
+                I am a registering as a new user
+                <input type="checkbox" onChange={toggleIsRegistering}/>
+            </label>
             <label>
               Email
             <input placeholder="Username" name="username" />

@@ -21,6 +21,7 @@ export class AuthProvider extends React.Component {
             token: JSON.parse(window.localStorage.getItem('token')) || null,
             login: this.login,
             logout: this.logout,
+            register: this.register,
         };
     }
 
@@ -30,6 +31,7 @@ export class AuthProvider extends React.Component {
             headers: {
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify({ username, email,  password }),
         });
 
         const body = await result.json();
