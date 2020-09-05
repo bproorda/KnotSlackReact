@@ -5,7 +5,10 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using signalrApi.Data;
 using signalrApi.Hubs;
+using signalrApi.Models.DTO;
 using signalrApi.Models.Identity;
 using signalrApi.services;
 
@@ -17,13 +20,15 @@ namespace signalrApi.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private knotSlackDbContext _context;
         private readonly IUserManager userManager;
         private IChatHub chatHub;
 
-        public UsersController(IUserManager userManager, IChatHub chatHub)
+        public UsersController(IUserManager userManager, IChatHub chatHub, knotSlackDbContext _context)
         {
             this.userManager = userManager;
             this.chatHub = chatHub;
+            this._context = _context;
         }
 
         [HttpPost("Login")]
@@ -36,6 +41,8 @@ namespace signalrApi.Controllers
                 if (result)
                 {
                     user.LoggedIn = true;
+                    await userManager.UpdateAsync(user);
+                    //comment out if using postman
                     //await chatHub.DisplayUsers();
                     return Ok(new UserWithToken
                     {
@@ -52,17 +59,21 @@ namespace signalrApi.Controllers
 
         //To update LoggedIn prop in db
         [HttpPost("Logout")]
-        public async Task<IActionResult> Logout(string UserName)
+        public async Task<string> Logout(userDTO userInfo)
         {
-            var user = await userManager.FindByNameAsync(UserName);
+            var user = await userManager.FindByNameAsync(userInfo.Username);
             if (user != null)
             {
                 user.LoggedIn = false;
+                await userManager.UpdateAsync(user);
+
+                //comment out if using postman
+                
                 await chatHub.DisplayUsers();
-                return Ok();
+                return user.UserName;
 
             }
-            return Unauthorized();
+            return "User Not Found";
         }
 
         [HttpPost("Register")]
@@ -153,6 +164,18 @@ namespace signalrApi.Controllers
 
             });
         }
+        //method for postman/testing. maybe admin stuff later
+        [HttpGet("users")]
+        public async Task<userDTO[]> users()
+        {
+                var users = await _context.Users
+                .Where(user => user.LoggedIn)
+                .Select(user => new userDTO
+                    {
+                     Username = user.Email
+                        }).ToListAsync();
 
+            return users.ToArray();
+        }
     }
 }

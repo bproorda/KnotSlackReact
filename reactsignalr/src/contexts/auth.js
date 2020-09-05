@@ -71,11 +71,22 @@ export class AuthProvider extends React.Component {
         this.logout();
     }
 
-    logout = () => {
+    logout = async (username) => {
+
+        const result = await fetch(`${usersAPI}logout`, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username,}),
+        });
+
+        if(result.ok){
         this.setState({token: null, user: null, permissions: [] });
         cookie.remove('auth', {path: "/"});
         window.localStorage.removeItem("user");
         window.localStorage.removeItem("token");
+        }
     }
 
     processToken(token, user) {
@@ -87,10 +98,7 @@ export class AuthProvider extends React.Component {
                     return;
                 }
                 if (true) {
-                    user = {
-            //username: payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
-            username: payload.FullName
-                    };
+                    user = payload.sub;
                 }
                 window.localStorage.setItem("user", JSON.stringify(user));
                 window.localStorage.setItem("token", JSON.stringify(token));
