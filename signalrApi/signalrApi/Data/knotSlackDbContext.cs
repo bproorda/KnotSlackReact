@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using signalrApi.Models;
 using signalrApi.Models.Identity;
 using System;
 using System.Collections.Generic;
@@ -21,5 +22,6 @@ namespace signalrApi.Data
 
         }
         public DbSet<ksUser> ksUser { get; set; }
+        public DbSet<Channel> Channel { get; set; }
     }
 }

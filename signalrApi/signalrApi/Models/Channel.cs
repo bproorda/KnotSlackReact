@@ -1,4 +1,6 @@
-﻿using System;
+﻿using signalrApi.Models.DTO;
+using signalrApi.Models.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,7 +14,7 @@ namespace signalrApi.Models
         [Required]
         public string Name { get; set; }
 
-        public List<string> Members { get; set; }
+        public List<ksUser> Members { get; set; }
 
     }
 }
