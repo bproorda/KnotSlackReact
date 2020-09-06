@@ -27,5 +27,6 @@ namespace signalrApi.Data
         public DbSet<ksUser> ksUser { get; set; }
         public DbSet<Channel> Channel { get; set; }
         public DbSet<UserChannel> UserChannels { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }
