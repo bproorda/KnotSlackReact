@@ -41,6 +41,13 @@ namespace signalrApi.Hubs
             }
         }
 
+        //method for testing and experimentation
+        public async Task GetContext() 
+        {
+            await Clients.Caller.SendAsync("ShowContext", Context.ToString());
+        }
+
+
         //public async Task RemoveUser(string user)
         //{
         //    Users.Remove(Users.Find(x => x == user));
