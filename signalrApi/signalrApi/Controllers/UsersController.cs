@@ -164,7 +164,7 @@ namespace signalrApi.Controllers
 
             });
         }
-        //method for postman/testing. maybe admin stuff later
+        
         [HttpGet("users")]
         public async Task<userListDTO[]> users()
         {
