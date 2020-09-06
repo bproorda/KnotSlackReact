@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using signalrApi.Data;
 using signalrApi.Hubs;
 using signalrApi.Models.Identity;
+using signalrApi.Repositories.MessageRepos;
 using signalrApi.services;
 
 namespace signalrApi
@@ -43,8 +44,9 @@ namespace signalrApi
             });
 
             services.AddTransient<IUserManager, UserManagerWrapper>();
-
+            
             services.AddTransient<IChatHub, ChatHub>();
+            services.AddTransient<IMessageRepository, MessageRepository>();
 
             services.AddIdentity<ksUser, IdentityRole>()
                .AddEntityFrameworkStores<knotSlackDbContext>()
