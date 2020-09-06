@@ -23,10 +23,14 @@ namespace signalrApi.Data
             modelBuilder.Entity<UserChannel>()
                 .HasKey(uc => new { uc.UserId, uc.ChannelName });
 
+            modelBuilder.Entity<UserMessage>()
+                .HasKey(um => new { um.UserId, um.MessageId });
+
         }
         public DbSet<ksUser> ksUser { get; set; }
         public DbSet<Channel> Channel { get; set; }
         public DbSet<UserChannel> UserChannels { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<UserMessage> UserMessages { get; set; }
     }
 }

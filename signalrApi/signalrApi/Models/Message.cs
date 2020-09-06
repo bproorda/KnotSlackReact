@@ -13,7 +13,7 @@ namespace signalrApi.Models
 
         public string UserId { get; set; }
 
-        public ksUser Sender { get; set; }
+        public string Sender { get; set; }
 
         public string Recipient { get; set; }
 
@@ -21,5 +21,8 @@ namespace signalrApi.Models
 
         [MaxLength]
         public string Contents { get; set; }
+
+        //Nav prop
+        public UserMessage UserMessage { get; set; }
     }
 }
