@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using signalrApi.Models;
+using signalrApi.Models.DTO;
 using signalrApi.Repositories.MessageRepos;
+using signalrApi.services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,41 +17,59 @@ namespace signalrApi.Controllers
     public class MessageController : ControllerBase
     {
         private IMessageRepository messageRepository;
+        private readonly IUserManager userManager;
 
-        public MessageController(IMessageRepository messageRepository)
+        public MessageController(IMessageRepository messageRepository, IUserManager userManager)
         {
             this.messageRepository = messageRepository;
+            this.userManager = userManager;
         }
-        // GET: api/<MessageController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        
+        [HttpPost("msgsender")]
+        public async Task<IEnumerable<Message>> GetMessagesSender(string sender)
         {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<MessageController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
+            var messages = await messageRepository.GetMessagesBySender(sender);
+            return messages;
         }
 
-        // POST api/<MessageController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+
+        [HttpPost("msgrec")]
+        public async Task<IEnumerable<Message>> GetMessagesRecipient(string recipient)
         {
+            var messages = await messageRepository.GetMessagesByRecipient(recipient);
+            return messages;
         }
 
-        // PUT api/<MessageController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost("new")]
+        public async Task<bool> CreateNewMessage(messageCreateDTO msg)
         {
+            var user = await userManager.FindByNameAsync(msg.Sender);
+
+            var message = new Message
+            {
+                Sender = msg.Sender,
+                Recipient = msg.Recipient,
+                Contents = msg.Contents,
+                UserId = user.Id,
+                Date = DateTime.Now,
+            };
+
+            await messageRepository.CreateNewMessage(message);
+            return false;
         }
 
         // DELETE api/<MessageController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult<bool>> Delete(int id)
         {
+           var message =  await messageRepository.DeleteMessage(id);
+
+            if(message == null)
+            {
+                return NotFound();
+            }
+
+            return true;
         }
     }
 }

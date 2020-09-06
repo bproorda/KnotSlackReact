@@ -7,5 +7,10 @@ namespace signalrApi.Models.DTO
 {
     public class messageCreateDTO
     {
+        public string Sender { get; set; }
+
+        public string Recipient { get; set; }
+
+        public string Contents { get; set; }
     }
 }

@@ -23,13 +23,13 @@ namespace signalrApi.Repositories.MessageRepos
             return true;
         }
 
-        public async Task<bool> DeleteMessage(int id)
+        public async Task<Message> DeleteMessage(int id)
         {
             Message msg = await GetOneMessage(id);
 
             _context.Messages.Remove(msg);
             await _context.SaveChangesAsync();
-            return true;
+            return msg;
             
         }
 
