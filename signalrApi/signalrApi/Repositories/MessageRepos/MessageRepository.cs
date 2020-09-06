@@ -68,9 +68,15 @@ namespace signalrApi.Repositories.MessageRepos
             return message;
         }
 
-        public Task<IEnumerable<Message>> GetPrivateMessages(string UserA, string UserB)
+        public async Task<IEnumerable<Message>> GetPrivateMessages(string UserA, string UserB)
         {
-            throw new NotImplementedException();
+            var messages = await _context.Messages
+                .Where(msg => (UserA == msg.Sender || UserA == msg.Recipient) 
+                &&
+                (UserB == msg.Sender || UserB == msg.Recipient))
+                .ToListAsync();
+
+            return messages;
         }
     }
 }
