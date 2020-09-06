@@ -33,14 +33,22 @@ namespace signalrApi.Repositories.MessageRepos
             
         }
 
-        public Task<IEnumerable<Message>> GetMessagesByRecipient(string Recipient)
+        public async Task<IEnumerable<Message>> GetMessagesByRecipient(string Recipient)
         {
-            throw new NotImplementedException();
+            var messages = await _context.Messages
+                .Where(msg => Recipient == msg.Recipient)
+                .ToListAsync();
+
+            return messages;
         }
 
-        public Task<IEnumerable<Message>> GetMessagesBySender(string User)
+        public async Task<IEnumerable<Message>> GetMessagesBySender(string User)
         {
-            throw new NotImplementedException();
+            var messages = await _context.Messages
+                .Where(msg => User == msg.Sender)
+                .ToListAsync();
+
+            return messages;
         }
 
         public async Task<Message> GetOneMessage(int id)
