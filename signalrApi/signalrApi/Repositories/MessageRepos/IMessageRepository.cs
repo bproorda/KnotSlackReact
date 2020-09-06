@@ -14,5 +14,8 @@ namespace signalrApi.Repositories.MessageRepos
         Task<IEnumerable<Message>> GetPrivateMessages(string UserA, string UserB);
 
         Task<bool> CreateNewMessage(Message message);
+
+        Task<Message> GetOneMessage(int id);
+        Task<bool> DeleteMessage(Message message);
     }
 }
