@@ -30,9 +30,10 @@ namespace signalrApi.Hubs
         {
             var users = _context.Users
                 .Where(user => user.LoggedIn)
-                .Select(user => new userDTO
+                .Select(user => new userListDTO
                 {
-                    Username = user.Email
+                    Username = user.Email,
+                    LoggedIn = user.LoggedIn
                 }).ToList();
 
             if (users != null && users.Count > 0)
@@ -44,7 +45,8 @@ namespace signalrApi.Hubs
         //method for testing and experimentation
         public async Task GetContext() 
         {
-            await Clients.Caller.SendAsync("ShowContext", Context.ToString());
+            string msg = $"ConnectionID: {Context.ConnectionId}, User: {Context.User.ToString()}";
+            await Clients.Caller.SendAsync("ShowContext", msg);
         }
 
 
