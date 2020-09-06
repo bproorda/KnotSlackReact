@@ -14,6 +14,6 @@ namespace signalrApi.Models.Identity
         public string? ConnectionId {get; set;}
 
         // Nav Prop for Many to Many Relationshipt
-        public List<Channel> Channels { get; set; }
+        public List<UserChannel> UserChannels { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace signalrApi.Models
         [Required]
         public string Name { get; set; }
 
-        public List<ksUser> Members { get; set; }
+        public List<UserChannel> UserChannels { get; set; }
 
     }
 }
