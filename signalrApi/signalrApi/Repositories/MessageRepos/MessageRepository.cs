@@ -1,4 +1,5 @@
-﻿using signalrApi.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using signalrApi.Data;
 using signalrApi.Models;
 using System;
 using System.Collections.Generic;
@@ -37,9 +38,21 @@ namespace signalrApi.Repositories.MessageRepos
             throw new NotImplementedException();
         }
 
-        public Task<Message> GetOneMessage(int id)
+        public async Task<Message> GetOneMessage(int id)
         {
-            throw new NotImplementedException();
+            var message = await _context.Messages
+                .Select(msg => new Message
+                {
+                    Id = msg.Id,
+                    Sender = msg.Sender,
+                    Recipient = msg.Recipient,
+                    Date = msg.Date,
+                    Contents = msg.Contents,
+                    UserId = msg.UserId,
+
+                }).FirstOrDefaultAsync(msg => id == msg.Id);
+
+            return message;
         }
 
         public Task<IEnumerable<Message>> GetPrivateMessages(string UserA, string UserB)
