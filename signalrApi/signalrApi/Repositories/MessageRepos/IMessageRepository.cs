@@ -16,6 +16,6 @@ namespace signalrApi.Repositories.MessageRepos
         Task<bool> CreateNewMessage(Message message);
 
         Task<Message> GetOneMessage(int id);
-        Task<bool> DeleteMessage(Message message);
+        Task<bool> DeleteMessage(int id);
     }
 }

@@ -23,9 +23,14 @@ namespace signalrApi.Repositories.MessageRepos
             return true;
         }
 
-        public Task<bool> DeleteMessage(Message message)
+        public async Task<bool> DeleteMessage(int id)
         {
-            throw new NotImplementedException();
+            Message msg = await GetOneMessage(id);
+
+            _context.Messages.Remove(msg);
+            await _context.SaveChangesAsync();
+            return true;
+            
         }
 
         public Task<IEnumerable<Message>> GetMessagesByRecipient(string Recipient)
