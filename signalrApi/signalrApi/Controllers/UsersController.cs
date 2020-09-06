@@ -166,13 +166,13 @@ namespace signalrApi.Controllers
         }
         //method for postman/testing. maybe admin stuff later
         [HttpGet("users")]
-        public async Task<userDTO[]> users()
+        public async Task<userListDTO[]> users()
         {
                 var users = await _context.Users
-                .Where(user => user.LoggedIn)
-                .Select(user => new userDTO
+                .Select(user => new userListDTO
                     {
-                     Username = user.Email
+                     Username = user.Email,
+                     LoggedIn = user.LoggedIn
                         }).ToListAsync();
 
             return users.ToArray();
