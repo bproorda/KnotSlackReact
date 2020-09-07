@@ -111,9 +111,15 @@ namespace signalrApi.Hubs
 
     public interface IChatHub
     {
-        Task SendMessage(string user, string message);
-        
-
+        Task SendMessage(string sender, string recipient, string contents);
+        Task<Message> WriteMessage(string sender, string recipient, string contents);
+        Task SendPrivateMessage(string sender, string recipient, string contents);
+        Task AddToGroup(string channelName);
+        Task RemoveFromGroup(string channelName);
+        Task SendGroupMessage(string sender, string recipient, string contents);
         Task DisplayUsers();
+        //method for testing and experimentation
+         Task GetContext();
+
     }
 }
