@@ -27,6 +27,15 @@ namespace signalrApi.Hubs
 
         public async Task SendMessage(string sender, string recipient, string contents)
         {
+            var message = await WriteMessage(sender, recipient, contents);
+
+            await messageRepository.CreateNewMessage(message);
+
+            await Clients.All.SendAsync("ReceiveMessage", message.ToString());
+        }
+
+        public async Task<Message> WriteMessage(string sender, string recipient, string contents)
+        {
             var user = await userManager.FindByNameAsync(sender);
 
             var message = new Message
@@ -38,9 +47,12 @@ namespace signalrApi.Hubs
                 Date = DateTime.Now,
             };
 
-            await messageRepository.CreateNewMessage(message);
+            return message;
+        }
 
-            await Clients.All.SendAsync("ReceiveMessage", message.ToString());
+        public Task SendPrivateMessage(string user, string message)
+        {
+            return Clients.User(user).SendAsync("ReceiveMessage", message);
         }
 
         public async Task DisplayUsers()
