@@ -24,8 +24,8 @@ namespace signalrApi.Controllers
         public ChannelsController(knotSlackDbContext context, IChannelRepository channelRepository, IUserChannelRepository userChannelRepository)
         {
            this._context = context;
-            this.channelRepository = channelRepository;
-            this.userChannelRepository = userChannelRepository;
+           this.channelRepository = channelRepository;
+           this.userChannelRepository = userChannelRepository;
         }
 
         // GET: api/Channels
