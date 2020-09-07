@@ -57,6 +57,26 @@ namespace signalrApi.Hubs
             await Clients.User(recipient).SendAsync("ReceiveMessage", message);
         }
 
+        public async Task AddToGroup(string channelName)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, channelName);
+
+           
+        }
+
+        public async Task RemoveFromGroup(string channelName)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, channelName);
+
+        }
+
+        public async Task SendGroupMessage(string sender, string recipient, string contents)
+        {
+            var message = await WriteMessage(sender, recipient, contents);
+
+            await Clients.Group(recipient).SendAsync("ReceiveMessage", message);
+        }
+
         public async Task DisplayUsers()
         {
             var users = _context.Users
