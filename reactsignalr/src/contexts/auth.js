@@ -19,6 +19,7 @@ export class AuthProvider extends React.Component {
             user: JSON.parse(window.localStorage.getItem('user')) || null,
             permissions: [],
             token: JSON.parse(window.localStorage.getItem('token')) || null,
+            channels: JSON.parse(window.localStorage.getItem('channels')) || null, 
             login: this.login,
             logout: this.logout,
             register: this.register,
@@ -89,7 +90,7 @@ export class AuthProvider extends React.Component {
         }
     }
 
-    processToken(token, user) {
+    processToken(token, body) {
         try {
             const payload = jwt.decode(token);
             if (payload) {
@@ -98,14 +99,17 @@ export class AuthProvider extends React.Component {
                     return;
                 }
                 if (true) {
-                    user = payload.sub;
+                   var user = payload.sub;
                 }
+                let channels = body.channels;
                 window.localStorage.setItem("user", JSON.stringify(user));
                 window.localStorage.setItem("token", JSON.stringify(token));
+                window.localStorage.setItem("channels", JSON.stringify(channels));
                 console.log(user);
                 this.setState({
                     token,
                     user,
+                    channels,
                     permissions: payload.permissions || [],
                 });
                 cookie.save('auth', token, {path: "/"});
