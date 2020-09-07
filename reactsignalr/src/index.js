@@ -4,14 +4,17 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import { AuthProvider } from './contexts/auth.js';
+import { HubProvider } from './contexts/hub.js';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
+      <HubProvider>
       <BrowserRouter>
     <App />
     </BrowserRouter>
+    </HubProvider>
     </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
