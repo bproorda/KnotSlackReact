@@ -1,0 +1,50 @@
+﻿using signalrApi.Data;
+using signalrApi.Models;
+using signalrApi.services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace signalrApi.Repositories.UserChannelRepos
+{
+    public class UserChannelRepository : IUserChannelRepository
+    {
+        private knotSlackDbContext _context;
+        private IUserManager userManager;
+
+        public UserChannelRepository(knotSlackDbContext _context, IUserManager userManager)
+        {
+            this._context = _context;
+            this.userManager = userManager;
+        }
+
+        public async Task<UserChannel> AddUserToChannel(string username, string channel)
+        {
+            var user = await userManager.FindByNameAsync(username);
+
+            var newUC = new UserChannel
+            {
+                UserId = user.Id,
+                ChannelName = channel,
+            };
+
+             _context.UserChannels.Add(newUC);
+            await _context.SaveChangesAsync();
+
+            return newUC;
+        }
+
+        public async Task<UserChannel> RemoveUserFromChannel(string username, string channel)
+        {
+            var user = await userManager.FindByNameAsync(username);
+
+            var uc = _context.UserChannels.Find(user.Id, channel);
+
+            _context.Remove(uc);
+            await _context.SaveChangesAsync();
+
+            return uc;
+        }
+    }
+}
