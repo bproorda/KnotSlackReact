@@ -9,19 +9,20 @@ import useHub from '../../contexts/hub.js'
 
 export default function Chat(props) {
 
-const {user} = useAuth();
+    const { user } = useAuth();
 
-const {messages, hubConnection} = useHub();
+    const { messages, hubConnection } = useHub();
 
-const [message, setMessage] = useState("");
+    const [message, setMessage] = useState("");
 
-const [filteredMessages, setFilteredMessages] = useState([]);
+    const [filteredMessages, setFilteredMessages] = useState([]);
 
-useEffect(() => {
-    let theseMessages = messages.filter(msg => msg.Recipient === "General");
-    setFilteredMessages(theseMessages)
-}, [messages])
- 
+    useEffect(() => {
+        console.log(messages);
+        let theseMessages = messages.filter(msg => msg.Recipient === "General");
+        setFilteredMessages(theseMessages)
+    }, [messages])
+
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -39,7 +40,7 @@ useEffect(() => {
         thisForm.reset();
     };
 
-  
+
 
     const changeHandler = e => {
         setMessage(e.target.value);
@@ -54,7 +55,7 @@ useEffect(() => {
                 </label>
                 <button name="name" type="submit">Send</button>
             </form>
-            <ChatWindow messages={filteredMessages}  />
+            <ChatWindow messages={filteredMessages} />
 
         </>
     )
