@@ -54,7 +54,7 @@ namespace signalrApi.Hubs
         {
             var message = await WriteMessage(sender, recipient, contents);
 
-            await Clients.User(sender).SendAsync("ReceiveMessage", message);
+            await Clients.User(recipient).SendAsync("ReceiveMessage", message);
         }
 
         public async Task DisplayUsers()
