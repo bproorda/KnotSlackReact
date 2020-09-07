@@ -87,24 +87,7 @@ namespace signalrApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Channel>> PostChannel(Channel channel)
         {
-            _context.Channel.Add(channel);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ChannelExists(channel.Name))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetChannel", new { id = channel.Name }, channel);
+            
         }
 
         // DELETE: api/Channels/5

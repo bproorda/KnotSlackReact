@@ -18,6 +18,20 @@ namespace signalrApi.Repositories.ChannelRepos
             this._context = _context;
             this.userManager = userManager;
         }
+
+        public async Task<Channel> CreateNewChannel(string channelName)
+        {
+            Channel newChannel = new Channel
+            {
+                Name = channelName,
+            };
+
+            _context.Channel.Add(newChannel);
+            await _context.SaveChangesAsync();
+
+            return newChannel;
+        }
+
         public async Task<List<string>> GetMyChannels(string username)
         {
             var user = await userManager.FindByNameAsync(username);

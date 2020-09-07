@@ -10,6 +10,8 @@ namespace signalrApi.Repositories.ChannelRepos
     {
         Task<List<string>> GetMyChannels(string user);
 
+        Task<Channel> CreateNewChannel(string channelName);
+
         
     }
 }
