@@ -50,9 +50,11 @@ namespace signalrApi.Hubs
             return message;
         }
 
-        public Task SendPrivateMessage(string user, string message)
+        public async Task SendPrivateMessage(string sender, string recipient, string contents)
         {
-            return Clients.User(user).SendAsync("ReceiveMessage", message);
+            var message = await WriteMessage(sender, recipient, contents);
+
+            await Clients.User(sender).SendAsync("ReceiveMessage", message);
         }
 
         public async Task DisplayUsers()
