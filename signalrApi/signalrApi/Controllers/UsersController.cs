@@ -42,13 +42,16 @@ namespace signalrApi.Controllers
                 {
                     user.LoggedIn = true;
                     await userManager.UpdateAsync(user);
-                    //comment out if using postman
-                    //await chatHub.DisplayUsers();
+
+                    List<string> channels = new List<string>();
+                    user.UserChannels.ForEach(uc => channels.Add(uc.ChannelName));
+
+
                     return Ok(new UserWithToken
                     {
                         UserId = user.Id,
-                        Token = userManager.CreateToken(user)
-
+                        Token = userManager.CreateToken(user),
+                        Channels = channels.ToArray(),
                     });
                 }
 
