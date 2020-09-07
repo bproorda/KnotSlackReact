@@ -10,5 +10,12 @@ namespace signalrApi.Models.Identity
     {
 
         public bool LoggedIn { get; set; }
+
+        public string ConnectionId {get; set;}
+
+        // Nav Prop for Many to Many/One to Many Relationships
+        public List<UserChannel> UserChannels { get; set; }
+
+        public List<UserMessage> UserMessages { get; set; }
     }
 }

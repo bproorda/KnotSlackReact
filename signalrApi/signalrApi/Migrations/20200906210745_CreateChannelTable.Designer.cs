@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using signalrApi.Data;
 
 namespace signalrApi.Migrations
 {
     [DbContext(typeof(knotSlackDbContext))]
-    partial class knotSlackDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200906210745_CreateChannelTable")]
+    partial class CreateChannelTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,33 +233,6 @@ namespace signalrApi.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("signalrApi.Models.Message", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Contents")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Recipient")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Sender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Messages");
-                });
-
             modelBuilder.Entity("signalrApi.Models.UserChannel", b =>
                 {
                     b.Property<string>("UserId")
@@ -271,22 +246,6 @@ namespace signalrApi.Migrations
                     b.HasIndex("ChannelName");
 
                     b.ToTable("UserChannels");
-                });
-
-            modelBuilder.Entity("signalrApi.Models.UserMessage", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("MessageId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "MessageId");
-
-                    b.HasIndex("MessageId")
-                        .IsUnique();
-
-                    b.ToTable("UserMessages");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -350,21 +309,6 @@ namespace signalrApi.Migrations
 
                     b.HasOne("signalrApi.Models.Identity.ksUser", "User")
                         .WithMany("UserChannels")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("signalrApi.Models.UserMessage", b =>
-                {
-                    b.HasOne("signalrApi.Models.Message", "Message")
-                        .WithOne("UserMessage")
-                        .HasForeignKey("signalrApi.Models.UserMessage", "MessageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("signalrApi.Models.Identity.ksUser", "User")
-                        .WithMany("UserMessages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
