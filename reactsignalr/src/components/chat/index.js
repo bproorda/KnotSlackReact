@@ -26,13 +26,14 @@ export default function Chat(props) {
 
             RecieveNewMessages();
             updateUserList();
+            lookingForContext();
 
         }
 
     }, [hubConnection]);
 
-    const RecieveNewMessages = () => {
-        hubConnection.on('ReceiveMessage', function (user, message) {
+    const RecieveNewMessages = async () => {
+        hubConnection.on('ReceiveMessage', async function (user, message) {
             console.log("messages received");
             console.log(message);
             var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -41,8 +42,14 @@ export default function Chat(props) {
             currentChat.push(encodedMsg);
             console.log(currentChat);
             setChat(currentChat);
+            console.log("searching for context")
+            await hubConnection.invoke("GetContext");
+            hubConnection.on('ShowContext', function(context){
+                console.log(context);
+            });
             IncrementCount();
         });
+
     }
 
     const updateUserList = () => {
@@ -51,6 +58,13 @@ export default function Chat(props) {
             console.log(users);
             setUserList(users);
             incrementUser();
+        })
+    }
+
+    const lookingForContext = () => {
+        console.log("searching for context")
+        hubConnection.on('ShowContext', function(context){
+            console.log(context);
         })
     }
 
@@ -86,6 +100,7 @@ export default function Chat(props) {
             await connection.invoke("DisplayUsers").catch(function (err) {
                 return console.error(err.toString());
             });
+            
         }
         else {
             alert('No connection to server yet.');
