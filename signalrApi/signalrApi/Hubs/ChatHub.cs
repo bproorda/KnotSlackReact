@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using signalrApi.Data;
+using signalrApi.Models;
 using signalrApi.Models.DTO;
+using signalrApi.Repositories.MessageRepos;
 using signalrApi.services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,18 +15,32 @@ namespace signalrApi.Hubs
     public class ChatHub : Hub, IChatHub
     {
         private knotSlackDbContext _context;
-
+        private readonly IMessageRepository messageRepository;
         private readonly IUserManager userManager;
 
-        public ChatHub(knotSlackDbContext _context, IUserManager userManager)
+        public ChatHub(knotSlackDbContext _context, IUserManager userManager, IMessageRepository messageRepository)
         {
             this._context = _context;
             this.userManager = userManager;
+            this.messageRepository = messageRepository;
         }
 
-        public async Task SendMessage(string user, string message)
+        public async Task SendMessage(string sender, string recipient, string contents)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            var user = await userManager.FindByNameAsync(sender);
+
+            var message = new Message
+            {
+                Sender = sender,
+                Recipient = recipient,
+                Contents = contents,
+                UserId = user.Id,
+                Date = DateTime.Now,
+            };
+
+            await messageRepository.CreateNewMessage(message);
+
+            await Clients.All.SendAsync("ReceiveMessage", message.ToString());
         }
 
         public async Task DisplayUsers()
