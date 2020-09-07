@@ -28,66 +28,41 @@ namespace signalrApi.Controllers
            this.userChannelRepository = userChannelRepository;
         }
 
-        // GET: api/Channels
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Channel>>> GetChannel()
-        {
-            return await _context.Channel.ToListAsync();
-        }
 
-        // GET: api/Channels/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Channel>> GetChannel(string id)
-        {
-            var channel = await _context.Channel.FindAsync(id);
-
-            if (channel == null)
-            {
-                return NotFound();
-            }
-
-            return channel;
-        }
-
-        // PUT: api/Channels/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutChannel(string id, Channel channel)
-        {
-            if (id != channel.Name)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(channel).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ChannelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // POST: api/Channels
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Channel>> PostChannel(Channel channel)
+        public async Task<ActionResult<Channel>> PostChannel(string channelName)
         {
-            
+            var newChannel = await channelRepository.CreateNewChannel(channelName);
+
+            return newChannel;
+        }
+
+        [HttpPost("mychannels")]
+        public async Task<IEnumerable<string>> MyChannels(string username)
+        {
+            var channels = await channelRepository.GetMyChannels(username);
+
+            return channels;
+        }
+
+        [HttpPost("newuc")]
+        public async Task<UserChannel> AddToChannel(string username, string channel)
+        {
+            var thisChannel = await userChannelRepository.AddUserToChannel(username, channel);
+
+            return thisChannel;
+        }
+
+        [HttpPost("olduc")]
+        public async Task<UserChannel> RemoveFromChannel(string username, string channel)
+        {
+            var thisChannel = await userChannelRepository.RemoveUserFromChannel(username, channel);
+
+            return thisChannel;
         }
 
         // DELETE: api/Channels/5
