@@ -14,12 +14,12 @@ namespace signalrApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MessageController : ControllerBase
+    public class MessagesController : ControllerBase
     {
         private IMessageRepository messageRepository;
         private readonly IUserManager userManager;
 
-        public MessageController(IMessageRepository messageRepository, IUserManager userManager)
+        public MessagesController(IMessageRepository messageRepository, IUserManager userManager)
         {
             this.messageRepository = messageRepository;
             this.userManager = userManager;

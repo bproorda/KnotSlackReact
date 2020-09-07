@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace signalrApi.Repositories.UserChannelRepos
 {
-    interface IUserChannelRepository
+   public interface IUserChannelRepository
     {
         Task<UserChannel> AddUserToChannel(string username, string channel);
 
