@@ -9,7 +9,7 @@ export default function ChatWindow(props) {
             <h2>Messages: {count}</h2>
             <ul>
                 {messages.map((msg, index) => (
-                    <li key={index}>{msg}</li>
+                    <li key={index}>{msg.contents}</li>
                 ))}
             </ul>
         </>

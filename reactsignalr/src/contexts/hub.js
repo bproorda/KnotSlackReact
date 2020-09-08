@@ -20,7 +20,8 @@ export class HubProvider extends React.Component {
             user: this.setUser(),
             hubConnection: null,
             setConnection: this.setConnection,
-            messages: [],
+            messages: ["Hello"],
+            messgeCount: 0,
         }
 
     };
@@ -50,7 +51,7 @@ export class HubProvider extends React.Component {
     };
 
     recieveMessages = async (hubConnection) => {
-        //let hubConnection = this.hubConnection;
+        //let hubConnection = this.state.hubConnection;
         hubConnection.on('ReceiveMessage', async function (message) {
             console.log("messages received");
             var msg = message;
@@ -58,11 +59,11 @@ export class HubProvider extends React.Component {
             //msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
             //var encodedMsg = message.Sender + ": " + msg;
             //console.log(encodedMsg);
-            let msgs = this.messages ? this.messages : [];
-            console.log(msgs);
-            msgs.push(msg);
-            console.log(msgs);
-            this.setState({ messages: msgs });
+            let currentMessages = this.state.messages ? this.state.messages : [];
+            console.log(currentMessages);
+            currentMessages.push(msg);
+            console.log(currentMessages);
+            this.setState({ messages: currentMessages, messageCount: currentMessages.length });
 
         }.bind(this));
 

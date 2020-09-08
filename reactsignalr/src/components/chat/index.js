@@ -16,12 +16,15 @@ export default function Chat(props) {
     const [message, setMessage] = useState("");
 
     const [filteredMessages, setFilteredMessages] = useState([]);
+    const [messageCount, setMessageCount] = useState(0);
 
     useEffect(() => {
-        console.log(messages);
-        let theseMessages = messages.filter(msg => msg.Recipient === "General");
-        setFilteredMessages(theseMessages)
-    }, [messages])
+        console.log("Filtering to find general messages");
+        let theseMessages = messages.filter(msg => msg.recipient === "General");
+        setFilteredMessages(theseMessages);
+        setMessageCount(theseMessages.length);
+        console.log(theseMessages);
+    }, [messages, messageCount])
 
 
     const submitHandler = async (e) => {
