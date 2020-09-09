@@ -3,6 +3,8 @@ import React from 'react';
 export default function ChatWindow(props) {
 
     const { messages, count } = props;
+    console.log(messages);
+    console.log(count);
 
     return (
         <>

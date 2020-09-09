@@ -23,7 +23,7 @@ export class HubProvider extends React.Component {
       //hubContext props
       hubConnection: null,
       setConnection: this.setConnection,
-      messages: ["Hello"],
+      messages: [{contents: "Hello"}],
       messgeCount: 0,
 
       //UserContext props
@@ -34,7 +34,7 @@ export class HubProvider extends React.Component {
 
 
   async componentDidMount() {
-    console.log(this.context);
+    //console.log(this.context);
    await this.setConnection();
    
 }

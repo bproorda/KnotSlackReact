@@ -10,18 +10,19 @@ export default function Chat(props) {
     const [message, setMessage] = useState("");
 
     const [filteredMessages, setFilteredMessages] = useState([]);
-    const [messageCount, setMessageCount] = useState(0);
+    const [messageCount, setMessageCount] = useState(1);
 
     useEffect(() => {
         console.log("Filtering to find general messages");
-        let theseMessages = messages.filter(msg => msg.recipient === "General");
+        //let theseMessages = messages.filter(msg => msg.recipient === "General");
+        let theseMessages = messages
         setFilteredMessages(theseMessages);
         setMessageCount(theseMessages.length);
         console.log(theseMessages);
     }, [messages, messageCount])
 
     useEffect(()=>{
-        console.log(user);
+        console.log(messages);
     })
 
 
@@ -56,7 +57,7 @@ export default function Chat(props) {
                 </label>
                 <button name="name" type="submit">Send</button>
             </form>
-            <ChatWindow messages={filteredMessages} />
+            <ChatWindow messages={filteredMessages} count={messageCount} />
 
         </>
     )
