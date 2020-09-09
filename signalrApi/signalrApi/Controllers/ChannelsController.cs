@@ -43,9 +43,9 @@ namespace signalrApi.Controllers
         }
 
         [HttpPost("mychannels")]
-        public async Task<IEnumerable<string>> MyChannels(string username)
+        public async Task<IEnumerable<string>> MyChannels(userDTO input)
         {
-            var channels = await channelRepository.GetMyChannels(username);
+            var channels = await channelRepository.GetMyChannels(input.Username);
 
             return channels;
         }
