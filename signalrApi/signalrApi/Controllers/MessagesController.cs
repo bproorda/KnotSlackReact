@@ -27,17 +27,17 @@ namespace signalrApi.Controllers
         }
         
         [HttpPost("msgsender")]
-        public async Task<IEnumerable<Message>> GetMessagesSender(string sender)
+        public async Task<IEnumerable<Message>> GetMessagesSender(userDTO input)
         {
-            var messages = await messageRepository.GetMessagesBySender(sender);
+            var messages = await messageRepository.GetMessagesBySender(input.Username);
             return messages;
         }
 
 
         [HttpPost("msgrec")]
-        public async Task<IEnumerable<Message>> GetMessagesRecipient(string recipient)
+        public async Task<IEnumerable<Message>> GetMessagesRecipient(userDTO input)
         {
-            var messages = await messageRepository.GetMessagesByRecipient(recipient);
+            var messages = await messageRepository.GetMessagesByRecipient(input.Username);
             return messages;
         }
    

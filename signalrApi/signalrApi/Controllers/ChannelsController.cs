@@ -51,17 +51,17 @@ namespace signalrApi.Controllers
         }
 
         [HttpPost("newuc")]
-        public async Task<UserChannel> AddToChannel(string username, string channel)
+        public async Task<UserChannel> AddToChannel(ucDTO input)
         {
-            var thisChannel = await userChannelRepository.AddUserToChannel(username, channel);
+            var thisChannel = await userChannelRepository.AddUserToChannel(input.Username, input.ChannelName);
 
             return thisChannel;
         }
 
         [HttpPost("olduc")]
-        public async Task<UserChannel> RemoveFromChannel(string username, string channel)
+        public async Task<UserChannel> RemoveFromChannel(ucDTO input)
         {
-            var thisChannel = await userChannelRepository.RemoveUserFromChannel(username, channel);
+            var thisChannel = await userChannelRepository.RemoveUserFromChannel(input.Username, input.ChannelName);
 
             return thisChannel;
         }
