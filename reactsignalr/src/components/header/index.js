@@ -1,13 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import logo from '../../logo.svg';
-import useAuth from '../../contexts/auth';
+import UserContext from '../../contexts/userContext';
 import Button from 'react-bootstrap/Button';
 import './header.scss';
 
 
 function Header() {
 
-  const {user, logout} = useAuth();
+  const {user, logout} = useContext(UserContext);
 
   const logoutHandler = () => {
     console.log("logout was clicked");

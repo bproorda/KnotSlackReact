@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import useAuth from '../../contexts/auth';
+import React, { useState, useContext } from 'react';
+import UserContext from '../../contexts/userContext';
 import Button from 'react-bootstrap/Button';
 import { useHistory } from "react-router-dom";
 
 const Login = () => {
 
-    const { user, login, logout, register } = useAuth();
+    const { user, login, logout, register } = useContext(UserContext);
 
     let history = useHistory();
 

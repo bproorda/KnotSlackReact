@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from '../chatWindow';
-import useAuth from '../../contexts/auth.js';
-import useHub from '../../contexts/hub.js'
-// import {
-//     HubConnectionBuilder,
-//     LogLevel,
-// } from '../../../node_modules/@microsoft/signalr/dist/browser/signalr'
+import HubContext from '../../contexts/hubContext';
+
 
 export default function Chat(props) {
 
-    const { user } = useAuth();
-
-    const { messages, hubConnection } = useHub();
+    const {user,  messages, hubConnection } = useContext(HubContext);
 
     const [message, setMessage] = useState("");
 
@@ -25,6 +19,10 @@ export default function Chat(props) {
         setMessageCount(theseMessages.length);
         console.log(theseMessages);
     }, [messages, messageCount])
+
+    useEffect(()=>{
+        console.log(user);
+    })
 
 
     const submitHandler = async (e) => {
