@@ -3,15 +3,18 @@ import React from 'react';
 export default function ChatWindow(props) {
 
     const { messages, count } = props;
-    console.log(messages);
-    console.log(count);
+
+    const formatMessage = (message) => {
+        let fullDate = new Date(Date.parse(message.date));
+        return `${fullDate.toLocaleString()}  ${message.sender}: ${message.contents}`;
+    }
 
     return (
         <>
             <h2>Messages: {count}</h2>
             <ul>
                 {messages.map((msg, index) => (
-                    <li key={index}>{msg.contents}</li>
+                    <li key={index}>{formatMessage(msg)}</li>
                 ))}
             </ul>
         </>
