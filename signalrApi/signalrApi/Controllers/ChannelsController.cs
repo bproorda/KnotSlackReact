@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using signalrApi.Data;
 using signalrApi.Models;
+using signalrApi.Models.DTO;
 using signalrApi.Repositories.ChannelRepos;
 using signalrApi.Repositories.UserChannelRepos;
 
@@ -34,9 +35,9 @@ namespace signalrApi.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Channel>> PostChannel(string channelName)
+        public async Task<ActionResult<Channel>> PostChannel(createChannelDTO input)
         {
-            var newChannel = await channelRepository.CreateNewChannel(channelName);
+            var newChannel = await channelRepository.CreateNewChannel(input.name);
 
             return newChannel;
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using signalrApi.Data;
 using signalrApi.Models;
+using signalrApi.Models.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,6 +47,20 @@ namespace signalrApi.Repositories.MessageRepos
         {
             var messages = await _context.Messages
                 .Where(msg => User == msg.Sender)
+                .ToListAsync();
+
+            return messages;
+        }
+
+        public async Task<IEnumerable<Message>> GetMyMessages(ksUser User)
+        {
+            var channels = new List<string>();
+            User.UserChannels.ForEach(uc => channels.Add(uc.ChannelName));
+
+            var messages = await _context.Messages
+                .Where(msg => User.UserName == msg.Sender 
+                || User.UserName == msg.Recipient
+                || channels.Contains(msg.Recipient))
                 .ToListAsync();
 
             return messages;

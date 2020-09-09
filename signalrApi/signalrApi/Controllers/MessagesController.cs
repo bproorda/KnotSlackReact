@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using signalrApi.Models;
 using signalrApi.Models.DTO;
@@ -37,6 +38,15 @@ namespace signalrApi.Controllers
         public async Task<IEnumerable<Message>> GetMessagesRecipient(string recipient)
         {
             var messages = await messageRepository.GetMessagesByRecipient(recipient);
+            return messages;
+        }
+   
+        [HttpPost("mymsg")]
+        public async Task<IEnumerable<Message>> GetMyMessages(userDTO userInfo)
+        {
+            //var info = HttpContext.User.Identity;
+            var user = await userManager.FindByNameAsync(userInfo.Username);
+            var messages = await messageRepository.GetMyMessages(user);
             return messages;
         }
 
