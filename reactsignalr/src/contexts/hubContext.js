@@ -23,7 +23,7 @@ export class HubProvider extends React.Component {
       //hubContext props
       hubConnection: null,
       setConnection: this.setConnection,
-      messages: [{date: "1970-01-01T00:00:00.000Z", sender:"Diana Trouble", contents: "Hello World!"}],
+      messages: [{date: "1970-01-01T00:00:00.000Z", sender:"Diana Trouble", contents: "Hello World!", recipient: "General"}],
       messgeCount: 0,
 
       //UserContext props
