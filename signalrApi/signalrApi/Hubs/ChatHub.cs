@@ -31,7 +31,7 @@ namespace signalrApi.Hubs
 
             await messageRepository.CreateNewMessage(message);
 
-            await Clients.All.SendAsync("ReceiveMessage", message.ToString());
+            await Clients.All.SendAsync("ReceiveMessage", message);
         }
 
         public async Task<Message> WriteMessage(string sender, string recipient, string contents)
