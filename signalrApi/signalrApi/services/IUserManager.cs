@@ -63,7 +63,6 @@ namespace signalrApi.services
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim("UserId", user.Id),
-                
             };
 
             var token = new JwtSecurityToken(

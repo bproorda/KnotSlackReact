@@ -3,16 +3,19 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from './App';
-import { AuthProvider } from './contexts/auth.js';
+import { UserProvider } from './contexts/userContext';
+import { HubProvider } from './contexts/hubContext';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <AuthProvider>
-      <BrowserRouter>
-    <App />
+    <BrowserRouter>
+      <UserProvider>
+          <HubProvider>
+            <App />
+          </HubProvider>
+      </UserProvider>
     </BrowserRouter>
-    </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

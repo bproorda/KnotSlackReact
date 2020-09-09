@@ -1,82 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from '../chatWindow';
-import {
-    HubConnectionBuilder,
-    LogLevel,
-} from '../../../node_modules/@microsoft/signalr/dist/browser/signalr'
+import HubContext from '../../contexts/hubContext';
+
 
 export default function Chat(props) {
 
-    const username = props.username;
-    const [hubConnection, setHubConnection] = useState();
-    const [chat, setChat] = useState([]);
+    const {user,  messages, hubConnection } = useContext(HubContext);
+
     const [message, setMessage] = useState("");
-    const [messageCount, setMessageCount] = useState(0);
-    const [userList, setUserList] = useState([]);
-    const [userCount, setUserCount] = useState(0);
 
-
-    useEffect(() => {
-        startup();
-    }, []);
+    const [filteredMessages, setFilteredMessages] = useState([]);
+    const [messageCount, setMessageCount] = useState(1);
 
     useEffect(() => {
-        if (hubConnection) {
-            console.log(hubConnection);
+        console.log("Filtering to find general messages");
+        //let theseMessages = messages.filter(msg => msg.recipient === "General");
+        let theseMessages = messages
+        setFilteredMessages(theseMessages);
+        setMessageCount(theseMessages.length);
+        console.log(theseMessages);
+    }, [messages, messageCount])
 
-            RecieveNewMessages();
-            updateUserList();
-            lookingForContext();
+    useEffect(()=>{
+        console.log(messages);
+    })
 
-        }
-
-    }, [hubConnection]);
-
-    const RecieveNewMessages = async () => {
-        hubConnection.on('ReceiveMessage', async function (user, message) {
-            console.log("messages received");
-            console.log(message);
-            var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            var encodedMsg = user + ": " + msg;
-            let currentChat = chat;
-            currentChat.push(encodedMsg);
-            console.log(currentChat);
-            setChat(currentChat);
-            console.log("searching for context")
-            await hubConnection.invoke("GetContext");
-            hubConnection.on('ShowContext', function(context){
-                console.log(context);
-            });
-            IncrementCount();
-        });
-
-    }
-
-    const updateUserList = () => {
-        hubConnection.on('ShowUsers', function (users) {
-            console.log("updating user list");
-            console.log(users);
-            setUserList(users);
-            incrementUser();
-        })
-    }
-
-    const lookingForContext = () => {
-        console.log("searching for context")
-        hubConnection.on('ShowContext', function(context){
-            console.log(context);
-        })
-    }
-
-    const IncrementCount = () => {
-        let currentCount = chat.length;
-        setMessageCount(currentCount);
-        console.log(`# of messages: ${currentCount}`);
-    }
-
-    const incrementUser = () => {
-        setUserCount(userList.length);
-    }
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -84,7 +32,7 @@ export default function Chat(props) {
 
         if (hubConnection.connectionStarted) {
             console.log("sending!")
-            await hubConnection.invoke("SendMessage", username, message).catch(function (err) {
+            await hubConnection.invoke("SendMessage", user, "General", message).catch(function (err) {
                 return console.error(err.toString());
             });
         }
@@ -94,34 +42,7 @@ export default function Chat(props) {
         thisForm.reset();
     };
 
-    const sendUser = async (connection) => {
-        if (connection.connectionStarted) {
-            console.log("adding your username to the list of users")
-            await connection.invoke("DisplayUsers").catch(function (err) {
-                return console.error(err.toString());
-            });
-            
-        }
-        else {
-            alert('No connection to server yet.');
-        }
-    }
-    const startup = async () => {
-        let hubConnection = new HubConnectionBuilder()
-            .withUrl("https://localhost:5001/chatHub")
-            .configureLogging(LogLevel.Information)
-            .build();
 
-       await hubConnection.start()
-            .then(result => {
-                console.log('Connected!');
-            })
-            .catch(e => console.log('Connection failed: ', e));
-
-        sendUser(hubConnection);
-
-        setHubConnection(hubConnection);
-    }
 
     const changeHandler = e => {
         setMessage(e.target.value);
@@ -131,12 +52,12 @@ export default function Chat(props) {
         <>
             <form onSubmit={submitHandler}>
                 <label>
-                    {username} says:
+                    {user} says:
     <input type="text" name="name" onChange={changeHandler} />
                 </label>
                 <button name="name" type="submit">Send</button>
             </form>
-            <ChatWindow messages={chat} count={messageCount} />
+            <ChatWindow messages={filteredMessages} count={messageCount} />
 
         </>
     )

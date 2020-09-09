@@ -1,28 +1,27 @@
-import React, { useContext } from 'react';
+import React from 'react'
 import jwt from 'jsonwebtoken';
 import cookie from 'react-cookies';
-
-// TODO: Input Users API url below
 const usersAPI = 'https://localhost:5001/api/Users/';
 
-export const AuthContext = React.createContext();
+const UserContext = React.createContext();
 
-export default function useAuth() {
-    return useContext(AuthContext);
-}
 
-export class AuthProvider extends React.Component {
+export default UserContext;
+
+export class UserProvider extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            user: JSON.parse(window.localStorage.getItem('user')) || null,
+            fakeUser: "Bob",
+            food: "Favorite Food: Bacon",
+            user: JSON.parse(window.localStorage.getItem('user')) || "NotBob",
             permissions: [],
             token: JSON.parse(window.localStorage.getItem('token')) || null,
+            channels: JSON.parse(window.localStorage.getItem('channels')) || null,
             login: this.login,
             logout: this.logout,
             register: this.register,
-        };
+        }
     }
 
     register = async (email, password) => {
@@ -38,7 +37,7 @@ export class AuthProvider extends React.Component {
         const body = await result.json();
 
         if (result.ok) {
-            if(this.processToken(body.token, body)){
+            if (this.processToken(body.token, body)) {
                 return true;
             }
         } else {
@@ -60,7 +59,7 @@ export class AuthProvider extends React.Component {
         //console.log(body);
 
         if (result.ok) {
-            if(this.processToken(body.token, body)){
+            if (this.processToken(body.token, body)) {
                 return true;
             }
         } else {
@@ -78,40 +77,43 @@ export class AuthProvider extends React.Component {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username,}),
+            body: JSON.stringify({ username, }),
         });
 
-        if(result.ok){
-        this.setState({token: null, user: null, permissions: [] });
-        cookie.remove('auth', {path: "/"});
-        window.localStorage.removeItem("user");
-        window.localStorage.removeItem("token");
+        if (result.ok) {
+            this.setState({ token: null, user: null, permissions: [] });
+            cookie.remove('auth', { path: "/" });
+            window.localStorage.removeItem("user");
+            window.localStorage.removeItem("token");
         }
     }
 
-    processToken(token, user) {
+    processToken(token, body) {
         try {
             const payload = jwt.decode(token);
             if (payload) {
-                if(payload.exp*1000 < Date.now()) {
+                if (payload.exp * 1000 < Date.now()) {
                     this.logout();
                     return;
                 }
                 if (true) {
-                    user = payload.sub;
+                    var user = payload.sub;
                 }
+                let channels = body.channels;
                 window.localStorage.setItem("user", JSON.stringify(user));
                 window.localStorage.setItem("token", JSON.stringify(token));
+                window.localStorage.setItem("channels", JSON.stringify(channels));
                 console.log(user);
                 this.setState({
                     token,
                     user,
+                    channels,
                     permissions: payload.permissions || [],
                 });
-                cookie.save('auth', token, {path: "/"});
+                cookie.save('auth', token, { path: "/" });
                 return true;
             }
-        } catch(e) {
+        } catch (e) {
             console.warn(e);
             this.logout();
         }
@@ -124,11 +126,12 @@ export class AuthProvider extends React.Component {
         this.processToken(cookieToken);
     }
 
+
     render() {
         return (
-            <AuthContext.Provider value={this.state}>
+            <UserContext.Provider value={this.state}>
                 {this.props.children}
-            </AuthContext.Provider>
+            </UserContext.Provider>
         );
     }
 }

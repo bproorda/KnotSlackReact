@@ -44,14 +44,18 @@ namespace signalrApi.Controllers
                     await userManager.UpdateAsync(user);
 
                     List<string> channels = new List<string>();
-                    user.UserChannels.ForEach(uc => channels.Add(uc.ChannelName));
 
+                    if (user.UserChannels != null)
+                    {
+                        user.UserChannels.ForEach(uc => channels.Add(uc.ChannelName));
+                    }
 
                     return Ok(new UserWithToken
                     {
-                        UserId = user.Id,
+                        UserId = user.UserName,
                         Token = userManager.CreateToken(user),
                         Channels = channels.ToArray(),
+
                     });
                 }
 
