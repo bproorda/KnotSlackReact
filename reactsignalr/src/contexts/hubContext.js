@@ -4,6 +4,9 @@ import {
   LogLevel,
 } from '@microsoft/signalr/dist/browser/signalr';
 import UserContext from './userContext';
+//import context from 'react-bootstrap/esm/AccordionContext';
+const usersAPI = 'https://localhost:5001/api/Users/';
+const messagesAPI = 'https://localhost:5001/api/messages/';
 
 export const HubContext = React.createContext();
 
@@ -19,6 +22,7 @@ export class HubProvider extends React.Component {
       //dummy prop
       book: "Favorie Book: Dune",
       userContext: context,
+      allUsers: null,
 
       //hubContext props
       hubConnection: null,
@@ -27,7 +31,6 @@ export class HubProvider extends React.Component {
       messgeCount: 0,
 
       //UserContext props
-      //dummy props
       user: context.user
     }
   }
@@ -36,7 +39,26 @@ export class HubProvider extends React.Component {
   async componentDidMount() {
     //console.log(this.context);
     await this.setConnection();
+    await this.fetchAllUsers();
+  }
 
+  fetchAllUsers = async () => {
+    const result = await fetch(`${usersAPI}allusers`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.context.token}`
+      },
+    });
+
+    const body = await result.json();
+    console.log(body);
+
+    if (result.ok) {
+      this.setState({allUsers: body});
+    } else {
+      return false;
+    }
   }
 
   setConnection = async () => {
@@ -76,7 +98,7 @@ export class HubProvider extends React.Component {
     }.bind(this));
   }
 
-  recieveUpdatedUser = async (hubConnection) =>{
+  recieveUpdatedUser = async (hubConnection) => {
     hubConnection.on('UpdateUsers', async function (user) {
       console.log(user);
     });

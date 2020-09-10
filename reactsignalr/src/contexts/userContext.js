@@ -14,7 +14,7 @@ export class UserProvider extends React.Component {
         this.state = {
             fakeUser: "Bob",
             food: "Favorite Food: Bacon",
-            user: JSON.parse(window.localStorage.getItem('user')) || "NotBob",
+            user: JSON.parse(window.localStorage.getItem('user')) || "",
             permissions: [],
             token: JSON.parse(window.localStorage.getItem('token')) || null,
             channels: JSON.parse(window.localStorage.getItem('channels')) || null,
