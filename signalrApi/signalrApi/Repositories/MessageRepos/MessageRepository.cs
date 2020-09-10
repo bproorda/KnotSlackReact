@@ -2,6 +2,7 @@
 using signalrApi.Data;
 using signalrApi.Models;
 using signalrApi.Models.Identity;
+using signalrApi.Repositories.UserChannelRepos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,12 @@ namespace signalrApi.Repositories.MessageRepos
     public class MessageRepository : IMessageRepository
     {
         private knotSlackDbContext _context;
+        private IUserChannelRepository userChannelRepository;
 
-        public MessageRepository(knotSlackDbContext _context)
+        public MessageRepository(knotSlackDbContext _context, IUserChannelRepository userChannelRepository)
         {
             this._context = _context;
+            this.userChannelRepository = userChannelRepository;
         }
         public async Task<bool> CreateNewMessage(Message message)
         {
@@ -54,8 +57,7 @@ namespace signalrApi.Repositories.MessageRepos
 
         public async Task<IEnumerable<Message>> GetMyMessages(ksUser User)
         {
-            var channels = new List<string>();
-            User.UserChannels.ForEach(uc => channels.Add(uc.ChannelName));
+            var channels = await userChannelRepository.GetUserChannels(User);
 
             var messages = await _context.Messages
                 .Where(msg => User.UserName == msg.Sender 
