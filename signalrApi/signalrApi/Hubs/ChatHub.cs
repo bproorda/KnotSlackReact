@@ -100,6 +100,17 @@ namespace signalrApi.Hubs
             await Clients.Caller.SendAsync("ShowContext", msg);
         }
 
+        public async Task SendUpdatedUser(string username, bool loggedIn)
+        {
+            var updatedUser = new userListDTO
+            {
+                Username = username,
+                LoggedIn = loggedIn,
+            };
+
+            await Clients.All.SendAsync("UpdateUsers", updatedUser);
+        }
+
 
         //public async Task RemoveUser(string user)
         //{
@@ -117,6 +128,7 @@ namespace signalrApi.Hubs
         Task AddToGroup(string channelName);
         Task RemoveFromGroup(string channelName);
         Task SendGroupMessage(string sender, string recipient, string contents);
+        Task SendUpdatedUser(string username, bool loggedIn);
         Task DisplayUsers();
         //method for testing and experimentation
          Task GetContext();

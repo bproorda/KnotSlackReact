@@ -48,6 +48,8 @@ namespace signalrApi.Controllers
                     user.LoggedIn = true;
                     await userManager.UpdateAsync(user);
 
+                    await chatHub.SendUpdatedUser(user.UserName, user.LoggedIn);
+
                     var channels = await userChannelRepository.GetUserChannels(user);
 
                     return Ok(new UserWithToken
@@ -75,7 +77,7 @@ namespace signalrApi.Controllers
                 await userManager.UpdateAsync(user);
 
                 //comment out if using postman
-                await chatHub.DisplayUsers();
+                await chatHub.SendUpdatedUser(user.UserName, user.LoggedIn);
                 return user.UserName;
 
             }
