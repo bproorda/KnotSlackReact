@@ -75,7 +75,6 @@ namespace signalrApi.Controllers
                 await userManager.UpdateAsync(user);
 
                 //comment out if using postman
-                
                 await chatHub.DisplayUsers();
                 return user.UserName;
 
@@ -90,7 +89,7 @@ namespace signalrApi.Controllers
             var user = new ksUser
             {
                 Email = register.Email,
-                UserName = register.Email,
+                UserName = register.UserName,
                 LoggedIn = true,
 
             };
