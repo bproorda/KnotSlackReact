@@ -24,13 +24,13 @@ export class UserProvider extends React.Component {
         }
     }
 
-    register = async (email, password) => {
+    register = async (email, username, password) => {
         const result = await fetch(`${usersAPI}register`, {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ email, username, password }),
         });
         console.log(result);
 
