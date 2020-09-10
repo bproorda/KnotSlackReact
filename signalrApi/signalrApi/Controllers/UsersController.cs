@@ -63,7 +63,7 @@ namespace signalrApi.Controllers
             }
             return Unauthorized();
         }
-        [Authorize]
+        //[Authorize]
         //To update LoggedIn prop in db
         [HttpPost("Logout")]
         public async Task<string> Logout(userDTO userInfo)
@@ -171,8 +171,8 @@ namespace signalrApi.Controllers
 
             });
         }
-        
-        [HttpGet("users")]
+        [Authorize]
+        [HttpPost("allusers")]
         public async Task<userListDTO[]> users()
         {
                 var users = await _context.Users
