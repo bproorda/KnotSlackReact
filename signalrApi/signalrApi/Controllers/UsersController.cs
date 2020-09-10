@@ -182,7 +182,7 @@ namespace signalrApi.Controllers
                 var users = await _context.Users
                 .Select(user => new userListDTO
                     {
-                     Username = user.Email,
+                     Username = user.UserName,
                      LoggedIn = user.LoggedIn
                         }).ToListAsync();
 

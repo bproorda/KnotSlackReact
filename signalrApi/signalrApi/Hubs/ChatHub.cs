@@ -107,8 +107,9 @@ namespace signalrApi.Hubs
                 Username = username,
                 LoggedIn = loggedIn,
             };
-
-            await Clients.All.SendAsync("UpdateUsers", updatedUser);
+            if (Clients != null) {
+                await Clients.All.SendAsync("UpdateUsers", updatedUser);
+            };
         }
 
 
