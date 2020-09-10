@@ -13,7 +13,7 @@ export default function ChatWindow(props) {
         <>
             <h2>Messages: {count}</h2>
             <ul>
-                {messages.filter(msg => msg.recipient === "General").map((msg, index) => (
+                {messages.map((msg, index) => (
                     <li key={index}>{formatMessage(msg)}</li>
                 ))}
             </ul>
