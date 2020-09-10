@@ -40,6 +40,7 @@ export class HubProvider extends React.Component {
     //console.log(this.context);
     await this.setConnection();
     await this.fetchAllUsers();
+    await this.fetchAllMessages();
   }
 
   fetchAllUsers = async () => {
@@ -56,6 +57,26 @@ export class HubProvider extends React.Component {
 
     if (result.ok) {
       this.setState({allUsers: body});
+    } else {
+      return false;
+    }
+  };
+
+  fetchAllMessages = async () => {
+    const result = await fetch(`${messagesAPI}mymsg`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.context.token}`
+      },
+    });
+
+    const body = await result.json();
+    console.log(body);
+
+    if (result.ok) {
+      let allMessages = this.state.messages.concat(body);
+      this.setState({messages: allMessages});
     } else {
       return false;
     }
