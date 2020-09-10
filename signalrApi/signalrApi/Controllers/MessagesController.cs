@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using signalrApi.Models;
 using signalrApi.Models.DTO;
@@ -19,11 +21,13 @@ namespace signalrApi.Controllers
     {
         private IMessageRepository messageRepository;
         private readonly IUserManager userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MessagesController(IMessageRepository messageRepository, IUserManager userManager)
+        public MessagesController(IMessageRepository messageRepository, IUserManager userManager, IHttpContextAccessor _httpContextAccessor)
         {
             this.messageRepository = messageRepository;
             this.userManager = userManager;
+            this._httpContextAccessor = _httpContextAccessor;
         }
         
         [HttpPost("msgsender")]
@@ -42,10 +46,10 @@ namespace signalrApi.Controllers
         }
         [Authorize]
         [HttpPost("mymsg")]
-        public async Task<IEnumerable<Message>> GetMyMessages(userDTO userInfo)
+        public async Task<IEnumerable<Message>> GetMyMessages()
         {
-            var info = HttpContext.User.Identity;
-            var user = await userManager.FindByNameAsync(userInfo.Username);
+            var username = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var user = await userManager.FindByNameAsync(username);
             var messages = await messageRepository.GetMyMessages(user);
             return messages;
         }

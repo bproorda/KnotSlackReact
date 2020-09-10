@@ -84,7 +84,9 @@ namespace signalrApi
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials());
-            }); ;
+            });
+
+            services.AddHttpContextAccessor();
 
             services.AddSignalR();
         }
