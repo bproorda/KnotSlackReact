@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace signalrApi.Models
 {
-    //Join Table for Many to Many relationshipt
+    //Join Table for Many to Many relationships
     public class UserChannel
     {
         public string UserId { get; set; }

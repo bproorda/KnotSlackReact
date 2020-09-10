@@ -13,6 +13,7 @@ using signalrApi.Hubs;
 using signalrApi.Models.DTO;
 using signalrApi.Models.Identity;
 using signalrApi.services;
+using signalrApi.Repositories.UserChannelRepos;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,13 +25,15 @@ namespace signalrApi.Controllers
     {
         private knotSlackDbContext _context;
         private readonly IUserManager userManager;
+        private IUserChannelRepository userChannelRepository;
         private IChatHub chatHub;
 
-        public UsersController(IUserManager userManager, IChatHub chatHub, knotSlackDbContext _context)
+        public UsersController(IUserManager userManager, IChatHub chatHub, knotSlackDbContext _context, IUserChannelRepository userChannelRepository)
         {
             this.userManager = userManager;
             this.chatHub = chatHub;
             this._context = _context;
+            this.userChannelRepository = userChannelRepository;
         }
 
         [HttpPost("Login")]
@@ -45,18 +48,13 @@ namespace signalrApi.Controllers
                     user.LoggedIn = true;
                     await userManager.UpdateAsync(user);
 
-                    List<string> channels = new List<string>();
-
-                    if (user.UserChannels != null)
-                    {
-                        user.UserChannels.ForEach(uc => channels.Add(uc.ChannelName));
-                    }
+                    var channels = await userChannelRepository.GetUserChannels(user);
 
                     return Ok(new UserWithToken
                     {
                         UserId = user.UserName,
                         Token = userManager.CreateToken(user),
-                        Channels = channels.ToArray(),
+                        Channels = channels,
 
                     });
                 }

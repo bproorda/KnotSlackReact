@@ -1,5 +1,8 @@
-﻿using signalrApi.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using signalrApi.Data;
 using signalrApi.Models;
+using signalrApi.Models.DTO;
+using signalrApi.Models.Identity;
 using signalrApi.services;
 using System;
 using System.Collections.Generic;
@@ -45,6 +48,24 @@ namespace signalrApi.Repositories.UserChannelRepos
             await _context.SaveChangesAsync();
 
             return uc;
+        }
+
+        public async Task<string[]> GetUserChannels(ksUser user)
+        {
+            var userChannels = await _context.UserChannels
+                .Where(uc => uc.UserId == user.Id)
+                .Select(uc => new ucDTO
+                {
+                    ChannelName = uc.ChannelName,
+                }).ToListAsync();
+
+            var middleMan = new List<string>();
+
+            userChannels.ForEach(uc => middleMan.Add(uc.ChannelName));
+
+            var output = middleMan.ToArray();
+
+            return output;
         }
     }
 }
