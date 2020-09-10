@@ -109,7 +109,8 @@ namespace signalrApi.Controllers
             return Ok(new UserWithToken
             {
                 UserId = user.Id,
-                Token = userManager.CreateToken(user)
+                Token = userManager.CreateToken(user),
+                Channels = new string[1] { "General" },
             });
 
 
