@@ -39,15 +39,15 @@ const Login = () => {
     }
 
     const toggleIsRegistering = () => {
-        console.log("Registering new user!");
+        //console.log("Registering new user!");
         setIsRegistering(!isRegistering);
     }
 
     const logoutSubmit = e => {
-        console.log("logging out use");
+        console.log("logging out user");
         e.preventDefault();
-        logout();
-        history.push("/")
+        logout(user);
+        history.push("/");
 
     }
 

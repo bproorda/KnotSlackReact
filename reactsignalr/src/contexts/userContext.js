@@ -56,7 +56,7 @@ export class UserProvider extends React.Component {
         });
 
         const body = await result.json();
-        //console.log(body);
+        console.log(body);
 
         if (result.ok) {
             if (this.processToken(body.token, body)) {
