@@ -40,11 +40,11 @@ namespace signalrApi.Controllers
             var messages = await messageRepository.GetMessagesByRecipient(input.Username);
             return messages;
         }
-   
+        [Authorize]
         [HttpPost("mymsg")]
         public async Task<IEnumerable<Message>> GetMyMessages(userDTO userInfo)
         {
-            //var info = HttpContext.User.Identity;
+            var info = HttpContext.User.Identity;
             var user = await userManager.FindByNameAsync(userInfo.Username);
             var messages = await messageRepository.GetMyMessages(user);
             return messages;

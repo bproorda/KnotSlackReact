@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using signalrApi.Data;
 using signalrApi.Hubs;
 using signalrApi.Models.DTO;
@@ -63,7 +65,7 @@ namespace signalrApi.Controllers
             }
             return Unauthorized();
         }
-
+        [Authorize]
         //To update LoggedIn prop in db
         [HttpPost("Logout")]
         public async Task<string> Logout(userDTO userInfo)
