@@ -105,6 +105,8 @@ namespace signalrApi.Controllers
                 });
             }
 
+            await userChannelRepository.AddNewUserToGeneral(user.UserName);
+
             return Ok(new UserWithToken
             {
                 UserId = user.Id,

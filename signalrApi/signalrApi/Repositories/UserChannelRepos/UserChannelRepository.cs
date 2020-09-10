@@ -38,6 +38,22 @@ namespace signalrApi.Repositories.UserChannelRepos
             return newUC;
         }
 
+        public async Task<UserChannel> AddNewUserToGeneral(string username)
+        {
+            var user = await userManager.FindByNameAsync(username);
+
+            var newUC = new UserChannel
+            {
+                UserId = user.Id,
+                ChannelName = "General",
+            };
+
+            _context.UserChannels.Add(newUC);
+            await _context.SaveChangesAsync();
+
+            return newUC;
+        }
+
         public async Task<UserChannel> RemoveUserFromChannel(string username, string channel)
         {
             var user = await userManager.FindByNameAsync(username);
