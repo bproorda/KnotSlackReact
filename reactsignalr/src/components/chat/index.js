@@ -9,7 +9,7 @@ export default function Chat(props) {
 
     const [message, setMessage] = useState("");
 
-    const [messageCount, setMessageCount] = useState(1);
+    const [messageCount] = useState(1);
 
 
     useEffect(()=>{
