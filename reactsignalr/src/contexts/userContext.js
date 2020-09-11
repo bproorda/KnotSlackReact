@@ -12,12 +12,14 @@ export class UserProvider extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            //dummy props
             fakeUser: "Bob",
             food: "Favorite Food: Bacon",
-            user: JSON.parse(window.localStorage.getItem('user')) || "",
+            //real props
+            user: null,
             permissions: [],
-            token: JSON.parse(window.localStorage.getItem('token')) || null,
-            channels: JSON.parse(window.localStorage.getItem('channels')) || null,
+            token: null,
+            channels: null,
             login: this.login,
             logout: this.logout,
             register: this.register,
@@ -37,7 +39,7 @@ export class UserProvider extends React.Component {
         const body = await result.json();
 
         if (result.ok) {
-            if (this.processToken(body.token, body)) {
+            if (this.processToken(body.token, body.channels)) {
                 return true;
             }
         } else {
@@ -59,7 +61,7 @@ export class UserProvider extends React.Component {
         console.log(body);
 
         if (result.ok) {
-            if (this.processToken(body.token, body)) {
+            if (this.processToken(body.token, body.channels)) {
                 return true;
             }
         } else {
@@ -88,7 +90,7 @@ export class UserProvider extends React.Component {
         }
     }
 
-    processToken(token, body) {
+    processToken(token, channels) {
         try {
             const payload = jwt.decode(token);
             if (payload) {
@@ -99,9 +101,8 @@ export class UserProvider extends React.Component {
                 if (true) {
                     var user = payload.sub;
                 }
-                let channels = body.channels;
-                window.localStorage.setItem("user", JSON.stringify(user));
-                window.localStorage.setItem("token", JSON.stringify(token));
+                //window.localStorage.setItem("user", JSON.stringify(user));
+                //window.localStorage.setItem("token", JSON.stringify(token));
                 window.localStorage.setItem("channels", JSON.stringify(channels));
                 console.log(user);
                 this.setState({
@@ -122,8 +123,9 @@ export class UserProvider extends React.Component {
     componentDidMount() {
         const cookieToken = cookie.load('auth');
         if (cookieToken) console.log('Found auth cookie!');
-
-        this.processToken(cookieToken);
+        //if window.localStorage
+        let channels = JSON.parse(window.localStorage.getItem('channels'))
+        this.processToken(cookieToken, channels);
     }
 
 
