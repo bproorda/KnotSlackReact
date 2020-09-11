@@ -39,9 +39,12 @@ export class HubProvider extends React.Component {
 
   async componentDidMount() {
     //console.log(this.context);
+
+    if(this.state.user !== null){
     await this.setConnection();
     await this.fetchAllUsers();
     await this.fetchAllMessages();
+    }
   }
 
   fetchAllUsers = async () => {

@@ -4,6 +4,7 @@ import Header from './components/header';
 import Login from './components/login';
 import Chat from './components/chat';
 import UserContext from './contexts/userContext';
+import { HubProvider } from './contexts/hubContext';
 import './App.css';
 
 function App() {
@@ -18,8 +19,9 @@ function App() {
       {user ? <Redirect to="/chat" /> : <Login /> }
       </Route>
       <Route path = "/chat">
+      <HubProvider>
       {user ? <Chat /> : <Redirect to="/" />}
-      
+      </HubProvider>
       </Route>
     </Switch>
     </>
