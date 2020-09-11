@@ -37,7 +37,15 @@ namespace signalrApi.Repositories.MessageRepos
             
         }
 
-        public async Task<IEnumerable<Message>> GetMessagesByRecipient(string Recipient)
+        public async Task<bool> DeleteMessagesBySender(string username)
+        {
+            var messages = await GetMessagesBySender(username);
+            messages.ForEach( msg => _context.Messages.Remove(msg));
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<List<Message>> GetMessagesByRecipient(string Recipient)
         {
             var messages = await _context.Messages
                 .Where(msg => Recipient == msg.Recipient)
@@ -46,7 +54,7 @@ namespace signalrApi.Repositories.MessageRepos
             return messages;
         }
 
-        public async Task<IEnumerable<Message>> GetMessagesBySender(string User)
+        public async Task<List<Message>> GetMessagesBySender(string User)
         {
             var messages = await _context.Messages
                 .Where(msg => User == msg.Sender)

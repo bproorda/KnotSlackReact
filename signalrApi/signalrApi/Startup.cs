@@ -44,7 +44,7 @@ namespace signalrApi
             services.AddTransient<IUserManager, UserManagerWrapper>();
             
             services.AddTransient<IChatHub, ChatHub>();
-            services.AddTransient<IMessageRepository, MessageRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddTransient<IChannelRepository, ChannelRepository>();
             services.AddTransient<IUserChannelRepository, UserChannelRepository>();
 

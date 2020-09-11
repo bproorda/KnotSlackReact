@@ -85,5 +85,15 @@ namespace signalrApi.Controllers
 
             return true;
         }
+
+        //Deleting all messages sent by a specific user
+        [Authorize]
+        [HttpPost("delsender")]
+        public async Task<ActionResult<bool>> DeleteBySender(userDTO user)
+        {
+            await messageRepository.DeleteMessagesBySender(user.Username);
+
+            return true;
+        }
     }
 }

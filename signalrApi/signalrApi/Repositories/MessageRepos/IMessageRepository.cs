@@ -9,8 +9,8 @@ namespace signalrApi.Repositories.MessageRepos
 {
     public interface IMessageRepository
     {
-        Task<IEnumerable<Message>> GetMessagesByRecipient(string Recipient );
-        Task<IEnumerable<Message>> GetMessagesBySender(string User);
+        Task<List<Message>> GetMessagesByRecipient(string Recipient );
+        Task<List<Message>> GetMessagesBySender(string User);
         Task<IEnumerable<Message>> GetMyMessages(ksUser User);
 
         Task<IEnumerable<Message>> GetPrivateMessages(string UserA, string UserB);
@@ -19,5 +19,7 @@ namespace signalrApi.Repositories.MessageRepos
 
         Task<Message> GetOneMessage(int id);
         Task<Message> DeleteMessage(int id);
+        Task<bool> DeleteMessagesBySender(string username);
+
     }
 }
