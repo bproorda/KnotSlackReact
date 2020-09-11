@@ -4,13 +4,16 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import { UserProvider } from './contexts/userContext';
+import { HubProvider } from './contexts/hubContext';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <UserProvider>
+          <HubProvider>
             <App />
+          </HubProvider>
       </UserProvider>
     </BrowserRouter>
   </React.StrictMode>,

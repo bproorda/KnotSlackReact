@@ -47,6 +47,12 @@ export class HubProvider extends React.Component {
     }
   }
 
+  componentWillUnmount(){
+    if(this.state.user !== null){
+      this.setState({hubConnection: null});
+    }
+  }
+
   fetchAllUsers = async () => {
     const result = await fetch(`${usersAPI}allusers`, {
       method: 'post',
