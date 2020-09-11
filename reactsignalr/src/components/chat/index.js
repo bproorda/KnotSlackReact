@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from '../chatWindow';
 import HubContext from '../../contexts/hubContext';
+import UserList from '../userList'
 
 
 export default function Chat(props) {
 
-    const {user,  messages, hubConnection } = useContext(HubContext);
+    const { user, messages, hubConnection } = useContext(HubContext);
 
     const [message, setMessage] = useState("");
 
     const [messageCount] = useState(1);
 
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log(messages);
     })
 
@@ -48,8 +49,9 @@ export default function Chat(props) {
                 </label>
                 <button name="name" type="submit">Send</button>
             </form>
-            
+
             <ChatWindow messages={messages.filter(msg => msg.recipient === "General")} count={messageCount} />
+            <UserList />
 
         </>
     )
