@@ -14,6 +14,7 @@ using signalrApi.Models.DTO;
 using signalrApi.Models.Identity;
 using signalrApi.services;
 using signalrApi.Repositories.UserChannelRepos;
+using signalrApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -57,7 +58,6 @@ namespace signalrApi.Controllers
                         UserId = user.UserName,
                         Token = userManager.CreateToken(user),
                         Channels = channels,
-
                     });
                 }
 
@@ -108,11 +108,13 @@ namespace signalrApi.Controllers
 
             await userChannelRepository.AddNewUserToGeneral(user.UserName);
 
+            var channels = await userChannelRepository.GetUserChannels(user);
+
             return Ok(new UserWithToken
             {
-                UserId = user.Id,
+                UserId = user.UserName,
                 Token = userManager.CreateToken(user),
-                Channels = new string[1] { "General" },
+                Channels = channels,
             });
 
 

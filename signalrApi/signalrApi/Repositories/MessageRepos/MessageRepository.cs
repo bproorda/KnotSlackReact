@@ -66,11 +66,14 @@ namespace signalrApi.Repositories.MessageRepos
         public async Task<IEnumerable<Message>> GetMyMessages(ksUser User)
         {
             var channels = await userChannelRepository.GetUserChannels(User);
+            var channelNames = new List<string>();
+
+            channels.ForEach(channel => channelNames.Add(channel.ChannelName));
 
             var messages = await _context.Messages
                 .Where(msg => User.UserName == msg.Sender 
                 || User.UserName == msg.Recipient
-                || channels.Contains(msg.Recipient))
+                || channelNames.Contains(msg.Recipient))
                 .ToListAsync();
 
             return messages;

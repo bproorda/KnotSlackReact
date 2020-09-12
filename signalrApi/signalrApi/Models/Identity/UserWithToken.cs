@@ -10,6 +10,6 @@ namespace signalrApi.Models.Identity
         public string UserId { get; set; }
         public string Token { get; set; }
 
-        public string[] Channels { get; set; }
+        public List<UserChannel> Channels { get; set; }
     }
 }

@@ -66,13 +66,18 @@ namespace signalrApi.Repositories.UserChannelRepos
             return uc;
         }
 
-        public async Task<string[]> GetUserChannels(ksUser user)
+        public async Task<List<UserChannel>> GetUserChannels(ksUser user)
         {
             var userChannels = await _context.UserChannels
                 .Where(uc => uc.UserId == user.Id)
-                .Select(uc => new ucDTO
+                .Select( uc => new UserChannel
                 {
                     ChannelName = uc.ChannelName,
+                    Channel = new Channel
+                    {
+                        Name = uc.Channel.Name,
+                        Type = uc.Channel.Type,
+                    }
                 }).ToListAsync();
 
             var middleMan = new List<string>();
@@ -81,7 +86,7 @@ namespace signalrApi.Repositories.UserChannelRepos
 
             var output = middleMan.ToArray();
 
-            return output;
+            return userChannels;
         }
     }
 }
