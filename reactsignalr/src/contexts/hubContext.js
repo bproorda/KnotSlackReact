@@ -31,9 +31,10 @@ export class HubProvider extends React.Component {
       messages: [{ date: "1970-01-01T00:00:00.000Z", sender: "Diana Trouble", contents: "Hello World!", recipient: "General" }],
       messgeCount: 0,
       currentWindow: "General",
+      windows: [],
 
       //UserContext props
-      user: context.user
+      user: context.user,
     }
   }
 
@@ -67,7 +68,7 @@ export class HubProvider extends React.Component {
     });
 
     const body = await result.json();
-    console.log(body);
+    //console.log(body);
 
     if (result.ok) {
       this.setState({allUsers: body});
@@ -86,7 +87,7 @@ export class HubProvider extends React.Component {
     });
 
     const body = await result.json();
-    console.log(body);
+    //console.log(body);
 
     if (result.ok) {
       let allMessages = this.state.messages.concat(body);
@@ -102,7 +103,7 @@ export class HubProvider extends React.Component {
       .configureLogging(LogLevel.Information)
       .build();
 
-    console.log(hubConnection);
+    //console.log(hubConnection);
 
     await hubConnection.start()
       .then(result => {
@@ -118,16 +119,16 @@ export class HubProvider extends React.Component {
   recieveMessages = async (hubConnection) => {
     //let hubConnection = this.state.hubConnection;
     hubConnection.on('ReceiveMessage', async function (message) {
-      console.log("messages received");
+      //console.log("messages received");
       var msg = message;
       console.log(msg);
       //msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       //var encodedMsg = message.Sender + ": " + msg;
       //console.log(encodedMsg);
       let currentMessages = this.state.messages ? this.state.messages : [];
-      console.log(currentMessages);
+      //console.log(currentMessages);
       currentMessages.push(msg);
-      console.log(currentMessages);
+      //console.log(currentMessages);
       this.setState({ messages: currentMessages, messageCount: currentMessages.length });
 
     }.bind(this));
@@ -135,7 +136,7 @@ export class HubProvider extends React.Component {
 
   recieveUpdatedUser = async (hubConnection) => {
     hubConnection.on('UpdateUsers', async function (user) {
-      console.log(user);
+      //console.log(user);
     });
   }
   render() {

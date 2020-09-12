@@ -1,13 +1,12 @@
 import React, {useContext} from 'react';
 import Button from 'react-bootstrap/Button';
-//import HubContext from '../../contexts/hubContext';
 import UserContext from '../../contexts/userContext'
 
 
 export default function ChannelList(props) {
 
     const { channels } = useContext(UserContext);
-    console.log(channels);
+    //console.log(channels);
 
 
     // const getStyle = (user) => {

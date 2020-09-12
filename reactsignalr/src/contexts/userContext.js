@@ -34,7 +34,7 @@ export class UserProvider extends React.Component {
             },
             body: JSON.stringify({ email, username, password }),
         });
-        console.log(result);
+        //console.log(result);
 
         const body = await result.json();
 
@@ -58,7 +58,7 @@ export class UserProvider extends React.Component {
         });
 
         const body = await result.json();
-        console.log(body);
+        //console.log(body);
 
         if (result.ok) {
             if (this.processToken(body.token, body.channels)) {
@@ -101,10 +101,8 @@ export class UserProvider extends React.Component {
                 if (true) {
                     var user = payload.sub;
                 }
-                //window.localStorage.setItem("user", JSON.stringify(user));
-                //window.localStorage.setItem("token", JSON.stringify(token));
                 window.localStorage.setItem("channels", JSON.stringify(channels));
-                console.log(user);
+                //console.log(user);
                 this.setState({
                     token,
                     user,
@@ -123,7 +121,6 @@ export class UserProvider extends React.Component {
     componentDidMount() {
         const cookieToken = cookie.load('auth');
         if (cookieToken) console.log('Found auth cookie!');
-        //if window.localStorage
         let channels = JSON.parse(window.localStorage.getItem('channels'))
         this.processToken(cookieToken, channels);
     }

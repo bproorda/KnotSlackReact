@@ -15,7 +15,7 @@ export default function Chat(props) {
 
 
     useEffect(() => {
-        console.log(messages);
+        //console.log(messages);
     })
 
 
