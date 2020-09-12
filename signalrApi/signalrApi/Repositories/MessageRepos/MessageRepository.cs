@@ -68,7 +68,7 @@ namespace signalrApi.Repositories.MessageRepos
             var channels = await userChannelRepository.GetUserChannels(User);
             var channelNames = new List<string>();
 
-            channels.ForEach(channel => channelNames.Add(channel.ChannelName));
+            channels.ForEach(channel => channelNames.Add(channel.name));
 
             var messages = await _context.Messages
                 .Where(msg => User.UserName == msg.Sender 

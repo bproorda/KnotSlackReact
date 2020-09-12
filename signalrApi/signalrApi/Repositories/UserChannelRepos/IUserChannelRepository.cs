@@ -14,7 +14,7 @@ namespace signalrApi.Repositories.UserChannelRepos
 
         Task<UserChannel> RemoveUserFromChannel(string username, string channel);
 
-        Task<List<UserChannel>> GetUserChannels(ksUser user);
+        Task<List<createChannelDTO>> GetUserChannels(ksUser user);
 
         Task<UserChannel> AddNewUserToGeneral(string username);
     }
