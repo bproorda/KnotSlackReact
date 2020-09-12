@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from '../chatWindow';
 import HubContext from '../../contexts/hubContext';
 import UserList from '../userList'
+import ChannelList from '../channelList'
 
 
 export default function Chat(props) {
@@ -51,8 +52,10 @@ export default function Chat(props) {
             </form>
 
             <ChatWindow messages={messages.filter(msg => msg.recipient === "General")} count={messageCount} />
-            <UserList />
-
+            <span>
+                <ChannelList />
+                <UserList />
+            </span>
         </>
     )
 }
