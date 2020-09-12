@@ -103,8 +103,6 @@ export class HubProvider extends React.Component {
       .configureLogging(LogLevel.Information)
       .build();
 
-    //console.log(hubConnection);
-
     await hubConnection.start()
       .then(result => {
         console.log('Connected!');
@@ -117,18 +115,12 @@ export class HubProvider extends React.Component {
   };
 
   recieveMessages = async (hubConnection) => {
-    //let hubConnection = this.state.hubConnection;
     hubConnection.on('ReceiveMessage', async function (message) {
       //console.log("messages received");
       var msg = message;
       console.log(msg);
-      //msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      //var encodedMsg = message.Sender + ": " + msg;
-      //console.log(encodedMsg);
       let currentMessages = this.state.messages ? this.state.messages : [];
-      //console.log(currentMessages);
       currentMessages.push(msg);
-      //console.log(currentMessages);
       this.setState({ messages: currentMessages, messageCount: currentMessages.length });
 
     }.bind(this));
