@@ -37,7 +37,7 @@ namespace signalrApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Channel>> PostChannel(createChannelDTO input)
         {
-            var newChannel = await channelRepository.CreateNewChannel(input.name);
+            var newChannel = await channelRepository.CreateNewChannel(input);
 
             return newChannel;
         }

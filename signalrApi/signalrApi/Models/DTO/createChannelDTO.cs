@@ -8,5 +8,7 @@ namespace signalrApi.Models.DTO
     public class createChannelDTO
     {
         public string name { get; set; }
+
+        public string type { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using signalrApi.Data;
 using signalrApi.Models;
+using signalrApi.Models.DTO;
 using signalrApi.services;
 using System;
 using System.Collections.Generic;
@@ -19,11 +20,13 @@ namespace signalrApi.Repositories.ChannelRepos
             this.userManager = userManager;
         }
 
-        public async Task<Channel> CreateNewChannel(string channelName)
+        public async Task<Channel> CreateNewChannel(createChannelDTO input)
         {
             Channel newChannel = new Channel
             {
-                Name = channelName,
+                Name = input.name,
+                Type = input.type,
+
             };
 
             _context.Channel.Add(newChannel);

@@ -1,4 +1,5 @@
 ﻿using signalrApi.Models;
+using signalrApi.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace signalrApi.Repositories.ChannelRepos
     {
         Task<List<string>> GetMyChannels(string user);
 
-        Task<Channel> CreateNewChannel(string channelName);
+        Task<Channel> CreateNewChannel(createChannelDTO input);
 
         
     }
