@@ -1,16 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Button from 'react-bootstrap/Button';
 //import HubContext from '../../contexts/hubContext';
+import UserContext from '../../contexts/userContext'
 
 
 export default function ChannelList(props) {
 
-    //const { userContext } = useContext(HubContext);
+    const { channels } = useContext(UserContext);
+    console.log(channels);
 
-    //const allchannels = userContext.channels;
-    //console.log(userContext);
-    var theseChannels = JSON.parse(window.localStorage.getItem("channels"));
-    console.log(theseChannels);
 
     // const getStyle = (user) => {
     //     var style = null;
@@ -26,7 +24,7 @@ export default function ChannelList(props) {
     return (
         <>
             <ul style={{ listStyleType: "none" }}>
-                {(theseChannels !== null) ? theseChannels.map((channel, index) => (
+                {(channels !== null) ? channels.map((channel, index) => (
                     <li key={index}><Button >{channel}</Button></li>
                 )) : null}
             </ul>
