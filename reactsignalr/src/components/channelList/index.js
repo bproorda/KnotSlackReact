@@ -24,7 +24,7 @@ export default function ChannelList(props) {
         <>
             <ul style={{ listStyleType: "none" }}>
                 {(channels !== null) ? channels.map((channel, index) => (
-                    <li key={index}><Button >{channel}</Button></li>
+                    <li key={index}><Button >{channel.name}</Button></li>
                 )) : null}
             </ul>
         </>
