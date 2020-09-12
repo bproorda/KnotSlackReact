@@ -51,8 +51,6 @@ const Login = () => {
 
     }
 
-    console.log(user);
-
 
     if (user) {
         return (

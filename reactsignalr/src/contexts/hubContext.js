@@ -27,6 +27,7 @@ export class HubProvider extends React.Component {
       //hubContext props
       hubConnection: null,
       setConnection: null,
+      hasUpdated: false,
       messages: [{ date: "1970-01-01T00:00:00.000Z", sender: "Diana Trouble", contents: "Hello World!", recipient: "General" }],
       messgeCount: 0,
       currentWindow: "General",
@@ -37,10 +38,13 @@ export class HubProvider extends React.Component {
   }
 
 
-  async componentDidMount() {
-    //console.log(this.context);
+  async componentDidUpdate(prevProps, prevState) {
+    if(!this.state.hasUpdated){
+      this.setState({hasUpdated: true});
+    }
 
-    if(this.state.user !== null){
+    if(this.context.user !== prevState.user && !this.state.hasUpdated){
+      console.log("update is running!")
     await this.setConnection();
     await this.fetchAllUsers();
     await this.fetchAllMessages();
