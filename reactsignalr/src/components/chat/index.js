@@ -43,16 +43,14 @@ export default function Chat(props) {
 
     return (
         <>
+            <ChatWindow messages={messages.filter(msg => msg.recipient === "General")} count={messageCount} />
             <form onSubmit={submitHandler}>
                 <label>
-                    {user} says:
     <input type="text" name="name" onChange={changeHandler} />
                 </label>
                 <button name="name" type="submit">Send</button>
             </form>
-
-            <ChatWindow messages={messages.filter(msg => msg.recipient === "General")} count={messageCount} />
-            <span>
+            <span className="theList">
                 <ChannelList />
                 <UserList />
             </span>

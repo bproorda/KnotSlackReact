@@ -22,6 +22,7 @@ export default function ChannelList(props) {
 
     return (
         <>
+        <h3>Your Channels</h3>
             <ul style={{ listStyleType: "none" }}>
                 {(channels !== null) ? channels.map((channel, index) => (
                     <li key={index}><Button >{channel.name}</Button></li>

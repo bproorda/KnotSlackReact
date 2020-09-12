@@ -1,4 +1,5 @@
 import React from 'react';
+import './chatWindow.scss';
 
 export default function ChatWindow(props) {
 
@@ -11,12 +12,14 @@ export default function ChatWindow(props) {
 
     return (
         <>
-            <h2>Messages: {count}</h2>
-            <ul>
-                {messages.map((msg, index) => (
-                    <li key={index}>{formatMessage(msg)}</li>
-                ))}
-            </ul>
+            <div>
+                <h2>Messages: {count}</h2>
+                <ul>
+                    {messages.map((msg, index) => (
+                        <li key={index}>{formatMessage(msg)}</li>
+                    ))}
+                </ul>
+            </div>
         </>
     )
 

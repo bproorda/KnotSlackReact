@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import logo from '../../logo.svg';
+import logo from '../../assests/KnotLogo.png';
 import UserContext from '../../contexts/userContext';
 import Button from 'react-bootstrap/Button';
 import { useHistory } from "react-router-dom";
@@ -25,7 +25,7 @@ function Header() {
           <p>
             my Knot Slack Prototype, a Work in progress!
           </p>
-          {user ? <Button onClick={logoutHandler}>Log Out</Button> : null}
+          {user ? <Button className="logout" onClick={logoutHandler}>Log Out</Button> : null}
         </header>
       </div>
     );

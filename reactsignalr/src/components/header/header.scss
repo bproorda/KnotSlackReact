@@ -3,6 +3,7 @@ header {
     height: 15vmin;
     position: sticky;
     top: 0;
+    width: 100%;
 
     p {
         color: whitesmoke;
@@ -26,6 +27,14 @@ header {
         .App-logo {
           animation: App-logo-spin infinite 20s linear;
         }
+      }
+
+      .logout {
+        position: absolute;
+        right: 10vmin;
+        top: 5vmin;
+        padding: 1.5vmin;
+        border-radius: 50%;
       }
 
 }

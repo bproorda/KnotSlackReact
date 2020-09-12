@@ -20,6 +20,7 @@ export default function UserList(props) {
 
     return (
         <>
+        <h3>Your Neighbors</h3>
             <ul style={{ listStyleType: "none" }}>
                 {(allUsers !== null) ? allUsers.map((user, index) => (
                     <li key={index}><Button style={getStyle(user)}>{user.username}</Button></li>
