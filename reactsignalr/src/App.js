@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import Header from './components/header';
 import Login from './components/login';
-import Chat from './components/chat';
+import ChatCentral from './components/chatCentral';
 import UserContext from './contexts/userContext';
 import './App.css';
 
@@ -18,7 +18,7 @@ function App() {
       {user ? <Redirect to="/chat" /> : <Login /> }
       </Route>
       <Route path = "/chat">
-      {user ? <Chat /> : <Redirect to="/" />}
+      {user ? <ChatCentral /> : <Redirect to="/" />}
       
       </Route>
     </Switch>

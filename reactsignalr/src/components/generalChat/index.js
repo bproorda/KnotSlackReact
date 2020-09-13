@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from '../chatWindow';
 import HubContext from '../../contexts/hubContext';
-import UserList from '../userList'
-import ChannelList from '../channelList'
 
 
-export default function Chat(props) {
+
+export default function GeneralChat(props) {
 
     const { user, messages, hubConnection } = useContext(HubContext);
 
@@ -35,8 +34,6 @@ export default function Chat(props) {
         thisForm.reset();
     };
 
-
-
     const changeHandler = e => {
         setMessage(e.target.value);
     };
@@ -50,10 +47,6 @@ export default function Chat(props) {
                 </label>
                 <button name="name" type="submit">Send</button>
             </form>
-            <span className="theList">
-                <ChannelList />
-                <UserList />
-            </span>
         </>
     )
 }
