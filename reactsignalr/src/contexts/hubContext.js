@@ -138,6 +138,7 @@ export class HubProvider extends React.Component {
       {name: channel.name, type: channel.type, Zindex : (this.context.channels.length - index) }
     ));
     console.log(windows);
+    this.setState({windows: windows});
   }
 
   render() {
