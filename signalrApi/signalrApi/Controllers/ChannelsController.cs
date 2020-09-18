@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,13 +22,15 @@ namespace signalrApi.Controllers
         private readonly knotSlackDbContext _context;
         private IChannelRepository channelRepository;
         private IUserChannelRepository userChannelRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
 
-        public ChannelsController(knotSlackDbContext context, IChannelRepository channelRepository, IUserChannelRepository userChannelRepository)
+        public ChannelsController(knotSlackDbContext context, IChannelRepository channelRepository, IUserChannelRepository userChannelRepository, IHttpContextAccessor _httpContextAccessor)
         {
            this._context = context;
            this.channelRepository = channelRepository;
            this.userChannelRepository = userChannelRepository;
+            this._httpContextAccessor = _httpContextAccessor;
         }
 
 
@@ -34,10 +38,13 @@ namespace signalrApi.Controllers
         // POST: api/Channels
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Channel>> PostChannel(createChannelDTO input)
         {
             var newChannel = await channelRepository.CreateNewChannel(input);
+            var username = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            await userChannelRepository.AddUserToChannel(username, input.name);
 
             return newChannel;
         }
