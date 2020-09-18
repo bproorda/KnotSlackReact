@@ -139,6 +139,12 @@ export class HubProvider extends React.Component {
     ));
     console.log(windows);
     this.setState({windows: windows});
+  };
+
+  createNewWindow = (name, type) => {
+    let newWindow = {name: name, type: type, Zindex : (this.state.windows.length + 1) };
+    let currentWindows = this.state.windows;
+    currentWindows.push(newWindow);
   }
 
   render() {
