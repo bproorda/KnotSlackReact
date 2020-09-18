@@ -7,6 +7,7 @@ import UserContext from './userContext';
 //import context from 'react-bootstrap/esm/AccordionContext';
 const usersAPI = 'https://localhost:5001/api/Users/';
 const messagesAPI = 'https://localhost:5001/api/messages/';
+const channelsAPI = 'https://localhost:5001/api/channels/';
 
 export const HubContext = React.createContext();
 
@@ -141,10 +142,19 @@ export class HubProvider extends React.Component {
     this.setState({windows: windows});
   };
 
-  createNewWindow = (name, type) => {
+  createNewWindow = async (name, type) => {
     let newWindow = {name: name, type: type, Zindex : (this.state.windows.length + 1) };
     let currentWindows = this.state.windows;
     currentWindows.push(newWindow);
+
+    //sending new window to api
+    await fetch(`${channelsAPI}`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.context.token}`
+      },
+    });
   }
 
   render() {
