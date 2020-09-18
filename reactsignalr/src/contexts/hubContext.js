@@ -146,6 +146,7 @@ export class HubProvider extends React.Component {
     let newWindow = {name: name, type: type, Zindex : (this.state.windows.length + 1) };
     let currentWindows = this.state.windows;
     currentWindows.push(newWindow);
+    this.setState({windows: currentWindows});
 
     //sending new window to api
     await fetch(`${channelsAPI}`, {
@@ -155,6 +156,15 @@ export class HubProvider extends React.Component {
         'Authorization': `Bearer ${this.context.token}`
       },
     });
+  }
+
+  doesWindowAlreadyExist = async (name, type) => {
+    let result = this.state.windows.find(window => name === window.name && type === window.type);
+    if(result){
+      this.updateView(name, type);
+    } else {
+      this.createNewWindow(name, type);
+    }
   }
 
   render() {
