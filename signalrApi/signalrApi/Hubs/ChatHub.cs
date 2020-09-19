@@ -54,7 +54,13 @@ namespace signalrApi.Hubs
         {
             var message = await WriteMessage(sender, recipient, contents);
 
+            await messageRepository.CreateNewMessage(message);
+
             await Clients.User(recipient).SendAsync("ReceiveMessage", message);
+
+            await Clients.Caller.SendAsync("ReceiveMessage", message);
+
+            Console.WriteLine(recipient);
         }
 
         public async Task AddToGroup(string channelName)
@@ -74,7 +80,11 @@ namespace signalrApi.Hubs
         {
             var message = await WriteMessage(sender, recipient, contents);
 
+            await messageRepository.CreateNewMessage(message);
+
             await Clients.Group(recipient).SendAsync("ReceiveMessage", message);
+
+            //Console.WriteLine(recipient);
         }
 
         public async Task DisplayUsers()
