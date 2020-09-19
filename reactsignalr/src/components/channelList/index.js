@@ -16,7 +16,7 @@ export default function ChannelList(props) {
     return (
         <>
         <h3>Your Channels</h3>
-            <ul style={{ listStyleType: "none" }}>
+            <ul style={{ listStyleType: "none", overflow:"auto" }}>
                 {(channels !== null) ? channels.filter(channel => channel.type === "Group" || channel.type === "General").map((channel, index) => (
                     <li key={index}><Button onClick={() => clickHandler(channel.name)} >{channel.name}</Button></li>
                 )) : null}
