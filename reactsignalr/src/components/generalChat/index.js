@@ -7,13 +7,11 @@ import './genChat.scss';
 
 export default function GeneralChat(props) {
 
-    const { user, messages, hubConnection, currentWindow } = useContext(HubContext);
+    const { user, messages, hubConnection } = useContext(HubContext);
 
     const [message, setMessage] = useState("");
 
     const [messageCount] = useState(1);
-    
-    const Zindex = props.Zindex;
 
 
     useEffect(() => {
@@ -42,7 +40,7 @@ export default function GeneralChat(props) {
     };
 
     return (
-        <div className={currentWindow === "General" ? "ChatVisible" : "ChatHidden"}>
+        <div className="Chat">
             <ChatWindow messages={messages.filter(msg => msg.recipient === "General")} count={messageCount} />
             <form onSubmit={submitHandler}>
                 <label>

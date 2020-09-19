@@ -9,24 +9,24 @@ import ChannelList from '../channelList'
 
 export default function ChatCentral(props) {
 
-    const { windows } = useContext(HubContext);
+    const { windows, currentWindow } = useContext(HubContext);
 
     //const [message, setMessage] = useState("");
 
 const whichChatComponent = (window, index) => {
     if(window.type === "General") {
-        return <GeneralChat key={index} Zindex={window.Zindex} style={{position: "relative", zIndex: window.Zindex}}/>
+        return <GeneralChat Zindex={window.Zindex} key={index} />
     } else if (window.type === "Private") {
-        return <PrivateChat name={window.recipient} Zindex={window.Zindex} key={index} style={{position: "relative", zIndex: window.Zindex}}/>
+        return <PrivateChat name={window.name} Zindex={window.Zindex} key={index}/>
     } else if (window.type === "Group") {
-        return <GroupChat name={window.recipient} Zindex={window.Zindex} key={index} style={{position: "relative", zIndex: window.Zindex}}/>
+        return <GroupChat name={window.name} Zindex={window.Zindex} key={index}/>
     }
 };
 
 
     return (
         <div>
-            {windows.map((window, index) => {
+            {windows.filter(window => window.name === currentWindow).map((window, index) => {
                return whichChatComponent(window, index)
             })}
             <span className="theList">
