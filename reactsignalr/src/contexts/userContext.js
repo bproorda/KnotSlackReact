@@ -95,7 +95,7 @@ export class UserProvider extends React.Component {
             const payload = jwt.decode(token);
             if (payload) {
                 if (payload.exp * 1000 < Date.now()) {
-                    this.logout();
+                    this.logout(payload.sub);
                     return;
                 }
                 if (true) {
