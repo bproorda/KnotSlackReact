@@ -166,6 +166,7 @@ export class HubProvider extends React.Component {
     } else {
      await  this.createNewWindow(name, type);
     }
+    this.setState({currentWindow: name});
   }
   updateView = (name, type) => {
     let windows = this.state.windows;

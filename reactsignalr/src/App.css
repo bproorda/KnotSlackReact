@@ -22,6 +22,11 @@
   right: 0;
   top: 17vmin;
 }
+ChatWindow{
+  position: relative;
+  left: 0;
+  bottom: 0;
+}
 
 @keyframes App-logo-spin {
   from {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from '../chatWindow';
 import HubContext from '../../contexts/hubContext';
+import './groupChat.scss';
 
 
 
@@ -13,6 +14,7 @@ export default function GroupChat(props) {
     const [messageCount] = useState(1);
 
     const channelName = props.name;
+    const Zindex = props.Zindex;
 
 
     useEffect(() => {
@@ -48,7 +50,7 @@ export default function GroupChat(props) {
     };
 
     return (
-        <>
+        <div className="Chat" style={{ zIndex: Zindex}}>
             <ChatWindow messages={messages.filter(msg => msg.recipient === channelName)} count={messageCount} />
             <form onSubmit={submitHandler}>
                 <label>
@@ -56,6 +58,6 @@ export default function GroupChat(props) {
                 </label>
                 <button name="name" type="submit">Send</button>
             </form>
-        </>
+        </div>
     )
 }

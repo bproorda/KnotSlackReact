@@ -15,17 +15,17 @@ export default function ChatCentral(props) {
 
 const whichChatComponent = (window, index) => {
     if(window.type === "General") {
-        return <GeneralChat key={index} style={{zIndex: window.Zindex, position: "relative"}}/>
+        return <GeneralChat key={index} Zindex={window.Zindex} style={{position: "relative", zIndex: window.Zindex}}/>
     } else if (window.type === "Private") {
-        return <PrivateChat name={window.recipient} key={index} style={{zIndex: window.Zindex, position: "relative"}}/>
+        return <PrivateChat name={window.recipient} Zindex={window.Zindex} key={index} style={{position: "relative", zIndex: window.Zindex}}/>
     } else if (window.type === "Group") {
-        return <GroupChat name={window.recipient} key={index} style={{zIndex: window.Zindex, position: "relative"}}/>
+        return <GroupChat name={window.recipient} Zindex={window.Zindex} key={index} style={{position: "relative", zIndex: window.Zindex}}/>
     }
 };
 
 
     return (
-        <>
+        <div>
             {windows.map((window, index) => {
                return whichChatComponent(window, index)
             })}
@@ -33,6 +33,6 @@ const whichChatComponent = (window, index) => {
                 <ChannelList />
                 <UserList />
             </span>
-        </>
+        </div>
     )
 }
