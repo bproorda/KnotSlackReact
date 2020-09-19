@@ -13,13 +13,13 @@ export default function ChatCentral(props) {
 
     //const [message, setMessage] = useState("");
 
-const whichChatComponent = (type, recipient, index) =>{
-    if(type === "General") {
-        return <GeneralChat key={index}/>
-    } else if (type === "Private") {
-        return <PrivateChat name={recipient} key={index}/>
-    } else if (type === "Group") {
-        return <GroupChat name={recipient} key={index}/>
+const whichChatComponent = (window, index) => {
+    if(window.type === "General") {
+        return <GeneralChat key={index} style={{zIndex: window.Zindex, position: "relative"}}/>
+    } else if (window.type === "Private") {
+        return <PrivateChat name={window.recipient} key={index} style={{zIndex: window.Zindex, position: "relative"}}/>
+    } else if (window.type === "Group") {
+        return <GroupChat name={window.recipient} key={index} style={{zIndex: window.Zindex, position: "relative"}}/>
     }
 };
 
@@ -27,7 +27,7 @@ const whichChatComponent = (type, recipient, index) =>{
     return (
         <>
             {windows.map((window, index) => {
-               return whichChatComponent(window.type, window.name, index)
+               return whichChatComponent(window, index)
             })}
             <span className="theList">
                 <ChannelList />
