@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from '../chatWindow';
 import HubContext from '../../contexts/hubContext';
+import UserContext from '../../contexts/userContext';
 import './privChat.scss';
 
 
 
 export default function PrivateChat(props) {
 
-    const { user, messages, hubConnection } = useContext(HubContext);
+    const { messages, hubConnection } = useContext(HubContext);
+    const { user } = useContext(UserContext);
 
     const [message, setMessage] = useState("");
 
@@ -28,6 +30,7 @@ export default function PrivateChat(props) {
 
         if (hubConnection.connectionStarted) {
             console.log("sending!")
+            console.log(`${user} to ${recipient}: ${message}`);
             await hubConnection.invoke("SendPrivateMessage", user, recipient, message).catch(function (err) {
                 return console.error(err.toString());
             });

@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from '../chatWindow';
 import HubContext from '../../contexts/hubContext';
+import UserContext from '../../contexts/userContext';
 import './groupChat.scss';
 
 
 
 export default function GroupChat(props) {
 
-    const { user, messages, hubConnection } = useContext(HubContext);
+    const { messages, hubConnection } = useContext(HubContext);
+    const { user } = useContext(UserContext);
 
     const [message, setMessage] = useState("");
 
