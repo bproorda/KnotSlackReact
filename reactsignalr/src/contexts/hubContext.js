@@ -144,7 +144,7 @@ export class HubProvider extends React.Component {
   };
 
   createNewWindow = async (name, type) => {
-    let newWindow = { name: name, type: type, Zindex: (this.state.windows.length + 1) };
+    let newWindow = { name: name, type: type};
     let currentWindows = this.state.windows;
     currentWindows.unshift(newWindow);
     this.setState({ windows: currentWindows });
@@ -156,6 +156,7 @@ export class HubProvider extends React.Component {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.context.token}`
       },
+      body: JSON.stringify(newWindow),
     });
   }
 
