@@ -41,22 +41,22 @@ export class HubProvider extends React.Component {
 
 
   async componentDidUpdate(prevProps, prevState) {
-    if(!this.state.hasUpdated){
-      this.setState({hasUpdated: true});
+    if (!this.state.hasUpdated) {
+      this.setState({ hasUpdated: true });
     }
 
-    if(this.context.user !== prevState.user && !this.state.hasUpdated){
+    if (this.context.user !== prevState.user && !this.state.hasUpdated) {
       console.log("update is running!")
-    await this.setConnection();
-    await this.fetchAllUsers();
-    await this.fetchAllMessages();
-    this.createWindows();
+      await this.setConnection();
+      await this.fetchAllUsers();
+      await this.fetchAllMessages();
+      this.createWindows();
     }
   }
 
-  componentWillUnmount(){
-    if(this.state.user !== null){
-      this.setState({hubConnection: null});
+  componentWillUnmount() {
+    if (this.state.user !== null) {
+      this.setState({ hubConnection: null });
     }
   }
 
@@ -73,7 +73,7 @@ export class HubProvider extends React.Component {
     //console.log(body);
 
     if (result.ok) {
-      this.setState({allUsers: body});
+      this.setState({ allUsers: body });
     } else {
       return false;
     }
@@ -93,7 +93,7 @@ export class HubProvider extends React.Component {
 
     if (result.ok) {
       let allMessages = this.state.messages.concat(body);
-      this.setState({messages: allMessages});
+      this.setState({ messages: allMessages });
     } else {
       return false;
     }
@@ -136,17 +136,17 @@ export class HubProvider extends React.Component {
 
   createWindows = () => {
     let windows = this.context.channels.map((channel, index) => (
-      {name: channel.name, type: channel.type, Zindex : (this.context.channels.length - index) }
+      { name: channel.name, type: channel.type, Zindex: (this.context.channels.length - index) }
     ));
     console.log(windows);
-    this.setState({windows: windows});
+    this.setState({ windows: windows });
   };
 
   createNewWindow = async (name, type) => {
-    let newWindow = {name: name, type: type, Zindex : (this.state.windows.length + 1) };
+    let newWindow = { name: name, type: type, Zindex: (this.state.windows.length + 1) };
     let currentWindows = this.state.windows;
-    currentWindows.push(newWindow);
-    this.setState({windows: currentWindows});
+    currentWindows.unshift(newWindow);
+    this.setState({ windows: currentWindows });
 
     //sending new window to api
     await fetch(`${channelsAPI}`, {
@@ -160,11 +160,21 @@ export class HubProvider extends React.Component {
 
   doesWindowAlreadyExist = async (name, type) => {
     let result = this.state.windows.find(window => name === window.name && type === window.type);
-    if(result){
+    if (result) {
       this.updateView(name, type);
     } else {
       this.createNewWindow(name, type);
     }
+  }
+  updateView = (name, type) => {
+    let windows = this.state.windows;
+    const index = windows.findIndex(window => window.name === name && window.type === type);
+    windows[index].z = windows.length;
+    for (let i = 0; i < index; i++) {
+      windows[i].z = windows[i].z - 1;
+    }
+    windows.sort((a, b) => b.z - a.z);
+    this.setState({ windows: windows });
   }
 
   render() {
