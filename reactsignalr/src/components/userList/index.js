@@ -5,7 +5,7 @@ import HubContext from '../../contexts/hubContext';
 
 export default function UserList(props) {
 
-    const { allUsers } = useContext(HubContext);
+    const { allUsers, doesWindowAlreadyExist } = useContext(HubContext);
 
     const getStyle = (user) => {
         var style = null;
@@ -17,13 +17,17 @@ export default function UserList(props) {
         return style;
     }
 
+    const clickHandler = (name) => {
+        doesWindowAlreadyExist(name, "Private");
+    }
+
 
     return (
         <>
         <h3>Your Neighbors</h3>
             <ul style={{ listStyleType: "none" }}>
                 {(allUsers !== null) ? allUsers.map((user, index) => (
-                    <li key={index}><Button style={getStyle(user)}>{user.username}</Button></li>
+                    <li key={index}><Button onClick={() => clickHandler(user.username)} style={getStyle(user)}>{user.username}</Button></li>
                 )) : null}
             </ul>
         </>

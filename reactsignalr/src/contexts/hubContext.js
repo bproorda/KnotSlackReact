@@ -33,6 +33,7 @@ export class HubProvider extends React.Component {
       messgeCount: 0,
       currentWindow: "General",
       windows: [],
+      doesWindowAlreadyExist: this.doesWindowAlreadyExist,
 
       //UserContext props
       user: context.user,
@@ -163,7 +164,7 @@ export class HubProvider extends React.Component {
     if (result) {
       this.updateView(name, type);
     } else {
-      this.createNewWindow(name, type);
+     await  this.createNewWindow(name, type);
     }
   }
   updateView = (name, type) => {

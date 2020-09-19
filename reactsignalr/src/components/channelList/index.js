@@ -5,27 +5,18 @@ import UserContext from '../../contexts/userContext'
 
 export default function ChannelList(props) {
 
-    const { channels } = useContext(UserContext);
-    //console.log(channels);
+    const { channels, doesWindowAlreadyExist } = useContext(UserContext);
 
-
-    // const getStyle = (user) => {
-    //     var style = null;
-    //     if(user.loggedIn){
-    //         style = {color: "white", backgroundColor: "blue"};
-    //     } else {
-    //         style = {color: "black", backgroundColor: "lightgray"};
-    //     };
-    //     return style;
-    // }
-
+    const clickHandler = (name) => {
+        doesWindowAlreadyExist(name, "Group");
+    }
 
     return (
         <>
         <h3>Your Channels</h3>
             <ul style={{ listStyleType: "none" }}>
                 {(channels !== null) ? channels.map((channel, index) => (
-                    <li key={index}><Button >{channel.name}</Button></li>
+                    <li key={index}><Button onClick={() => clickHandler(channel.name)} >{channel.name}</Button></li>
                 )) : null}
             </ul>
         </>
