@@ -23,7 +23,7 @@ function Header() {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
-            my Knot Slack Prototype, a Work in progress!
+            Knot Slack
           </p>
           {user ? <Button className="logout" onClick={logoutHandler}>Log Out</Button> : null}
         </header>
