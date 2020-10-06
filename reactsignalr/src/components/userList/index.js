@@ -25,7 +25,7 @@ export default function UserList(props) {
     return (
         <>
         <h3>Your Neighbors</h3>
-            <ul style={{ listStyleType: "none", overflow:"auto" }}>
+            <ul style={{ listStyleType: "none", overflow:"auto", maxHeight: "50%" }}>
                 {(allUsers !== null) ? allUsers.map((user, index) => (
                     <li key={index}><Button onClick={() => clickHandler(user.username)} style={getStyle(user)}>{user.username}</Button></li>
                 )) : null}
