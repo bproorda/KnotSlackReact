@@ -7,6 +7,7 @@ export default function AllUsers(props){
 
     const { allUsers, doesWindowAlreadyExist } = useContext(HubContext);
     const [thisUser, setThisUser] = useState(null);
+    const options = allUsers ? allUsers.map((user, index) => ( {key: index, name: user.username} ) ) : {key: 0, name: "Loading!"};
 
     useEffect(() => {
         if(thisUser !== null){
@@ -15,6 +16,9 @@ export default function AllUsers(props){
     }, [thisUser])
 
     return(
-        <SelectSearch options={allUsers} onChange={setThisUser}></SelectSearch>
+        <SelectSearch 
+        options={options}
+        placeholder="Select a User" 
+        onChange={setThisUser}></SelectSearch>
     )
 }

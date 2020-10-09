@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import HubContext from '../../contexts/hubContext';
+import AllUsers from '../allUsers';
 
 
 export default function UserList(props) {
@@ -41,6 +42,9 @@ export default function UserList(props) {
                     <li key={index}><Button onClick={() => clickHandler(channel.name)} style={getStyle(channel.name)} >{channel.name}</Button></li>
                 )) : null}
             </ul>
+            <h3>All Users</h3>
+            <p>Select a User to send them a Private Message</p>
+            <AllUsers />
         </>
     )
 }
