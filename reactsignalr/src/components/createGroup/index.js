@@ -1,14 +1,12 @@
 import React, { useContext, useState } from 'react';
 import Button from 'react-bootstrap/Button';
-//import UserContext from '../../contexts/userContext';
 import HubContext from '../../contexts/hubContext';
 
 
 
 export default function CreateGroup(props) {
 
-    //const { channels } = useContext(UserContext);
-    const { channelsAPI, doesWindowAlreadyExist } = useContext(HubContext);
+    const { doesWindowAlreadyExist } = useContext(HubContext);
     const [groupName, setGroupName] = useState();
     const [toggle, setToggle] = useState(false);
 
