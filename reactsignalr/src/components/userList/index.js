@@ -7,9 +7,15 @@ export default function UserList(props) {
 
     const { allUsers, doesWindowAlreadyExist, windows } = useContext(HubContext);
 
-    const getStyle = (user) => {
+    //console.log(allUsers);
+    //console.log(windows);
+
+    const getStyle = (username) => {
         var style = null;
-        if(user.loggedIn){
+
+        var indexNumber = allUsers.findIndex(user => user.username === username);
+
+        if(indexNumber > 0 && allUsers[indexNumber].loggedIn){
             style = {color: "white", backgroundColor: "blue"};
         } else {
             style = {color: "black", backgroundColor: "lightgray"};
@@ -32,7 +38,7 @@ export default function UserList(props) {
             </ul> */}
                         <ul style={{ listStyleType: "none", overflow: "auto", maxHeight: "50%" }}>
                 {(windows !== null) ? windows.filter(channel => channel.type === "Private" ).map((channel, index) => (
-                    <li key={index}><Button onClick={() => clickHandler(channel.name)} >{channel.name}</Button></li>
+                    <li key={index}><Button onClick={() => clickHandler(channel.name)} style={getStyle(channel.name)} >{channel.name}</Button></li>
                 )) : null}
             </ul>
         </>
