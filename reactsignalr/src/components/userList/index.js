@@ -5,7 +5,7 @@ import HubContext from '../../contexts/hubContext';
 
 export default function UserList(props) {
 
-    const { allUsers, doesWindowAlreadyExist } = useContext(HubContext);
+    const { allUsers, doesWindowAlreadyExist, windows } = useContext(HubContext);
 
     const getStyle = (user) => {
         var style = null;
@@ -25,9 +25,14 @@ export default function UserList(props) {
     return (
         <>
         <h3>Your Neighbors</h3>
-            <ul style={{ listStyleType: "none", overflow:"auto", maxHeight: "50%" }}>
+            {/* <ul style={{ listStyleType: "none", overflow:"auto", maxHeight: "50%" }}>
                 {(allUsers !== null) ? allUsers.map((user, index) => (
                     <li key={index}><Button onClick={() => clickHandler(user.username)} style={getStyle(user)}>{user.username}</Button></li>
+                )) : null}
+            </ul> */}
+                        <ul style={{ listStyleType: "none", overflow: "auto", maxHeight: "50%" }}>
+                {(windows !== null) ? windows.filter(channel => channel.type === "Private" ).map((channel, index) => (
+                    <li key={index}><Button onClick={() => clickHandler(channel.name)} >{channel.name}</Button></li>
                 )) : null}
             </ul>
         </>
