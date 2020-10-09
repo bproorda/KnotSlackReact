@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
-import UserContext from '../../contexts/userContext';
 import HubContext from '../../contexts/hubContext';
 import CreateGroup from '../createGroup';
 import './channelList.scss'
@@ -8,8 +7,7 @@ import './channelList.scss'
 
 export default function ChannelList(props) {
 
-    const { channels } = useContext(UserContext);
-    const { doesWindowAlreadyExist } = useContext(HubContext);
+    const { windows, doesWindowAlreadyExist } = useContext(HubContext);
 
     const clickHandler = (name) => {
         doesWindowAlreadyExist(name, "Group");
@@ -20,7 +18,7 @@ export default function ChannelList(props) {
             <h3>Your Channels</h3>
             <CreateGroup />
             <ul style={{ listStyleType: "none", overflow: "auto", maxHeight: "50%" }}>
-                {(channels !== null) ? channels.filter(channel => channel.type === "Group" || channel.type === "General").map((channel, index) => (
+                {(windows !== null) ? windows.filter(channel => channel.type === "Group" || channel.type === "General").map((channel, index) => (
                     <li key={index}><Button onClick={() => clickHandler(channel.name)} >{channel.name}</Button></li>
                 )) : null}
             </ul>
