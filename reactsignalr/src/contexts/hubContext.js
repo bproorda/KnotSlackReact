@@ -40,7 +40,7 @@ export class HubProvider extends React.Component {
 
       //UserContext props
       user: context.user,
-      loggedInWhen: context.loggedInWhen,
+      loggedInWhen: context.lastVisited,
     }
   }
 

@@ -20,7 +20,7 @@ export class UserProvider extends React.Component {
             permissions: [],
             token: null,
             channels: null,
-            loggedInWhen: new Date(0),
+            lastVisited: new Date(0),
             login: this.login,
             logout: this.logout,
             register: this.register,
@@ -62,7 +62,7 @@ export class UserProvider extends React.Component {
         //console.log(body);
 
         if (result.ok) {
-            if (this.processToken(body.token, body.channels)) {
+            if (this.processToken(body.token, body.channels, body.lastVisited)) {
                 return true;
             }
         } else {
@@ -91,7 +91,7 @@ export class UserProvider extends React.Component {
         }
     }
 
-    processToken(token, channels) {
+    processToken(token, channels, lastVisited) {
         try {
             const payload = jwt.decode(token);
             if (payload) {
@@ -103,15 +103,16 @@ export class UserProvider extends React.Component {
                     var user = payload.sub;
                 }
                 window.localStorage.setItem("channels", JSON.stringify(channels));
+                window.localStorage.setItem("lastVisited", JSON.stringify(lastVisited));
                 //console.log(user);
                 this.setState({
                     token,
                     user,
                     channels,
+                    lastVisited,
                     permissions: payload.permissions || [],
                 });
                 cookie.save('auth', token, { path: "/" });
-                this.setState({ loggedInWhen: new Date() });
                 return true;
             }
         } catch (e) {
@@ -124,8 +125,9 @@ export class UserProvider extends React.Component {
         const cookieToken = cookie.load('auth');
         if (cookieToken) {
             console.log('Found auth cookie!');
-            let channels = JSON.parse(window.localStorage.getItem('channels'))
-            this.processToken(cookieToken, channels);
+            let channels = JSON.parse(window.localStorage.getItem('channels'));
+            let lastTimeVisited = JSON.parse(window.localStorage.getItem('lastVisited'));
+            this.processToken(cookieToken, channels, lastTimeVisited);
         }
     }
 
