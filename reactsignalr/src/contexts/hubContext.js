@@ -36,9 +36,11 @@ export class HubProvider extends React.Component {
       windows: [],
       doesWindowAlreadyExist: this.doesWindowAlreadyExist,
       addUserToGroup: this.addUserToGroup,
+      updateLastVisited: this.updateLastVisited,
 
       //UserContext props
       user: context.user,
+      loggedInWhen: context.loggedInWhen,
     }
   }
 
@@ -139,14 +141,19 @@ export class HubProvider extends React.Component {
 
   createWindows = () => {
     let windows = this.context.channels.map((channel, index) => (
-      { name: channel.name, type: channel.type }
+      { name: channel.name, type: channel.type, lastVisited: new Date(0), hasUnread: this.checkForUnreads(channel.name) }
     ));
     //console.log(windows);
     this.setState({ windows: windows });
   };
 
+  checkForUnreads = channelName => {
+    //let currentMsgs = this.state.messages;
+
+  };
+
   createNewWindow = async (name, type) => {
-    let newWindow = { name: name, type: type };
+    let newWindow = { name: name, type: type, lastVisited: new Date(0), hasUnread: false };
     let currentWindows = this.state.windows;
     currentWindows.unshift(newWindow);
     this.setState({ windows: currentWindows });
@@ -182,6 +189,20 @@ export class HubProvider extends React.Component {
       },
       body: JSON.stringify(newGroupUser),
     });
+  }
+
+  updateLastVisited = (channelName) => {
+    let theseWindows = this.state.windows;
+    let desiredIndex = theseWindows.findIndex(window => window.name === channelName);
+    theseWindows[desiredIndex].lastVisited = new Date();
+    this.setState({windows: theseWindows});
+  }
+
+  updateHasUnread = (channelName) => {
+    let theseWindows = this.state.windows;
+    let desiredIndex = theseWindows.findIndex(window => window.name === channelName);
+    theseWindows[desiredIndex].hasUnread = new Date();
+    this.setState({windows: theseWindows});
   }
 
   render() {

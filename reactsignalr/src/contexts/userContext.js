@@ -20,7 +20,7 @@ export class UserProvider extends React.Component {
             permissions: [],
             token: null,
             channels: null,
-            loggedInWhen: null,
+            loggedInWhen: new Date(0),
             login: this.login,
             logout: this.logout,
             register: this.register,
