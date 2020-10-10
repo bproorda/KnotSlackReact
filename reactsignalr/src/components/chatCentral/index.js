@@ -26,7 +26,7 @@ const whichChatComponent = (window, index) => {
 
     return (
         <div>
-            {windows.filter(window => window.name === currentWindow).map((window, index) => {
+            {windows.filter(window => window.name === currentWindow.name).map((window, index) => {
                return whichChatComponent(window, index)
             })}
             <span className="theList">

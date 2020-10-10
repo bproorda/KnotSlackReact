@@ -32,7 +32,7 @@ export class HubProvider extends React.Component {
       channelsAPI: channelsAPI,
       messages: [{ date: "1970-01-01T00:00:00.000Z", sender: "Diana Trouble", contents: "Hello World!", recipient: "General" }],
       messgeCount: 0,
-      currentWindow: "General",
+      currentWindow: {name: "General", type: "General"},
       windows: [],
       doesWindowAlreadyExist: this.doesWindowAlreadyExist,
 
@@ -166,7 +166,8 @@ export class HubProvider extends React.Component {
     if (!result) {
      await  this.createNewWindow(name, type);
     }
-    this.setState({currentWindow: name});
+    let newCurrentWindow = {name: name, type: type};
+    this.setState({currentWindow: newCurrentWindow});
   }
 
 
