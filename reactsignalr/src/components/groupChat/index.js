@@ -1,23 +1,30 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from '../chatWindow';
 import HubContext from '../../contexts/hubContext';
-import UserContext from '../../contexts/userContext';
 import './groupChat.scss';
 
 
 
 export default function GroupChat(props) {
 
-    const { messages, hubConnection } = useContext(HubContext);
-    const { user } = useContext(UserContext);
+    const { user, messages, hubConnection } = useContext(HubContext);
 
     const [message, setMessage] = useState("");
 
-    const [messageCount] = useState(1);
+    const [windowMessages, setWindowMessages] = useState([]);
+
+    const [messageCount, setMessageCount] = useState(0);
 
     const channelName = props.name;
-    const Zindex = props.Zindex;
 
+    useEffect(() => {
+        let newMessages = messages.filter(msg => msg.recipient === channelName);
+        setWindowMessages(newMessages);
+    }, [messages, channelName]);
+
+    useEffect(() => {
+        setMessageCount(windowMessages.length);
+    }, [windowMessages]);
 
     useEffect(() => {
         connectToGroup();
@@ -52,8 +59,8 @@ export default function GroupChat(props) {
     };
 
     return (
-        <div className="Chat" style={{ zIndex: Zindex}}>
-            <ChatWindow messages={messages.filter(msg => msg.recipient === channelName)} count={messageCount} />
+        <div className="Chat" >
+            <ChatWindow messages={windowMessages} count={messageCount} />
             <form onSubmit={submitHandler}>
                 <label>
                     <input type="text" name="name" onChange={changeHandler} />
