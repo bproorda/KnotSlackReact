@@ -58,6 +58,7 @@ namespace signalrApi.Controllers
                         UserId = user.UserName,
                         Token = userManager.CreateToken(user),
                         Channels = channels,
+                        LastVisited = user.LastVisited,
                     });
                 }
 
@@ -115,6 +116,7 @@ namespace signalrApi.Controllers
                 UserId = user.UserName,
                 Token = userManager.CreateToken(user),
                 Channels = channels,
+                LastVisited = DateTime.Now,
             });
 
 

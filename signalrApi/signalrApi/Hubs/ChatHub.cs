@@ -124,6 +124,15 @@ namespace signalrApi.Hubs
             };
         }
 
+        public async Task UpdateLastVisited(string username)
+        {
+            var thisUser = await userManager.FindByNameAsync(username);
+
+            thisUser.LastVisited = DateTime.Now;
+
+            await userManager.UpdateAsync(thisUser);
+        }
+
 
         //public async Task RemoveUser(string user)
         //{

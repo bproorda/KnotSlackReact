@@ -11,6 +11,7 @@ namespace signalrApi.Models.Identity
         public string UserId { get; set; }
         public string Token { get; set; }
 
+        public DateTime LastVisited { get; set; }
         public List<createChannelDTO> Channels { get; set; }
     }
 }
