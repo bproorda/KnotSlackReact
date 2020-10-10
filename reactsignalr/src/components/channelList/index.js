@@ -9,8 +9,9 @@ export default function ChannelList(props) {
 
     const { windows, doesWindowAlreadyExist } = useContext(HubContext);
 
-    const clickHandler = (name) => {
-        doesWindowAlreadyExist(name, "Group");
+    const clickHandler = (name, type) => {
+        console.log("Clicked");
+        doesWindowAlreadyExist(name, type);
     }
 //need to create different sections for channel type or use windows in userlist
     return (
@@ -19,7 +20,7 @@ export default function ChannelList(props) {
             <CreateGroup />
             <ul style={{ listStyleType: "none", overflow: "auto", maxHeight: "50%" }}>
                 {(windows !== null) ? windows.filter(channel => channel.type === "Group" || channel.type === "General").map((channel, index) => (
-                    <li key={index}><Button onClick={() => clickHandler(channel.name)} >{channel.name}</Button></li>
+                    <li key={index}><Button onClick={() => clickHandler(channel.name, channel.type)} >{channel.name}</Button></li>
                 )) : null}
             </ul>
         </div>
