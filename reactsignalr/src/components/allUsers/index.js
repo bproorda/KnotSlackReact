@@ -11,7 +11,7 @@ export default function AllUsers(props){
 
     useEffect(() => {
         if(thisUser !== null){
-            doesWindowAlreadyExist(thisUser, "Private");
+            //doesWindowAlreadyExist(thisUser, "Private");
         }
     }, [thisUser, doesWindowAlreadyExist]);
 
@@ -19,6 +19,7 @@ export default function AllUsers(props){
         <SelectSearch 
         placeholder="Select a User" 
         onChange={setThisUser}
+        search
         options={currentOptions}></SelectSearch>
     )
 }
