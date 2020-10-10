@@ -1,27 +1,32 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from '../chatWindow';
 import HubContext from '../../contexts/hubContext';
-import UserContext from '../../contexts/userContext';
 import './privChat.scss';
 
 
 
 export default function PrivateChat(props) {
 
-    const { messages, hubConnection } = useContext(HubContext);
-    const { user } = useContext(UserContext);
+
+    const { user, messages, hubConnection } = useContext(HubContext);
 
     const [message, setMessage] = useState("");
 
-    const [messageCount] = useState(1);
+    const [windowMessages, setWindowMessages] = useState([]);
+
+    const [messageCount, setMessageCount] = useState(0);
 
     const recipient = props.name;
-    const Zindex = props.Zindex;
 
 
     useEffect(() => {
-        //console.log(messages);
-    })
+        let newMessages = messages.filter(msg => msg.recipient === recipient);
+        setWindowMessages(newMessages);
+    }, [messages, recipient]);
+
+    useEffect(() => {
+        setMessageCount(windowMessages.length);
+    }, [windowMessages]);
 
 
     const submitHandler = async (e) => {
@@ -46,11 +51,11 @@ export default function PrivateChat(props) {
     };
 
     return (
-        <div className="Chat" style={{zIndex: Zindex}}>
-            <ChatWindow messages={messages.filter(msg => msg.recipient === recipient)} count={messageCount} />
+        <div className="Chat" >
+            <ChatWindow messages={windowMessages} count={messageCount} />
             <form onSubmit={submitHandler}>
                 <label>
-    <input type="text" name="name" onChange={changeHandler} />
+                    <input type="text" name="name" onChange={changeHandler} />
                 </label>
                 <button name="name" type="submit">Send</button>
             </form>
