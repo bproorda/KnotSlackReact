@@ -59,12 +59,12 @@ export class HubProvider extends React.Component {
     }
   }
 
- async componentWillUnmount() {
+  async componentWillUnmount() {
     if (this.state.user !== null) {
       await this.state.hubConnection.invoke("UpdateLastVisited", this.context.user).catch(function (err) {
         return console.error(err.toString());
-    });
-    window.localStorage.setItem("lastVisited", new Date());
+      });
+      window.localStorage.setItem("lastVisited", new Date());
       this.setState({ hubConnection: null });
     }
   }
@@ -129,9 +129,10 @@ export class HubProvider extends React.Component {
     hubConnection.on('ReceiveMessage', async function (message) {
       //console.log("messages received");
       var msg = message;
-      console.log(msg);
+      //console.log(msg);
       let currentMessages = this.state.messages ? this.state.messages : [];
       currentMessages.push(msg);
+      if (msg.Recipient !== this.state.currentWindow.name) this.updateHasUnread(msg.Recipient);
       this.setState({ messages: currentMessages, messageCount: currentMessages.length });
 
     }.bind(this));
@@ -152,12 +153,16 @@ export class HubProvider extends React.Component {
   };
 
   checkForUnreads = channelName => {
-    //let currentMsgs = this.state.messages;
-
+    let currentMsgs = this.state.messages;
+    let result = currentMsgs.some(msg => msg.Date > this.context.lastVisited);
+    if (result) {
+      return true;
+    }
+    return false;
   };
 
   createNewWindow = async (name, type) => {
-    let newWindow = { name: name, type: type, lastVisited: new Date(0), hasUnread: false };
+    let newWindow = { name: name, type: type, lastVisited: new Date(), hasUnread: false };
     let currentWindows = this.state.windows;
     currentWindows.unshift(newWindow);
     this.setState({ windows: currentWindows });
@@ -184,7 +189,7 @@ export class HubProvider extends React.Component {
 
   addUserToGroup = async (username, channelName) => {
 
-    let newGroupUser = {Username: username, ChannelName: channelName};
+    let newGroupUser = { Username: username, ChannelName: channelName };
     await fetch(`${channelsAPI}newuc`, {
       method: 'post',
       headers: {
@@ -195,18 +200,18 @@ export class HubProvider extends React.Component {
     });
   }
 
-  updateLastVisited = (channelName) => {
+  updateLastVisitedWindow = (channelName) => {
     let theseWindows = this.state.windows;
     let desiredIndex = theseWindows.findIndex(window => window.name === channelName);
     theseWindows[desiredIndex].lastVisited = new Date();
-    this.setState({windows: theseWindows});
+    this.setState({ windows: theseWindows });
   }
 
   updateHasUnread = (channelName) => {
     let theseWindows = this.state.windows;
     let desiredIndex = theseWindows.findIndex(window => window.name === channelName);
     theseWindows[desiredIndex].hasUnread = new Date();
-    this.setState({windows: theseWindows});
+    this.setState({ windows: theseWindows });
   }
 
   render() {
