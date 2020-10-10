@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import HubContext from '../../contexts/hubContext';
 import SelectSearch from 'react-select-search';
+import './allUsers.scss';
 
 export default function AllUsers(props){
 
