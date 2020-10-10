@@ -59,8 +59,12 @@ export class HubProvider extends React.Component {
     }
   }
 
-  componentWillUnmount() {
+ async componentWillUnmount() {
     if (this.state.user !== null) {
+      await this.state.hubConnection.invoke("UpdateLastVisited", this.context.user).catch(function (err) {
+        return console.error(err.toString());
+    });
+    window.localStorage.setItem("lastVisited", new Date());
       this.setState({ hubConnection: null });
     }
   }
