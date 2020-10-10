@@ -6,7 +6,7 @@ export default function AllUsers(props){
 
     const { allUsers, doesWindowAlreadyExist } = useContext(HubContext);
     const [thisUser, setThisUser] = useState(null);
-    const currentOptions = allUsers ? allUsers.map((user) => ( {name: user.username, value: user.username} ) ) : [{name: "Loading!", value: null}];
+    const currentOptions = allUsers ? allUsers.map((user) => ( {name: user.username, value: user.username} ) ) : [{name: "Loading!", value: "Loading!"}];
    
 
     useEffect(() => {
