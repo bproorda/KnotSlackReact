@@ -32,9 +32,10 @@ export class HubProvider extends React.Component {
       channelsAPI: channelsAPI,
       messages: [{ date: "1970-01-01T00:00:00.000Z", sender: "Diana Trouble", contents: "Hello World!", recipient: "General" }],
       messgeCount: 0,
-      currentWindow: {name: "General", type: "General"},
+      currentWindow: { name: "General", type: "General" },
       windows: [],
       doesWindowAlreadyExist: this.doesWindowAlreadyExist,
+      addUserToGroup: this.addUserToGroup,
 
       //UserContext props
       user: context.user,
@@ -145,7 +146,7 @@ export class HubProvider extends React.Component {
   };
 
   createNewWindow = async (name, type) => {
-    let newWindow = { name: name, type: type};
+    let newWindow = { name: name, type: type };
     let currentWindows = this.state.windows;
     currentWindows.unshift(newWindow);
     this.setState({ windows: currentWindows });
@@ -164,12 +165,24 @@ export class HubProvider extends React.Component {
   doesWindowAlreadyExist = async (name, type) => {
     let result = this.state.windows.find(window => name === window.name && type === window.type);
     if (!result) {
-     await  this.createNewWindow(name, type);
+      await this.createNewWindow(name, type);
     }
-    let newCurrentWindow = {name: name, type: type};
-    this.setState({currentWindow: newCurrentWindow});
+    let newCurrentWindow = { name: name, type: type };
+    this.setState({ currentWindow: newCurrentWindow });
   }
 
+  addUserToGroup = async (username, channelName) => {
+
+    let newGroupUser = {Username: username, ChannelName: channelName};
+    await fetch(`${channelsAPI}newuc`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.context.token}`
+      },
+      body: JSON.stringify(newGroupUser),
+    });
+  }
 
   render() {
     return (

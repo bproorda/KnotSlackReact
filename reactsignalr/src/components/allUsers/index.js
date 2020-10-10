@@ -21,7 +21,7 @@ export default function AllUsers(props) {
                 onChange={setThisUser}
                 search
                 options={currentOptions}></SelectSearch>
-            <Button onClick={()=>doesWindowAlreadyExist(thisUser, "Private")}>Send PM</Button>
+            <Button onClick={() => doesWindowAlreadyExist(thisUser, "Private")}>Send PM</Button>
             {currentWindow.type === "Group" ? <Button>Add to Group</Button> : null}
         </div>
     )
