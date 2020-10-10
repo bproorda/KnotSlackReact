@@ -56,11 +56,13 @@ namespace signalrApi.Hubs
 
             await messageRepository.CreateNewMessage(message);
 
+            var thisUser = Clients.User(recipient);
+
             await Clients.User(recipient).SendAsync("ReceiveMessage", message);
 
             await Clients.Caller.SendAsync("ReceiveMessage", message);
 
-            Console.WriteLine(recipient);
+            Console.WriteLine(thisUser);
         }
 
         public async Task AddToGroup(string channelName)
