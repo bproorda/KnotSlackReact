@@ -9,7 +9,7 @@ export default function UserList(props) {
     const { allUsers, doesWindowAlreadyExist, windows } = useContext(HubContext);
 
     //console.log(allUsers);
-    console.log(windows);
+    //console.log(windows);
 
     const getStyle = (username) => {
         var style = null;

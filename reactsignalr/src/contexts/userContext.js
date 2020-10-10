@@ -20,6 +20,7 @@ export class UserProvider extends React.Component {
             permissions: [],
             token: null,
             channels: null,
+            loggedInWhen: null,
             login: this.login,
             logout: this.logout,
             register: this.register,
@@ -110,6 +111,7 @@ export class UserProvider extends React.Component {
                     permissions: payload.permissions || [],
                 });
                 cookie.save('auth', token, { path: "/" });
+                this.setState({ loggedInWhen: new Date() });
                 return true;
             }
         } catch (e) {
@@ -120,9 +122,11 @@ export class UserProvider extends React.Component {
 
     componentDidMount() {
         const cookieToken = cookie.load('auth');
-        if (cookieToken) console.log('Found auth cookie!');
-        let channels = JSON.parse(window.localStorage.getItem('channels'))
-        this.processToken(cookieToken, channels);
+        if (cookieToken) {
+            console.log('Found auth cookie!');
+            let channels = JSON.parse(window.localStorage.getItem('channels'))
+            this.processToken(cookieToken, channels);
+        }
     }
 
 

@@ -141,7 +141,7 @@ export class HubProvider extends React.Component {
     let windows = this.context.channels.map((channel, index) => (
       { name: channel.name, type: channel.type }
     ));
-    console.log(windows);
+    //console.log(windows);
     this.setState({ windows: windows });
   };
 
