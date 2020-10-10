@@ -154,6 +154,6 @@ namespace signalrApi.Hubs
         Task DisplayUsers();
         //method for testing and experimentation
          Task GetContext();
-
+        Task UpdateLastVisited(string username)
     }
 }

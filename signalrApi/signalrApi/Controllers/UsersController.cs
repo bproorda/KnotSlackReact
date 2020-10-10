@@ -79,6 +79,7 @@ namespace signalrApi.Controllers
 
                 //comment out if using postman
                 await chatHub.SendUpdatedUser(user.UserName, user.LoggedIn);
+                await chatHub.UpdateLastVisited(user.UserName);
                 return user.UserName;
 
             }
