@@ -10,10 +10,9 @@ export default function ChannelList(props) {
     const { windows, doesWindowAlreadyExist } = useContext(HubContext);
 
     const clickHandler = (name, type) => {
-        console.log("Clicked");
+        console.log(`name: ${name} type: ${type}`);
         doesWindowAlreadyExist(name, type);
     }
-//need to create different sections for channel type or use windows in userlist
     return (
         <div>
             <h3>Your Channels</h3>

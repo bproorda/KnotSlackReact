@@ -16,10 +16,10 @@ export default function UserList(props) {
 
         var indexNumber = allUsers.findIndex(user => user.username === username);
 
-        if(indexNumber > 0 && allUsers[indexNumber].loggedIn){
-            style = {color: "white", backgroundColor: "blue"};
+        if (indexNumber > 0 && allUsers[indexNumber].loggedIn) {
+            style = { color: "white", backgroundColor: "blue" };
         } else {
-            style = {color: "black", backgroundColor: "lightgray"};
+            style = { color: "black", backgroundColor: "lightgray" };
         };
         return style;
     }
@@ -31,14 +31,9 @@ export default function UserList(props) {
 
     return (
         <>
-        <h3>Your Neighbors</h3>
-            {/* <ul style={{ listStyleType: "none", overflow:"auto", maxHeight: "50%" }}>
-                {(allUsers !== null) ? allUsers.map((user, index) => (
-                    <li key={index}><Button onClick={() => clickHandler(user.username)} style={getStyle(user)}>{user.username}</Button></li>
-                )) : null}
-            </ul> */}
-                        <ul style={{ listStyleType: "none", overflow: "auto", maxHeight: "50%" }}>
-                {(windows !== null) ? windows.filter(channel => channel.type === "Private" ).map((channel, index) => (
+            <h3>Your Neighbors</h3>
+            <ul style={{ listStyleType: "none", overflow: "auto", maxHeight: "50%" }}>
+                {(windows !== null) ? windows.filter(channel => channel.type === "Private").map((channel, index) => (
                     <li key={index}><Button onClick={() => clickHandler(channel.name)} style={getStyle(channel.name)} >{channel.name}</Button></li>
                 )) : null}
             </ul>

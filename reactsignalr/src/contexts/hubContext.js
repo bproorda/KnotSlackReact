@@ -138,7 +138,7 @@ export class HubProvider extends React.Component {
 
   createWindows = () => {
     let windows = this.context.channels.map((channel, index) => (
-      { name: channel.name, type: channel.type, Zindex: (this.context.channels.length - index) }
+      { name: channel.name, type: channel.type }
     ));
     console.log(windows);
     this.setState({ windows: windows });
@@ -163,23 +163,12 @@ export class HubProvider extends React.Component {
 
   doesWindowAlreadyExist = async (name, type) => {
     let result = this.state.windows.find(window => name === window.name && type === window.type);
-    if (result) {
-      this.updateView(name, type);
-    } else {
+    if (!result) {
      await  this.createNewWindow(name, type);
     }
     this.setState({currentWindow: name});
   }
-  updateView = (name, type) => {
-    let windows = this.state.windows;
-    const index = windows.findIndex(window => window.name === name && window.type === type);
-    windows[index].z = windows.length;
-    for (let i = 0; i < index; i++) {
-      windows[i].z = windows[i].z - 1;
-    }
-    windows.sort((a, b) => b.z - a.z);
-    this.setState({ windows: windows });
-  }
+
 
   render() {
     return (
