@@ -11,12 +11,19 @@ export default function GeneralChat(props) {
 
     const [message, setMessage] = useState("");
 
-    const [messageCount] = useState(1);
+    const [windowMessages, setWindowMessages] = useState([]);
+
+    const [messageCount, setMessageCount] = useState(0);
 
 
     useEffect(() => {
-        //console.log(messages);
-    })
+        let newMessages = messages.filter(msg => msg.recipient === "General");
+        setWindowMessages(newMessages);
+     }, [messages]);
+
+    useEffect(() => {
+        setMessageCount(windowMessages.length);
+    }, [windowMessages]);
 
 
     const submitHandler = async (e) => {
@@ -41,10 +48,10 @@ export default function GeneralChat(props) {
 
     return (
         <div className="Chat">
-            <ChatWindow messages={messages.filter(msg => msg.recipient === "General")} count={messageCount} />
+            <ChatWindow messages={windowMessages} count={messageCount} />
             <form onSubmit={submitHandler}>
                 <label>
-    <input type="text" name="name" onChange={changeHandler} />
+                    <input type="text" name="name" onChange={changeHandler} />
                 </label>
                 <button name="name" type="submit">Send</button>
             </form>
