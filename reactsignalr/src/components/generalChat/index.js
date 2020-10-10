@@ -1,29 +1,29 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from '../chatWindow';
 import HubContext from '../../contexts/hubContext';
+import './genChat.scss';
 
 
-export default function Chat(props) {
 
-    const {user,  messages, hubConnection } = useContext(HubContext);
+export default function GeneralChat(props) {
+
+    const { user, messages, hubConnection } = useContext(HubContext);
 
     const [message, setMessage] = useState("");
 
-    const [filteredMessages, setFilteredMessages] = useState([]);
-    const [messageCount, setMessageCount] = useState(1);
+    const [windowMessages, setWindowMessages] = useState([]);
+
+    const [messageCount, setMessageCount] = useState(0);
+
 
     useEffect(() => {
-        console.log("Filtering to find general messages");
-        //let theseMessages = messages.filter(msg => msg.recipient === "General");
-        let theseMessages = messages
-        setFilteredMessages(theseMessages);
-        setMessageCount(theseMessages.length);
-        console.log(theseMessages);
-    }, [messages, messageCount])
+        let newMessages = messages.filter(msg => msg.recipient === "General");
+        setWindowMessages(newMessages);
+     }, [messages]);
 
-    useEffect(()=>{
-        console.log(messages);
-    })
+    useEffect(() => {
+        setMessageCount(windowMessages.length);
+    }, [windowMessages]);
 
 
     const submitHandler = async (e) => {
@@ -42,23 +42,19 @@ export default function Chat(props) {
         thisForm.reset();
     };
 
-
-
     const changeHandler = e => {
         setMessage(e.target.value);
     };
 
     return (
-        <>
+        <div className="Chat">
+            <ChatWindow messages={windowMessages} count={messageCount} />
             <form onSubmit={submitHandler}>
                 <label>
-                    {user} says:
-    <input type="text" name="name" onChange={changeHandler} />
+                    <input type="text" name="name" onChange={changeHandler} />
                 </label>
                 <button name="name" type="submit">Send</button>
             </form>
-            <ChatWindow messages={filteredMessages} count={messageCount} />
-
-        </>
+        </div>
     )
 }

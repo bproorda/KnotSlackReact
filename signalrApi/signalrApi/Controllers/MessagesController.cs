@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using signalrApi.Models;
 using signalrApi.Models.DTO;
@@ -18,25 +21,36 @@ namespace signalrApi.Controllers
     {
         private IMessageRepository messageRepository;
         private readonly IUserManager userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MessagesController(IMessageRepository messageRepository, IUserManager userManager)
+        public MessagesController(IMessageRepository messageRepository, IUserManager userManager, IHttpContextAccessor _httpContextAccessor)
         {
             this.messageRepository = messageRepository;
             this.userManager = userManager;
+            this._httpContextAccessor = _httpContextAccessor;
         }
         
         [HttpPost("msgsender")]
-        public async Task<IEnumerable<Message>> GetMessagesSender(string sender)
+        public async Task<IEnumerable<Message>> GetMessagesSender(userDTO input)
         {
-            var messages = await messageRepository.GetMessagesBySender(sender);
+            var messages = await messageRepository.GetMessagesBySender(input.Username);
             return messages;
         }
 
 
         [HttpPost("msgrec")]
-        public async Task<IEnumerable<Message>> GetMessagesRecipient(string recipient)
+        public async Task<IEnumerable<Message>> GetMessagesRecipient(userDTO input)
         {
-            var messages = await messageRepository.GetMessagesByRecipient(recipient);
+            var messages = await messageRepository.GetMessagesByRecipient(input.Username);
+            return messages;
+        }
+        [Authorize]
+        [HttpPost("mymsg")]
+        public async Task<IEnumerable<Message>> GetMyMessages()
+        {
+            var username = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var user = await userManager.FindByNameAsync(username);
+            var messages = await messageRepository.GetMyMessages(user);
             return messages;
         }
 
@@ -68,6 +82,16 @@ namespace signalrApi.Controllers
             {
                 return NotFound();
             }
+
+            return true;
+        }
+
+        //Deleting all messages sent by a specific user
+        [Authorize]
+        [HttpPost("delsender")]
+        public async Task<ActionResult<bool>> DeleteBySender(userDTO user)
+        {
+            await messageRepository.DeleteMessagesBySender(user.Username);
 
             return true;
         }

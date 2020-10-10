@@ -15,7 +15,7 @@ const Login = () => {
     const handleSubmit = e => {
         e.preventDefault();
 
-        const { username, password } = e.target.elements;
+        const { username, email, password } = e.target.elements;
 
         let result = null;
 
@@ -28,7 +28,7 @@ const Login = () => {
         } else {
             console.log("registering");
 
-            result = register(username.value, password.value);
+            result = register(email.value, username.value, password.value);
         }
 
         if (result){ 
@@ -39,19 +39,17 @@ const Login = () => {
     }
 
     const toggleIsRegistering = () => {
-        console.log("Registering new user!");
+        //console.log("Registering new user!");
         setIsRegistering(!isRegistering);
     }
 
     const logoutSubmit = e => {
-        console.log("logging out use");
+        console.log("logging out user");
         e.preventDefault();
-        logout();
-        history.push("/")
+        logout(user);
+        history.push("/");
 
     }
-
-    console.log(user);
 
 
     if (user) {
@@ -74,9 +72,13 @@ const Login = () => {
                 <input type="checkbox" onChange={toggleIsRegistering} />
             </label>
             <label>
-                Email
+                Username
             <input placeholder="Username" name="username" />
             </label>
+            {isRegistering ?             <label>
+                Email
+            <input placeholder="Email" name="email" />
+            </label> : null}
             <label>
                 password
             <input placeholder="Password" type="password" name="password" />

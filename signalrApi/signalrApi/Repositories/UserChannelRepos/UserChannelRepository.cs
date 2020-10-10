@@ -1,5 +1,8 @@
-﻿using signalrApi.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using signalrApi.Data;
 using signalrApi.Models;
+using signalrApi.Models.DTO;
+using signalrApi.Models.Identity;
 using signalrApi.services;
 using System;
 using System.Collections.Generic;
@@ -35,6 +38,22 @@ namespace signalrApi.Repositories.UserChannelRepos
             return newUC;
         }
 
+        public async Task<UserChannel> AddNewUserToGeneral(string username)
+        {
+            var user = await userManager.FindByNameAsync(username);
+
+            var newUC = new UserChannel
+            {
+                UserId = user.Id,
+                ChannelName = "General",
+            };
+
+            _context.UserChannels.Add(newUC);
+            await _context.SaveChangesAsync();
+
+            return newUC;
+        }
+
         public async Task<UserChannel> RemoveUserFromChannel(string username, string channel)
         {
             var user = await userManager.FindByNameAsync(username);
@@ -45,6 +64,20 @@ namespace signalrApi.Repositories.UserChannelRepos
             await _context.SaveChangesAsync();
 
             return uc;
+        }
+
+        public async Task<List<createChannelDTO>> GetUserChannels(ksUser user)
+        {
+            var userChannels = await _context.UserChannels
+                .Where(uc => uc.UserId == user.Id)
+                .Select( uc => new createChannelDTO
+                {
+                      name = uc.Channel.Name,
+                      type = uc.Channel.Type,
+                }).ToListAsync();
+
+
+            return userChannels;
         }
     }
 }

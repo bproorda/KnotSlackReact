@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using signalrApi.Data;
 using signalrApi.Hubs;
 using signalrApi.Models.DTO;
 using signalrApi.Models.Identity;
 using signalrApi.services;
+using signalrApi.Repositories.UserChannelRepos;
+using signalrApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,13 +26,15 @@ namespace signalrApi.Controllers
     {
         private knotSlackDbContext _context;
         private readonly IUserManager userManager;
+        private IUserChannelRepository userChannelRepository;
         private IChatHub chatHub;
 
-        public UsersController(IUserManager userManager, IChatHub chatHub, knotSlackDbContext _context)
+        public UsersController(IUserManager userManager, IChatHub chatHub, knotSlackDbContext _context, IUserChannelRepository userChannelRepository)
         {
             this.userManager = userManager;
             this.chatHub = chatHub;
             this._context = _context;
+            this.userChannelRepository = userChannelRepository;
         }
 
         [HttpPost("Login")]
@@ -43,19 +49,16 @@ namespace signalrApi.Controllers
                     user.LoggedIn = true;
                     await userManager.UpdateAsync(user);
 
-                    List<string> channels = new List<string>();
+                    await chatHub.SendUpdatedUser(user.UserName, user.LoggedIn);
 
-                    if (user.UserChannels != null)
-                    {
-                        user.UserChannels.ForEach(uc => channels.Add(uc.ChannelName));
-                    }
+                    var channels = await userChannelRepository.GetUserChannels(user);
 
                     return Ok(new UserWithToken
                     {
                         UserId = user.UserName,
                         Token = userManager.CreateToken(user),
-                        Channels = channels.ToArray(),
-
+                        Channels = channels,
+                        LastVisited = user.LastVisited,
                     });
                 }
 
@@ -63,7 +66,7 @@ namespace signalrApi.Controllers
             }
             return Unauthorized();
         }
-
+        //[Authorize]
         //To update LoggedIn prop in db
         [HttpPost("Logout")]
         public async Task<string> Logout(userDTO userInfo)
@@ -75,8 +78,8 @@ namespace signalrApi.Controllers
                 await userManager.UpdateAsync(user);
 
                 //comment out if using postman
-                
-                await chatHub.DisplayUsers();
+                await chatHub.SendUpdatedUser(user.UserName, user.LoggedIn);
+                await chatHub.UpdateLastVisited(user.UserName);
                 return user.UserName;
 
             }
@@ -90,7 +93,7 @@ namespace signalrApi.Controllers
             var user = new ksUser
             {
                 Email = register.Email,
-                UserName = register.Email,
+                UserName = register.UserName,
                 LoggedIn = true,
 
             };
@@ -105,10 +108,16 @@ namespace signalrApi.Controllers
                 });
             }
 
+            await userChannelRepository.AddNewUserToGeneral(user.UserName);
+
+            var channels = await userChannelRepository.GetUserChannels(user);
+
             return Ok(new UserWithToken
             {
-                UserId = user.Id,
-                Token = userManager.CreateToken(user)
+                UserId = user.UserName,
+                Token = userManager.CreateToken(user),
+                Channels = channels,
+                LastVisited = DateTime.Now,
             });
 
 
@@ -171,14 +180,14 @@ namespace signalrApi.Controllers
 
             });
         }
-        
-        [HttpGet("users")]
+        [Authorize]
+        [HttpPost("allusers")]
         public async Task<userListDTO[]> users()
         {
                 var users = await _context.Users
                 .Select(user => new userListDTO
                     {
-                     Username = user.Email,
+                     Username = user.UserName,
                      LoggedIn = user.LoggedIn
                         }).ToListAsync();
 

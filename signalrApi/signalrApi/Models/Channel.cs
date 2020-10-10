@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace signalrApi.Models
 {
     public class Channel
@@ -13,6 +14,8 @@ namespace signalrApi.Models
         [Key]
         [Required]
         public string Name { get; set; }
+
+        public string Type { get; set; }
 
         public List<UserChannel> UserChannels { get; set; }
 

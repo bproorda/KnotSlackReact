@@ -54,7 +54,15 @@ namespace signalrApi.Hubs
         {
             var message = await WriteMessage(sender, recipient, contents);
 
+            await messageRepository.CreateNewMessage(message);
+
+            var thisUser = Clients.User(recipient);
+
             await Clients.User(recipient).SendAsync("ReceiveMessage", message);
+
+            await Clients.Caller.SendAsync("ReceiveMessage", message);
+
+            Console.WriteLine(thisUser);
         }
 
         public async Task AddToGroup(string channelName)
@@ -74,7 +82,11 @@ namespace signalrApi.Hubs
         {
             var message = await WriteMessage(sender, recipient, contents);
 
+            await messageRepository.CreateNewMessage(message);
+
             await Clients.Group(recipient).SendAsync("ReceiveMessage", message);
+
+            //Console.WriteLine(recipient);
         }
 
         public async Task DisplayUsers()
@@ -100,6 +112,27 @@ namespace signalrApi.Hubs
             await Clients.Caller.SendAsync("ShowContext", msg);
         }
 
+        public async Task SendUpdatedUser(string username, bool loggedIn)
+        {
+            var updatedUser = new userListDTO
+            {
+                Username = username,
+                LoggedIn = loggedIn,
+            };
+            if (Clients != null) {
+                await Clients.All.SendAsync("UpdateUsers", updatedUser);
+            };
+        }
+
+        public async Task UpdateLastVisited(string username)
+        {
+            var thisUser = await userManager.FindByNameAsync(username);
+
+            thisUser.LastVisited = DateTime.Now;
+
+            await userManager.UpdateAsync(thisUser);
+        }
+
 
         //public async Task RemoveUser(string user)
         //{
@@ -117,9 +150,10 @@ namespace signalrApi.Hubs
         Task AddToGroup(string channelName);
         Task RemoveFromGroup(string channelName);
         Task SendGroupMessage(string sender, string recipient, string contents);
+        Task SendUpdatedUser(string username, bool loggedIn);
         Task DisplayUsers();
         //method for testing and experimentation
          Task GetContext();
-
+        Task UpdateLastVisited(string username);
     }
 }

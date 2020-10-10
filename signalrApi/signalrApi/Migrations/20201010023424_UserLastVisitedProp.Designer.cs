@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using signalrApi.Data;
 
 namespace signalrApi.Migrations
 {
     [DbContext(typeof(knotSlackDbContext))]
-    partial class knotSlackDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201010023424_UserLastVisitedProp")]
+    partial class UserLastVisitedProp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

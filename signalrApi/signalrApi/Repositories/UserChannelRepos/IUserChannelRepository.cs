@@ -1,4 +1,6 @@
 ﻿using signalrApi.Models;
+using signalrApi.Models.DTO;
+using signalrApi.Models.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +13,9 @@ namespace signalrApi.Repositories.UserChannelRepos
         Task<UserChannel> AddUserToChannel(string username, string channel);
 
         Task<UserChannel> RemoveUserFromChannel(string username, string channel);
+
+        Task<List<createChannelDTO>> GetUserChannels(ksUser user);
+
+        Task<UserChannel> AddNewUserToGeneral(string username);
     }
 }

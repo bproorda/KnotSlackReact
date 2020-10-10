@@ -12,32 +12,35 @@ export class UserProvider extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            //dummy props
             fakeUser: "Bob",
             food: "Favorite Food: Bacon",
-            user: JSON.parse(window.localStorage.getItem('user')) || "NotBob",
+            //real props
+            user: null,
             permissions: [],
-            token: JSON.parse(window.localStorage.getItem('token')) || null,
-            channels: JSON.parse(window.localStorage.getItem('channels')) || null,
+            token: null,
+            channels: null,
+            lastVisited: new Date(0),
             login: this.login,
             logout: this.logout,
             register: this.register,
         }
     }
 
-    register = async (email, password) => {
+    register = async (email, username, password) => {
         const result = await fetch(`${usersAPI}register`, {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ email, username, password }),
         });
-        console.log(result);
+        //console.log(result);
 
         const body = await result.json();
 
         if (result.ok) {
-            if (this.processToken(body.token, body)) {
+            if (this.processToken(body.token, body.channels)) {
                 return true;
             }
         } else {
@@ -59,7 +62,7 @@ export class UserProvider extends React.Component {
         //console.log(body);
 
         if (result.ok) {
-            if (this.processToken(body.token, body)) {
+            if (this.processToken(body.token, body.channels, body.lastVisited)) {
                 return true;
             }
         } else {
@@ -88,26 +91,25 @@ export class UserProvider extends React.Component {
         }
     }
 
-    processToken(token, body) {
+    processToken(token, channels, lastVisited) {
         try {
             const payload = jwt.decode(token);
             if (payload) {
                 if (payload.exp * 1000 < Date.now()) {
-                    this.logout();
+                    this.logout(payload.sub);
                     return;
                 }
                 if (true) {
                     var user = payload.sub;
                 }
-                let channels = body.channels;
-                window.localStorage.setItem("user", JSON.stringify(user));
-                window.localStorage.setItem("token", JSON.stringify(token));
                 window.localStorage.setItem("channels", JSON.stringify(channels));
-                console.log(user);
+                window.localStorage.setItem("lastVisited", JSON.stringify(lastVisited));
+                //console.log(user);
                 this.setState({
                     token,
                     user,
                     channels,
+                    lastVisited,
                     permissions: payload.permissions || [],
                 });
                 cookie.save('auth', token, { path: "/" });
@@ -121,9 +123,12 @@ export class UserProvider extends React.Component {
 
     componentDidMount() {
         const cookieToken = cookie.load('auth');
-        if (cookieToken) console.log('Found auth cookie!');
-
-        this.processToken(cookieToken);
+        if (cookieToken) {
+            console.log('Found auth cookie!');
+            let channels = JSON.parse(window.localStorage.getItem('channels'));
+            let lastTimeVisited = JSON.parse(window.localStorage.getItem('lastVisited'));
+            this.processToken(cookieToken, channels, lastTimeVisited);
+        }
     }
 
 
