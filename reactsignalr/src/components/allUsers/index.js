@@ -6,7 +6,7 @@ import './allUsers.scss';
 
 export default function AllUsers(props) {
 
-    const { allUsers, doesWindowAlreadyExist, currentWindow } = useContext(HubContext);
+    const { allUsers, doesWindowAlreadyExist, currentWindow, addUserToGroup } = useContext(HubContext);
     const [thisUser, setThisUser] = useState(null);
     const currentOptions = allUsers ? allUsers.map((user) => ({ name: user.username, value: user.username })) : [{ name: "Loading!", value: "Loading!" }];
 
@@ -22,7 +22,7 @@ export default function AllUsers(props) {
                 search
                 options={currentOptions}></SelectSearch>
             <Button onClick={() => doesWindowAlreadyExist(thisUser, "Private")}>Send PM</Button>
-            {currentWindow.type === "Group" ? <Button>Add to Group</Button> : null}
+            {currentWindow.type === "Group" ? <Button onClick={() => addUserToGroup(thisUser, currentWindow.name)}>Add to Group</Button> : null}
         </div>
     )
 }
