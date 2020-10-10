@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import HubContext from '../../contexts/hubContext';
 import AllUsers from '../allUsers';
+import '../channelList/channelList.scss';
 
 
 export default function UserList(props) {
@@ -34,7 +35,7 @@ export default function UserList(props) {
             <h3>Your Neighbors</h3>
             <ul style={{ listStyleType: "none", overflow: "auto", maxHeight: "50%" }}>
                 {(windows !== null) ? windows.filter(channel => channel.type === "Private").map((channel, index) => (
-                    <li key={index}><Button onClick={() => clickHandler(channel.name)} style={getStyle(channel.name)} >{channel.name}</Button></li>
+                    <li key={index} className={channel.hasUnread ? "BlinkBlink" : ""}><Button onClick={() => clickHandler(channel.name)} style={getStyle(channel.name)} >{channel.name}</Button></li>
                 )) : null}
             </ul>
             <AllUsers />

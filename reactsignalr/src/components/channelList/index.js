@@ -19,7 +19,7 @@ export default function ChannelList(props) {
             <CreateGroup />
             <ul style={{ listStyleType: "none", overflow: "auto", maxHeight: "50%" }}>
                 {(windows !== null) ? windows.filter(channel => channel.type === "Group" || channel.type === "General").map((channel, index) => (
-                    <li key={index}><Button onClick={() => clickHandler(channel.name, channel.type)} >{channel.name}</Button></li>
+                    <li key={index} className={channel.hasUnread ? "BlinkBlink" : ""}><Button onClick={() => clickHandler(channel.name, channel.type)} >{channel.name}</Button></li>
                 )) : null}
             </ul>
         </div>
