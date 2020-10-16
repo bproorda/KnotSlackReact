@@ -16,6 +16,8 @@ using signalrApi.Repositories.MessageRepos;
 using signalrApi.Repositories.UserChannelRepos;
 using signalrApi.services;
 using Newtonsoft.Json;
+using Microsoft.OpenApi.Models;
+using System;
 
 namespace signalrApi
 {
@@ -47,6 +49,28 @@ namespace signalrApi
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddTransient<IChannelRepository, ChannelRepository>();
             services.AddTransient<IUserChannelRepository, UserChannelRepository>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "KnotSlack API",
+                    Description = "A Slack Clone using Signalr",
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Brennan Roorda",
+                        Email = "bproorda@gmail.com",
+                        Url = new Uri("https://twitter.com/spboyer"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Use under LICX",
+                        Url = new Uri("https://example.com/license"),
+                    }
+                });
+            });
 
             services.AddIdentity<ksUser, IdentityRole>()
                .AddEntityFrameworkStores<knotSlackDbContext>()
@@ -103,6 +127,13 @@ namespace signalrApi
 
             app.UseRouting();
 
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseAuthentication();
 
