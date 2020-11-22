@@ -5,9 +5,9 @@ import {
 } from '@microsoft/signalr/dist/browser/signalr';
 import UserContext from './userContext';
 //import context from 'react-bootstrap/esm/AccordionContext';
-const usersAPI = 'https://localhost:5001/api/Users/';
-const messagesAPI = 'https://localhost:5001/api/messages/';
-const channelsAPI = 'https://localhost:5001/api/channels/';
+const usersAPI = 'https://knot-slack-api.herokuapp.com/api/Users/';
+const messagesAPI = 'https://knot-slack-api.herokuapp.com/api/messages/';
+const channelsAPI = 'https://knot-slack-api.herokuapp.com/api/channels/';
 
 export const HubContext = React.createContext();
 
@@ -110,7 +110,7 @@ export class HubProvider extends React.Component {
 
   setConnection = async () => {
     let hubConnection = new HubConnectionBuilder()
-      .withUrl("https://localhost:5001/chatHub")
+      .withUrl("https://knot-slack-api.herokuapp.com/chatHub")
       .configureLogging(LogLevel.Information)
       .build();
 
