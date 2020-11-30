@@ -33,4 +33,4 @@ steps:
     deployToSlotOrASE: true
     ResourceGroupName: 'knotslackfront'
     SlotName: 'production'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    packageForLinux: '$(directory)/**/*.zip'
