@@ -2,35 +2,55 @@
 # Build a Node.js project that uses React.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+# https://azuredevopslabs.com/labs/azuredevops/yaml/
 
 trigger:
 - main
 
-pool:
-  vmImage: 'ubuntu-latest'
+stages:
+ - stage: Build
+   jobs:
+   - job: Build
+     pool:
+      vmImage: 'ubuntu-latest'
 
-# Set variables
-variables:
-  directory: reactsignalr/
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
+    # Set variables
+     variables:
+      directory: reactsignalr/
+     steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '10.x'
+        displayName: 'Install Node.js'
 
-- script: |
-    npm install
-    npm run build
-  workingDirectory: $(directory)
-  displayName: 'npm install and build'
+      - script: |
+          npm install
+          npm run build
+        workingDirectory: $(directory)
+        displayName: 'npm install and build'
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'drop'
+          publishLocation: 'Container'
 
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Azure subscription 1(b46f4c9e-38e6-4be1-a047-3d16c8c71621)'
-    appType: 'webApp'
-    WebAppName: 'KnotSlackReact'
-    deployToSlotOrASE: true
-    ResourceGroupName: 'knotslackfront'
-    SlotName: 'production'
-    packageForLinux: '$(directory)/**/*.zip'
+ - stage: Deploy
+   jobs:
+   - job: Deploy
+     pool:
+      vmImage: 'ubuntu-latest'
+
+     steps:
+      - task: DownloadBuildArtifacts@0
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'drop'
+          downloadPath: '$(System.ArtifactsDirectory)'
+      - task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'Azure subscription 1(b46f4c9e-38e6-4be1-a047-3d16c8c71621)'
+          appType: 'webApp'
+          WebAppName: 'KnotSlackReact'
+          packageForLinux: '$(System.ArtifactsDirectory)/drop/*.zip'
