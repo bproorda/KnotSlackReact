@@ -5,7 +5,7 @@
 # https://azuredevopslabs.com/labs/azuredevops/yaml/
 
 trigger:
-- main
+- master
 
 stages:
  - stage: Build
