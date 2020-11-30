@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import jwt from 'jsonwebtoken';
 import cookie from 'react-cookies';
 const usersAPI = 'https://localhost:5001/api/Users/';
