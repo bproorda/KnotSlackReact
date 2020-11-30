@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.20f9fabb.chunk.css",
+    "main.js": "/static/js/main.f1a10023.chunk.js",
+    "main.js.map": "/static/js/main.f1a10023.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.c9fc73a6.js",
+    "runtime-main.js.map": "/static/js/runtime-main.c9fc73a6.js.map",
+    "static/js/2.f332b900.chunk.js": "/static/js/2.f332b900.chunk.js",
+    "static/js/2.f332b900.chunk.js.map": "/static/js/2.f332b900.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.fb6886f965b0f3fbcca4637c86eb187d.js": "/precache-manifest.fb6886f965b0f3fbcca4637c86eb187d.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.20f9fabb.chunk.css.map": "/static/css/main.20f9fabb.chunk.css.map",
+    "static/js/2.f332b900.chunk.js.LICENSE.txt": "/static/js/2.f332b900.chunk.js.LICENSE.txt",
+    "static/media/KnotLogo.png": "/static/media/KnotLogo.5f5460c1.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c9fc73a6.js",
+    "static/js/2.f332b900.chunk.js",
+    "static/css/main.20f9fabb.chunk.css",
+    "static/js/main.f1a10023.chunk.js"
+  ]
+}
