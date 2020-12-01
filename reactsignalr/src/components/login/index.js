@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 
 const Login = () => {
 
-    const { user, login, logout, register } = useContext(UserContext);
+    const { user, login, logout, register, guestUser } = useContext(UserContext);
 
     let history = useHistory();
 
@@ -66,7 +66,7 @@ const Login = () => {
     return (
         <>
         {(!registrationFailed) ? null : isRegistering ? <h3>Registration Failed</h3> : <h3>Login Failed</h3>}
-        <form onSubmit={handleSubmit} className="login">
+        <form className="TheLoginForm" onSubmit={handleSubmit} >
             <label>
                 I am a registering as a new user
                 <input type="checkbox" onChange={toggleIsRegistering} />

@@ -17,6 +17,7 @@ export class UserProvider extends React.Component {
             food: "Favorite Food: Bacon",
             //real props
             user: null,
+            guestUser: false,
             permissions: [],
             token: null,
             channels: null,
@@ -109,6 +110,7 @@ export class UserProvider extends React.Component {
                     user,
                     channels,
                     lastVisited,
+                    guestUser: false,
                     permissions: payload.permissions || [],
                 });
                 cookie.save('auth', token, { path: "/" });
