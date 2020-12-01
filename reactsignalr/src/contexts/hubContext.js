@@ -5,9 +5,9 @@ import {
 } from '@microsoft/signalr/dist/browser/signalr';
 import UserContext from './userContext';
 //import context from 'react-bootstrap/esm/AccordionContext';
-const usersAPI = 'https://signalrapi20201129202240.azurewebsites.net/api/Users/';
-const messagesAPI = 'https://signalrapi20201129202240.azurewebsites.net/api/messages/';
-const channelsAPI = 'https://signalrapi20201129202240.azurewebsites.net/api/channels/';
+const usersAPI = 'https://localhost:5001/api/Users/';
+const messagesAPI = 'https://localhost:5001/api/messages/';
+const channelsAPI = 'https://localhost:5001/api/channels/';
 
 export const HubContext = React.createContext();
 
@@ -110,7 +110,7 @@ export class HubProvider extends React.Component {
 
   setConnection = async () => {
     let hubConnection = new HubConnectionBuilder()
-      .withUrl("https://signalrapi20201129202240.azurewebsites.net/chatHub")
+      .withUrl("https://localhost:5001/chatHub")
       .configureLogging(LogLevel.Information)
       .build();
 
@@ -129,10 +129,10 @@ export class HubProvider extends React.Component {
     hubConnection.on('ReceiveMessage', async function (message) {
       //console.log("messages received");
       var msg = message;
-      //console.log(msg);
+      console.log(msg);
       let currentMessages = this.state.messages ? this.state.messages : [];
       currentMessages.push(msg);
-      if (msg.Recipient !== this.state.currentWindow.name) this.updateHasUnread(msg.Recipient);
+      if (msg.recipient !== this.state.currentWindow.name) this.updateHasUnread(msg.Recipient);
       this.setState({ messages: currentMessages, messageCount: currentMessages.length });
 
     }.bind(this));

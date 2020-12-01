@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from '../chatWindow';
 import HubContext from '../../contexts/hubContext';
+import UserContext from '../../contexts/userContext';
 import './genChat.scss';
 
 
 
 export default function GeneralChat(props) {
 
-    const { user, messages, hubConnection } = useContext(HubContext);
+    const { messages, hubConnection } = useContext(HubContext);
+    const { user } = useContext(UserContext);
 
     const [message, setMessage] = useState("");
 
@@ -31,9 +33,9 @@ export default function GeneralChat(props) {
         let thisForm = e.target;
 
         if (hubConnection.connectionStarted) {
-            console.log("sending!")
+            console.log(`Sending: ${user}: ${message}`)
             await hubConnection.invoke("SendMessage", user, "General", message).catch(function (err) {
-                return console.error(err.toString());
+                return console.error(err);
             });
         }
         else {
