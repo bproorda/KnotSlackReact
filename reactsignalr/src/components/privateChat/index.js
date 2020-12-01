@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from '../chatWindow';
 import HubContext from '../../contexts/hubContext';
+import UserContext from '../../contexts/userContext';
 import './privChat.scss';
 
 
@@ -8,7 +9,8 @@ import './privChat.scss';
 export default function PrivateChat(props) {
 
 
-    const { user, messages, hubConnection } = useContext(HubContext);
+    const { messages, hubConnection, messageCount } = useContext(HubContext);
+    const { user } = useContext(UserContext);
 
     const [message, setMessage] = useState("");
 
@@ -22,7 +24,7 @@ export default function PrivateChat(props) {
     useEffect(() => {
         let newMessages = messages.filter(msg => msg.recipient === recipient);
         setWindowMessages(newMessages);
-    }, [messageNumber, recipient, messages]);
+    }, [messageCount, recipient, messages]);
 
     useEffect(() => {
         setMessageCount(windowMessages.length);
