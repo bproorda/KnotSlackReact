@@ -34,6 +34,7 @@ export class HubProvider extends React.Component {
       messgeCount: 0,
       currentWindow: { name: "General", type: "General" },
       windows: [],
+      windowCount: 1,
       doesWindowAlreadyExist: this.doesWindowAlreadyExist,
       addUserToGroup: this.addUserToGroup,
       updateLastVisited: this.updateLastVisited,
@@ -150,7 +151,7 @@ export class HubProvider extends React.Component {
     ));
     //console.log(windows);
     window.localStorage.setItem("channels", JSON.stringify(windows));
-    this.setState({ windows: windows });
+    this.setState({ windows: windows, windowCount: windows.length });
   };
 
   checkForUnreads = channelName => {
@@ -167,7 +168,7 @@ export class HubProvider extends React.Component {
     let currentWindows = this.state.windows;
     currentWindows.unshift(newWindow);
     window.localStorage.setItem("channels", JSON.stringify(currentWindows));
-    this.setState({ windows: currentWindows });
+    this.setState({ windows: currentWindows, windowCount: currentWindows.length });
 
     //sending new window to api
     await fetch(`${channelsAPI}`, {
