@@ -54,12 +54,12 @@ export default function PrivateChat(props) {
 
     return (
         <div className="Chat" >
-            <ChatWindow messages={windowMessages} count={messageNumber} />
-            <form onSubmit={submitHandler}>
+            <ChatWindow messages={windowMessages} count={messageNumber} name={recipient}/>
+            <form className="SendMsgForm" onSubmit={submitHandler}>
                 <label>
                     <input type="text" name="name" onChange={changeHandler} />
                 </label>
-                <button name="name" type="submit">Send</button>
+                <button name="name" type="submit">Send Message</button>
             </form>
         </div>
     )

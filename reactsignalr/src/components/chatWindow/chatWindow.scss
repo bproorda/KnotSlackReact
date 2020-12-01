@@ -1,10 +1,21 @@
 .TheMessages{
-    margin-left: 5vmin;
-    position: relative;
-    width: 90%;
+
     height: 100%;
     border: 2px solid black;
     border-radius: 3vmin;
     background-color: white;
+    list-style: none;
+    padding: 2vmin;
 
+    li{
+        padding: 0.25vmin;
+    }
+}
+
+.TheWindow{
+    margin-left: 7vmin;
+    margin-top: 7vmin;
+    position: relative;
+    min-width: 25vmin;
+    max-width: 100vmin;
 }

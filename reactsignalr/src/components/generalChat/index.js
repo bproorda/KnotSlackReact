@@ -51,12 +51,12 @@ export default function GeneralChat(props) {
 
     return (
         <div className="Chat">
-            <ChatWindow messages={windowMessages} count={messageNumber} />
-            <form onSubmit={submitHandler}>
+            <ChatWindow messages={windowMessages} count={messageNumber} name="General Chat"/>
+            <form className="SendMsgForm" onSubmit={submitHandler}>
                 <label>
                     <input type="text" name="name" onChange={changeHandler} />
                 </label>
-                <button name="name" type="submit">Send</button>
+                <button name="name" type="submit">Send Message</button>
             </form>
         </div>
     )

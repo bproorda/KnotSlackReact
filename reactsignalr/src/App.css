@@ -11,15 +11,22 @@
 .theList{
   position: fixed;
   right: 0;
-  top: 17vmin;
+  top: 15vmin;
   background-color: blue;
   padding: 5vmin;
+  height: 100%;
+  width: 10%;
+  min-width: 25vmin;
+  border-left: 2px solid black;
+  box-shadow: 0vmin 3vmin 3vmin;
 }
-/* ChatWindow{
-  position: relative;
-  left: 0;
-  bottom: 0;
-} */
+.SendMsgForm{
+  margin-left: 10vmin;
+  width: 80%;
+}
+.SendMsgForm input{
+  width: 70%;
+}
 
 @keyframes App-logo-spin {
   from {

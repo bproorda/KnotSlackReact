@@ -4,6 +4,8 @@ header {
     position: sticky;
     top: 0;
     width: 100%;
+    border-bottom: 2px solid black;
+    box-shadow: 0vmin 3vmin 3vmin;
 
     p {
         color: whitesmoke;
@@ -34,6 +36,7 @@ header {
         top: 5vmin;
         padding: 1.5vmin;
         border-radius: 50%;
+        background-color: lightsteelblue;
       }
 
 }

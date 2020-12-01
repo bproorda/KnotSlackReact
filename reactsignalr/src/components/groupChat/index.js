@@ -62,12 +62,12 @@ export default function GroupChat(props) {
 
     return (
         <div className="Chat" >
-            <ChatWindow messages={windowMessages} count={messageNumber} />
-            <form onSubmit={submitHandler}>
+            <ChatWindow messages={windowMessages} count={messageNumber} name={channelName}/>
+            <form className="SendMsgForm" onSubmit={submitHandler}>
                 <label>
                     <input type="text" name="name" onChange={changeHandler} />
                 </label>
-                <button name="name" type="submit">Send</button>
+                <button name="name" type="submit">Send Message</button>
             </form>
         </div>
     )
