@@ -12,6 +12,8 @@
   position: fixed;
   right: 0;
   top: 17vmin;
+  background-color: blue;
+  padding: 5vmin;
 }
 /* ChatWindow{
   position: relative;

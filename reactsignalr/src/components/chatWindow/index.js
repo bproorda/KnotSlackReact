@@ -14,7 +14,7 @@ export default function ChatWindow(props) {
         <>
             <div>
                 <h2>Messages: {count}</h2>
-                <ul>
+                <ul className="TheMessages">
                     {messages.map((msg, index) => (
                         <li key={index}>{formatMessage(msg)}</li>
                     ))}
