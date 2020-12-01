@@ -134,7 +134,7 @@ export class HubProvider extends React.Component {
       currentMessages.push(msg);
       if (msg.recipient !== this.state.currentWindow.name) this.updateHasUnread(msg.Recipient);
       this.setState({ messages: currentMessages, messageCount: currentMessages.length });
-
+      console.log(this.state.messageCount);
     }.bind(this));
   }
 

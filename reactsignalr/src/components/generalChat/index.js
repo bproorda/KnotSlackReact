@@ -8,20 +8,21 @@ import './genChat.scss';
 
 export default function GeneralChat(props) {
 
-    const { messages, hubConnection } = useContext(HubContext);
+    const { messages, hubConnection, messageCount } = useContext(HubContext);
     const { user } = useContext(UserContext);
 
     const [message, setMessage] = useState("");
 
     const [windowMessages, setWindowMessages] = useState([]);
 
-    const [messageCount, setMessageCount] = useState(0);
+    const [messageNumber, setMessageCount] = useState(0);
 
 
     useEffect(() => {
         let newMessages = messages.filter(msg => msg.recipient === "General");
+        //console.log("New Message in General!");
         setWindowMessages(newMessages);
-     }, [messages]);
+     }, [messageCount, messages]);
 
     useEffect(() => {
         setMessageCount(windowMessages.length);
@@ -50,7 +51,7 @@ export default function GeneralChat(props) {
 
     return (
         <div className="Chat">
-            <ChatWindow messages={windowMessages} count={messageCount} />
+            <ChatWindow messages={windowMessages} count={messageNumber} />
             <form onSubmit={submitHandler}>
                 <label>
                     <input type="text" name="name" onChange={changeHandler} />

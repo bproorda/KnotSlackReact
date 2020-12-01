@@ -7,20 +7,20 @@ import './groupChat.scss';
 
 export default function GroupChat(props) {
 
-    const { user, messages, hubConnection } = useContext(HubContext);
+    const { user, messages, hubConnection, messageCount } = useContext(HubContext);
 
     const [message, setMessage] = useState("");
 
     const [windowMessages, setWindowMessages] = useState([]);
 
-    const [messageCount, setMessageCount] = useState(0);
+    const [messageNumber, setMessageCount] = useState(0);
 
     const channelName = props.name;
 
     useEffect(() => {
         let newMessages = messages.filter(msg => msg.recipient === channelName);
         setWindowMessages(newMessages);
-    }, [messages, channelName]);
+    }, [messages, channelName, messageCount]);
 
     useEffect(() => {
         setMessageCount(windowMessages.length);
@@ -60,7 +60,7 @@ export default function GroupChat(props) {
 
     return (
         <div className="Chat" >
-            <ChatWindow messages={windowMessages} count={messageCount} />
+            <ChatWindow messages={windowMessages} count={messageNumber} />
             <form onSubmit={submitHandler}>
                 <label>
                     <input type="text" name="name" onChange={changeHandler} />

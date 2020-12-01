@@ -14,7 +14,7 @@ export default function PrivateChat(props) {
 
     const [windowMessages, setWindowMessages] = useState([]);
 
-    const [messageCount, setMessageCount] = useState(0);
+    const [messageNumber, setMessageCount] = useState(0);
 
     const recipient = props.name;
 
@@ -22,7 +22,7 @@ export default function PrivateChat(props) {
     useEffect(() => {
         let newMessages = messages.filter(msg => msg.recipient === recipient);
         setWindowMessages(newMessages);
-    }, [messages, recipient]);
+    }, [messageNumber, recipient, messages]);
 
     useEffect(() => {
         setMessageCount(windowMessages.length);
@@ -52,7 +52,7 @@ export default function PrivateChat(props) {
 
     return (
         <div className="Chat" >
-            <ChatWindow messages={windowMessages} count={messageCount} />
+            <ChatWindow messages={windowMessages} count={messageNumber} />
             <form onSubmit={submitHandler}>
                 <label>
                     <input type="text" name="name" onChange={changeHandler} />
