@@ -86,8 +86,7 @@ export class UserProvider extends React.Component {
         if (result.ok) {
             this.setState({ token: null, user: null, permissions: [] });
             cookie.remove('auth', { path: "/" });
-            window.localStorage.removeItem("user");
-            window.localStorage.removeItem("token");
+            window.localStorage.clear();
         }
     }
 

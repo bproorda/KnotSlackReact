@@ -149,6 +149,7 @@ export class HubProvider extends React.Component {
       { name: channel.name, type: channel.type, lastVisited: new Date(0), hasUnread: this.checkForUnreads(channel.name) }
     ));
     //console.log(windows);
+    window.localStorage.setItem("channels", JSON.stringify(windows));
     this.setState({ windows: windows });
   };
 
@@ -165,6 +166,7 @@ export class HubProvider extends React.Component {
     let newWindow = { name: name, type: type, lastVisited: new Date(), hasUnread: false };
     let currentWindows = this.state.windows;
     currentWindows.unshift(newWindow);
+    window.localStorage.setItem("channels", JSON.stringify(currentWindows));
     this.setState({ windows: currentWindows });
 
     //sending new window to api
