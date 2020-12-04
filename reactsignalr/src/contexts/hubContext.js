@@ -5,9 +5,9 @@ import {
 } from '@microsoft/signalr/dist/browser/signalr';
 import UserContext from './userContext';
 //import context from 'react-bootstrap/esm/AccordionContext';
-const usersAPI = 'https://localhost:5001/api/Users/';
-const messagesAPI = 'https://localhost:5001/api/messages/';
-const channelsAPI = 'https://localhost:5001/api/channels/';
+const usersAPI = 'https://knotslackapi.azurewebsites.net/api/Users/';
+const messagesAPI = 'https://knotslackapi.azurewebsites.net/api/messages/';
+const channelsAPI = 'https://knotslackapi.azurewebsites.net/api/channels/';
 
 export const HubContext = React.createContext();
 
@@ -133,7 +133,7 @@ export class HubProvider extends React.Component {
 
   setConnection = async () => {
     let hubConnection = new HubConnectionBuilder()
-      .withUrl("https://localhost:5001/chatHub")
+      .withUrl("https://knotslackapi.azurewebsites.net/chatHub")
       .configureLogging(LogLevel.Information)
       .build();
 
@@ -223,6 +223,7 @@ export class HubProvider extends React.Component {
       },
       body: JSON.stringify(newGroupUser),
     });
+    
   }
 
   updateLastVisitedWindow = (channelName) => {

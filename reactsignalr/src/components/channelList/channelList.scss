@@ -6,7 +6,13 @@
     animation: blinkingBackground 2s infinite;
 }
 .CurrentWindow{
-    background-color: whitesmoke;
+    background-color: green;
+    border: 2px solid black;
+    Button {
+        margin: auto;
+        position: relative;
+        left: 25%;
+    }
 }
 @keyframes blinkingBackground{
     0%		{ background-color: #10c018;}
