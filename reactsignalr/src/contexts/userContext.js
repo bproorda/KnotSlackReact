@@ -139,6 +139,8 @@ export class UserProvider extends React.Component {
             let guestId = Math.floor(Math.random() * 100000);
             console.log(`Hello, Guest${guestId}`);
             this.setState({user: guestId});
+        } else {
+            this.setState({user: null});
         }
         this.setState({guestUser: guest});
     }
