@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import HubContext from '../../contexts/hubContext';
-import UserContext from '../../contexts/userContext';
 import CreateGroup from '../createGroup';
 import './channelList.scss'
 
@@ -9,7 +8,7 @@ import './channelList.scss'
 export default function ChannelList(props) {
 
     const { windows, doesWindowAlreadyExist, currentWindow } = useContext(HubContext);
-    const { guestUser } = useContext(UserContext);
+
 
 
     const clickHandler = (name, type) => {
@@ -18,21 +17,17 @@ export default function ChannelList(props) {
     }
 
 
-    if (!guestUser) {
-        return (
-            <div>
-                <h3>Your Channels</h3>
-                <CreateGroup />
-                <ul style={{ listStyleType: "none", overflow: "auto", maxHeight: "50%" }}>
-                    {(windows !== null) ? windows.filter(channel => channel.type === "Group" || channel.type === "General").map((channel, index) => (
-                        <li key={index} className={channel.hasUnread ? "BlinkBlink" : currentWindow.name === channel.name ? "CurrentWindow" : ""}><Button onClick={() => clickHandler(channel.name, channel.type)} >{channel.name}</Button></li>
-                    )) : null}
-                </ul>
-            </div>
-        )
-    } else {
-        return (
-            <h3>Register/Login to see more!</h3>
-        )
-    }
+
+    return (
+        <div>
+            <h3>Your Channels</h3>
+            <CreateGroup />
+            <ul style={{ listStyleType: "none", overflow: "auto", maxHeight: "50%" }}>
+                {(windows !== null) ? windows.filter(channel => channel.type === "Group" || channel.type === "General").map((channel, index) => (
+                    <li key={index} className={channel.hasUnread ? "BlinkBlink" : currentWindow.name === channel.name ? "CurrentWindow" : ""}><Button onClick={() => clickHandler(channel.name, channel.type)} >{channel.name}</Button></li>
+                )) : null}
+            </ul>
+        </div>
+    )
+
 }
