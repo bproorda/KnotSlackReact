@@ -136,8 +136,8 @@ export class UserProvider extends React.Component {
     toggleGuest = () => {
         var guest = !this.state.guestUser;
         if(guest === true){
-            let guestId = Math.floor(Math.random() * 100000);
-            console.log(`Hello, Guest${guestId}`);
+            let guestId = `Guest${Math.floor(Math.random() * 100000)}`;
+            console.log(`Hello, ${guestId}`);
             this.setState({user: guestId});
         } else {
             this.setState({user: null});
