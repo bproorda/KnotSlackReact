@@ -54,9 +54,13 @@ export class HubProvider extends React.Component {
     if (this.context.user !== prevState.user && !this.state.hasUpdated) {
       console.log("update is running!")
       await this.setConnection();
-      await this.fetchAllUsers();
-      await this.fetchAllMessages();
-      this.createWindows();
+      if (!this.context.guestUser) {
+        await this.fetchAllUsers();
+        await this.fetchAllMessages();
+        this.createWindows();
+      } else {
+        await this.fetchGenMessages();
+      }
     }
   }
 
@@ -70,6 +74,24 @@ export class HubProvider extends React.Component {
     }
   }
 
+  fetchGenMessages = async () => {
+    const result = await fetch(`${messagesAPI}genmsg`, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const body = await result.json();
+    //console.log(body);
+
+    if (result.ok) {
+      let allMessages = this.state.messages.concat(body);
+      this.setState({ messages: allMessages });
+    } else {
+      return false;
+    }
+  }
   fetchAllUsers = async () => {
     const result = await fetch(`${usersAPI}allusers`, {
       method: 'post',
