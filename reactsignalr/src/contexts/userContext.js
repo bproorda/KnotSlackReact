@@ -140,7 +140,7 @@ export class UserProvider extends React.Component {
             console.log(`Hello, Guest${guestId}`);
             this.setState({user: guestId});
         }
-        this.setState({guestUser: !guest});
+        this.setState({guestUser: guest});
     }
 
 

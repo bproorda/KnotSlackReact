@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import HubContext from '../../contexts/hubContext';
+import UserContext from '../../contexts/userContext';
 import AllUsers from '../allUsers';
 import '../channelList/channelList.scss';
 
@@ -8,6 +9,7 @@ import '../channelList/channelList.scss';
 export default function UserList(props) {
 
     const { allUsers, doesWindowAlreadyExist, windows } = useContext(HubContext);
+    const {guestUser} = useContext(UserContext);
 
     //console.log(allUsers);
     //console.log(windows);
@@ -30,6 +32,7 @@ export default function UserList(props) {
     }
 
 
+if(!guestUser){
     return (
         <>
             <h3>Your Neighbors</h3>
@@ -41,4 +44,7 @@ export default function UserList(props) {
             <AllUsers />
         </>
     )
+} else {
+    return (null);
+}
 }
