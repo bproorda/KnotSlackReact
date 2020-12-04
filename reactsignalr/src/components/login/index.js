@@ -6,7 +6,7 @@ import './login.scss'
 
 const Login = () => {
 
-    const { user, login, logout, register, guestUser } = useContext(UserContext);
+    const { user, login, logout, register, toggleGuest } = useContext(UserContext);
 
     let history = useHistory();
 
@@ -52,6 +52,10 @@ const Login = () => {
 
     }
 
+    const enterFriend = () => {
+        toggleGuest();
+    }
+
 
     if (user) {
         return (
@@ -85,6 +89,7 @@ const Login = () => {
             <input placeholder="Password" type="password" name="password" />
             </label>
             <Button type="submit">Login</Button>
+            <Button onClick={enterFriend}>Enter as Guest User</Button>
         </form>
         </>
     )

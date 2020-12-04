@@ -25,6 +25,7 @@ export class UserProvider extends React.Component {
             login: this.login,
             logout: this.logout,
             register: this.register,
+            toggleGuest: this.toggleGuest,
         }
     }
 
@@ -130,6 +131,16 @@ export class UserProvider extends React.Component {
             let lastTimeVisited = JSON.parse(window.localStorage.getItem('lastVisited'));
             this.processToken(cookieToken, channels, lastTimeVisited);
         }
+    }
+
+    toggleGuest = () => {
+        var guest = !this.state.guestUser;
+        if(guest === true){
+            let guestId = Math.floor(Math.random() * 100000);
+            console.log(`Hello, Guest${guestId}`);
+            this.setState({user: guestId});
+        }
+        this.setState({guestUser: !guest});
     }
 
 
