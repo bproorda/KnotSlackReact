@@ -5,6 +5,9 @@
     border-radius: 5px;
     animation: blinkingBackground 2s infinite;
 }
+.CurrentWindow{
+    background-color: whitesmoke;
+}
 @keyframes blinkingBackground{
     0%		{ background-color: #10c018;}
     25%		{ background-color: #1056c0;}

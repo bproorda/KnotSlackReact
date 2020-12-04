@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import UserContext from '../../contexts/userContext';
 import Button from 'react-bootstrap/Button';
 import { useHistory } from "react-router-dom";
+import './login.scss'
 
 const Login = () => {
 
