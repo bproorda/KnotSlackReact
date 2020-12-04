@@ -3,6 +3,7 @@ import GeneralChat from '../generalChat';
 import PrivateChat from '../privateChat';
 import GroupChat from '../groupChat';
 import HubContext from '../../contexts/hubContext';
+import UserContext from '../../contexts/userContext';
 import UserList from '../userList'
 import ChannelList from '../channelList'
 
@@ -10,6 +11,7 @@ import ChannelList from '../channelList'
 export default function ChatCentral(props) {
 
     const { windows, currentWindow } = useContext(HubContext);
+    const { guestUser } = useContext(UserContext);
 
     //const [message, setMessage] = useState("");
 
@@ -24,6 +26,16 @@ const whichChatComponent = (window, index) => {
 };
 
 
+if(guestUser){
+    return (
+        <div>
+            <GeneralChat />
+            <span className="theList">
+                <h3>Register/Login to see more!</h3>
+            </span>
+        </div>
+    )
+} else {
     return (
         <div>
             {windows.filter(window => window.name === currentWindow.name).map((window, index) => {
@@ -35,4 +47,5 @@ const whichChatComponent = (window, index) => {
             </span>
         </div>
     )
+}
 }

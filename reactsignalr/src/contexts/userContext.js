@@ -1,7 +1,7 @@
 import React from 'react';
 import jwt from 'jsonwebtoken';
 import cookie from 'react-cookies';
-const usersAPI = 'https://localhost:5001/api/Users/';
+const usersAPI = 'https://knotslackapi.azurewebsites.net/api/Users/';
 
 const UserContext = React.createContext();
 
@@ -17,6 +17,7 @@ export class UserProvider extends React.Component {
             food: "Favorite Food: Bacon",
             //real props
             user: null,
+            guestUser: false,
             permissions: [],
             token: null,
             channels: null,
@@ -24,6 +25,7 @@ export class UserProvider extends React.Component {
             login: this.login,
             logout: this.logout,
             register: this.register,
+            toggleGuest: this.toggleGuest,
         }
     }
 
@@ -86,8 +88,7 @@ export class UserProvider extends React.Component {
         if (result.ok) {
             this.setState({ token: null, user: null, permissions: [] });
             cookie.remove('auth', { path: "/" });
-            window.localStorage.removeItem("user");
-            window.localStorage.removeItem("token");
+            window.localStorage.clear();
         }
     }
 
@@ -104,12 +105,13 @@ export class UserProvider extends React.Component {
                 }
                 window.localStorage.setItem("channels", JSON.stringify(channels));
                 window.localStorage.setItem("lastVisited", JSON.stringify(lastVisited));
-                //console.log(user);
+                console.log(user);
                 this.setState({
                     token,
                     user,
                     channels,
                     lastVisited,
+                    guestUser: false,
                     permissions: payload.permissions || [],
                 });
                 cookie.save('auth', token, { path: "/" });
@@ -129,6 +131,18 @@ export class UserProvider extends React.Component {
             let lastTimeVisited = JSON.parse(window.localStorage.getItem('lastVisited'));
             this.processToken(cookieToken, channels, lastTimeVisited);
         }
+    }
+
+    toggleGuest = () => {
+        var guest = !this.state.guestUser;
+        if(guest === true){
+            let guestId = Math.floor(Math.random() * 100000);
+            console.log(`Hello, Guest${guestId}`);
+            this.setState({user: guestId});
+        } else {
+            this.setState({user: null});
+        }
+        this.setState({guestUser: guest});
     }
 
 

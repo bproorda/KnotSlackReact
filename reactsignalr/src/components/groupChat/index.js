@@ -1,26 +1,28 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from '../chatWindow';
 import HubContext from '../../contexts/hubContext';
+import UserContext from '../../contexts/userContext';
 import './groupChat.scss';
 
 
 
 export default function GroupChat(props) {
 
-    const { user, messages, hubConnection } = useContext(HubContext);
+    const { messages, hubConnection, messageCount } = useContext(HubContext);
+    const { user } = useContext(UserContext);
 
     const [message, setMessage] = useState("");
 
     const [windowMessages, setWindowMessages] = useState([]);
 
-    const [messageCount, setMessageCount] = useState(0);
+    const [messageNumber, setMessageCount] = useState(0);
 
     const channelName = props.name;
 
     useEffect(() => {
         let newMessages = messages.filter(msg => msg.recipient === channelName);
         setWindowMessages(newMessages);
-    }, [messages, channelName]);
+    }, [messages, channelName, messageCount]);
 
     useEffect(() => {
         setMessageCount(windowMessages.length);
@@ -60,12 +62,12 @@ export default function GroupChat(props) {
 
     return (
         <div className="Chat" >
-            <ChatWindow messages={windowMessages} count={messageCount} />
-            <form onSubmit={submitHandler}>
+            <ChatWindow messages={windowMessages} count={messageNumber} name={channelName}/>
+            <form className="SendMsgForm" onSubmit={submitHandler}>
                 <label>
                     <input type="text" name="name" onChange={changeHandler} />
                 </label>
-                <button name="name" type="submit">Send</button>
+                <button name="name" type="submit">Send Message</button>
             </form>
         </div>
     )

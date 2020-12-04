@@ -3,7 +3,7 @@ import './chatWindow.scss';
 
 export default function ChatWindow(props) {
 
-    const { messages, count } = props;
+    const { messages, name } = props;
 
     const formatMessage = (message) => {
         let fullDate = new Date(Date.parse(message.date));
@@ -12,9 +12,9 @@ export default function ChatWindow(props) {
 
     return (
         <>
-            <div>
-                <h2>Messages: {count}</h2>
-                <ul>
+            <div className="TheWindow">
+                <h2>{name}</h2>
+                <ul className="TheMessages">
                     {messages.map((msg, index) => (
                         <li key={index}>{formatMessage(msg)}</li>
                     ))}

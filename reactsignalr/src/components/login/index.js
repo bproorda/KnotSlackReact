@@ -2,10 +2,11 @@ import React, { useState, useContext } from 'react';
 import UserContext from '../../contexts/userContext';
 import Button from 'react-bootstrap/Button';
 import { useHistory } from "react-router-dom";
+import './login.scss'
 
 const Login = () => {
 
-    const { user, login, logout, register } = useContext(UserContext);
+    const { user, login, logout, register, toggleGuest } = useContext(UserContext);
 
     let history = useHistory();
 
@@ -51,6 +52,10 @@ const Login = () => {
 
     }
 
+    const enterFriend = () => {
+        toggleGuest();
+    }
+
 
     if (user) {
         return (
@@ -66,7 +71,7 @@ const Login = () => {
     return (
         <>
         {(!registrationFailed) ? null : isRegistering ? <h3>Registration Failed</h3> : <h3>Login Failed</h3>}
-        <form onSubmit={handleSubmit} className="login">
+        <form className="TheLoginForm" onSubmit={handleSubmit} >
             <label>
                 I am a registering as a new user
                 <input type="checkbox" onChange={toggleIsRegistering} />
@@ -84,6 +89,7 @@ const Login = () => {
             <input placeholder="Password" type="password" name="password" />
             </label>
             <Button type="submit">Login</Button>
+            <Button onClick={enterFriend}>Enter as Guest User</Button>
         </form>
         </>
     )

@@ -10,7 +10,7 @@ export default function AllUsers(props) {
     const [thisUser, setThisUser] = useState(null);
     const currentOptions = allUsers ? allUsers.map((user) => ({ name: user.username, value: user.username })) : [{ name: "Loading!", value: "Loading!" }];
 
-
+    //console.log(allUsers);
 
     return (
         <div>

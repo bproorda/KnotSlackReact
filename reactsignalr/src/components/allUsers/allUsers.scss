@@ -4,10 +4,12 @@
  * Main wrapper
  */
  .select-search {
-    width: 300px;
+    width: 80%;
+    min-width: 200px;
     position: relative;
     font-family: 'Nunito Sans', sans-serif;
     box-sizing: border-box;
+    margin: auto;
 }
 
 .select-search *,

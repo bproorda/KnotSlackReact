@@ -5,9 +5,9 @@ import {
 } from '@microsoft/signalr/dist/browser/signalr';
 import UserContext from './userContext';
 //import context from 'react-bootstrap/esm/AccordionContext';
-const usersAPI = 'https://localhost:5001/api/Users/';
-const messagesAPI = 'https://localhost:5001/api/messages/';
-const channelsAPI = 'https://localhost:5001/api/channels/';
+const usersAPI = 'https://knotslackapi.azurewebsites.net/api/Users/';
+const messagesAPI = 'https://knotslackapi.azurewebsites.net/api/messages/';
+const channelsAPI = 'https://knotslackapi.azurewebsites.net/api/channels/';
 
 export const HubContext = React.createContext();
 
@@ -34,6 +34,7 @@ export class HubProvider extends React.Component {
       messgeCount: 0,
       currentWindow: { name: "General", type: "General" },
       windows: [],
+      windowCount: 1,
       doesWindowAlreadyExist: this.doesWindowAlreadyExist,
       addUserToGroup: this.addUserToGroup,
       updateLastVisited: this.updateLastVisited,
@@ -53,9 +54,13 @@ export class HubProvider extends React.Component {
     if (this.context.user !== prevState.user && !this.state.hasUpdated) {
       console.log("update is running!")
       await this.setConnection();
-      await this.fetchAllUsers();
-      await this.fetchAllMessages();
-      this.createWindows();
+      if (!this.context.guestUser) {
+        await this.fetchAllUsers();
+        await this.fetchAllMessages();
+        this.createWindows();
+      } else {
+        await this.fetchGenMessages();
+      }
     }
   }
 
@@ -69,6 +74,24 @@ export class HubProvider extends React.Component {
     }
   }
 
+  fetchGenMessages = async () => {
+    const result = await fetch(`${messagesAPI}genmsg`, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const body = await result.json();
+    //console.log(body);
+
+    if (result.ok) {
+      let allMessages = this.state.messages.concat(body);
+      this.setState({ messages: allMessages });
+    } else {
+      return false;
+    }
+  }
   fetchAllUsers = async () => {
     const result = await fetch(`${usersAPI}allusers`, {
       method: 'post',
@@ -110,7 +133,7 @@ export class HubProvider extends React.Component {
 
   setConnection = async () => {
     let hubConnection = new HubConnectionBuilder()
-      .withUrl("https://localhost:5001/chatHub")
+      .withUrl("https://knotslackapi.azurewebsites.net/chatHub")
       .configureLogging(LogLevel.Information)
       .build();
 
@@ -129,12 +152,12 @@ export class HubProvider extends React.Component {
     hubConnection.on('ReceiveMessage', async function (message) {
       //console.log("messages received");
       var msg = message;
-      //console.log(msg);
+      console.log(msg);
       let currentMessages = this.state.messages ? this.state.messages : [];
       currentMessages.push(msg);
-      if (msg.Recipient !== this.state.currentWindow.name) this.updateHasUnread(msg.Recipient);
+      if (msg.recipient !== this.state.currentWindow.name) this.updateHasUnread(msg.Recipient);
       this.setState({ messages: currentMessages, messageCount: currentMessages.length });
-
+      console.log(this.state.messageCount);
     }.bind(this));
   }
 
@@ -149,7 +172,8 @@ export class HubProvider extends React.Component {
       { name: channel.name, type: channel.type, lastVisited: new Date(0), hasUnread: this.checkForUnreads(channel.name) }
     ));
     //console.log(windows);
-    this.setState({ windows: windows });
+    window.localStorage.setItem("channels", JSON.stringify(windows));
+    this.setState({ windows: windows, windowCount: windows.length });
   };
 
   checkForUnreads = channelName => {
@@ -165,7 +189,8 @@ export class HubProvider extends React.Component {
     let newWindow = { name: name, type: type, lastVisited: new Date(), hasUnread: false };
     let currentWindows = this.state.windows;
     currentWindows.unshift(newWindow);
-    this.setState({ windows: currentWindows });
+    window.localStorage.setItem("channels", JSON.stringify(currentWindows));
+    this.setState({ windows: currentWindows, windowCount: currentWindows.length });
 
     //sending new window to api
     await fetch(`${channelsAPI}`, {
@@ -198,6 +223,7 @@ export class HubProvider extends React.Component {
       },
       body: JSON.stringify(newGroupUser),
     });
+    
   }
 
   updateLastVisitedWindow = (channelName) => {

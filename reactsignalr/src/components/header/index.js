@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import logo from '../../assests/KnotLogo.png';
 import UserContext from '../../contexts/userContext';
 import Button from 'react-bootstrap/Button';
@@ -8,7 +8,7 @@ import './header.scss';
 
 function Header() {
 
-  const {user, logout} = useContext(UserContext);
+  const { user, logout, guestUser, toggleGuest } = useContext(UserContext);
 
   let history = useHistory();
 
@@ -18,17 +18,23 @@ function Header() {
     history.push("/");
   }
 
-    return (
-      <div className="header">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Knot Slack
-          </p>
-          {user ? <Button className="logout" onClick={logoutHandler}>Log Out</Button> : null}
-        </header>
-      </div>
-    );
+  const friendToUser = () => {
+    history.push("/");
+    toggleGuest();
   }
 
-  export default Header;
+  return (
+    <div className="header">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Knot Slack
+          </p>
+        {user && !guestUser ? <Button className="logout" onClick={logoutHandler}>Log Out</Button> : null}
+        {guestUser ? <Button className="logout" onClick={friendToUser}>Login</Button> : null}
+      </header>
+    </div>
+  );
+}
+
+export default Header;

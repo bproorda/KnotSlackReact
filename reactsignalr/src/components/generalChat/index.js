@@ -1,25 +1,28 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from '../chatWindow';
 import HubContext from '../../contexts/hubContext';
+import UserContext from '../../contexts/userContext';
 import './genChat.scss';
 
 
 
 export default function GeneralChat(props) {
 
-    const { user, messages, hubConnection } = useContext(HubContext);
+    const { messages, hubConnection, messageCount } = useContext(HubContext);
+    const { user } = useContext(UserContext);
 
     const [message, setMessage] = useState("");
 
     const [windowMessages, setWindowMessages] = useState([]);
 
-    const [messageCount, setMessageCount] = useState(0);
+    const [messageNumber, setMessageCount] = useState(0);
 
 
     useEffect(() => {
         let newMessages = messages.filter(msg => msg.recipient === "General");
+        //console.log("New Message in General!");
         setWindowMessages(newMessages);
-     }, [messages]);
+     }, [messageCount, messages]);
 
     useEffect(() => {
         setMessageCount(windowMessages.length);
@@ -31,9 +34,9 @@ export default function GeneralChat(props) {
         let thisForm = e.target;
 
         if (hubConnection.connectionStarted) {
-            console.log("sending!")
+            console.log(`Sending: ${user}: ${message}`)
             await hubConnection.invoke("SendMessage", user, "General", message).catch(function (err) {
-                return console.error(err.toString());
+                return console.error(err);
             });
         }
         else {
@@ -48,12 +51,12 @@ export default function GeneralChat(props) {
 
     return (
         <div className="Chat">
-            <ChatWindow messages={windowMessages} count={messageCount} />
-            <form onSubmit={submitHandler}>
+            <ChatWindow messages={windowMessages} count={messageNumber} name="General Chat"/>
+            <form className="SendMsgForm" onSubmit={submitHandler}>
                 <label>
                     <input type="text" name="name" onChange={changeHandler} />
                 </label>
-                <button name="name" type="submit">Send</button>
+                <button name="name" type="submit">Send Message</button>
             </form>
         </div>
     )
